@@ -1,0 +1,145 @@
+# OSHA National Emphasis Programs, as listed on https://www.osha.gov/enforcement/directives/nep
+# (read 2026-11-19). Names, directive numbers and dates are from that list. The `text` lines are
+# our own short summaries. Programs marked `verified = true` take their industries from the
+# directive itself (amputations, warehousing and heat, read on 2026-11-19); for the others the
+# directive was not read, so their triggers follow the title and `verified = false` says so.
+# `industries` holds NAICS prefixes; an empty list means the program is not limited by industry
+# as far as we know (primary metals uses 331 from its title, unverified).
+# `triggers` are our own regular expressions (case insensitive) that a narrative must match for
+# the program to apply; a program with an industry list and no triggers applies to every report
+# in those industries. They are deliberately narrow, because a match can force an inspection
+# (OSHA's Category 1): a slip on a doormat is not a fall from height.
+# A report whose hazard falls under one of these programs meets OSHA's Category 1 criteria.
+
+[[documents]]
+citation = "CPL 03-00-027"
+title = "National Emphasis Program on Amputations in Manufacturing Industries"
+date = "2025-06-27"
+url = "https://www.osha.gov/enforcement/directives/nep"
+industries = ["311224", "311313", "311314", "311412", "311421", "311511", "311513", "311514", "311611", "311612", "311613", "311615", "311812", "311813", "311942", "311991", "311999", "312111", "312112", "321113", "321114", "321211", "321212", "321214", "321911", "321912", "321918", "321991", "321992", "321999", "322211", "322212", "322219", "326121", "326122", "326191", "326199", "327331", "327991", "331221", "331314", "331492", "331511", "331512", "331513", "331523", "331524", "332111", "332112", "332117", "332119", "332311", "332312", "332313", "332321", "332322", "332323", "332613", "332618", "332710", "332721", "332722", "332812", "332813", "332991", "332992", "332996", "332999", "333111", "333241", "333243", "333249", "333414", "333511", "333514", "333515", "333517", "335932", "336111", "336112", "336211", "336212", "336214", "336611", "336612", "337121", "337127", "337211", "337212", "337214", "337215"]
+triggers = ['amputat', '\bsevered\b']
+verified = true
+scope_note = "Industries are the 91 NAICS codes of Appendix B of the directive (signed 2025-05-29, effective 2025-06-27)."
+text = """Amputation hazards from hazardous machinery in manufacturing: caught in or between moving machine parts, point of operation, power presses, saws, slicers, conveyors, rollers, nip points, shears, mixers, augers; fingertip, finger, hand or arm amputations."""
+
+[[documents]]
+citation = "CPL 03-00-024"
+title = "National Emphasis Program on Outdoor and Indoor Heat-Related Hazards"
+date = "2026-04-10"
+url = "https://www.osha.gov/enforcement/directives/nep"
+industries = ["1121", "1122", "1151", "3115", "3116", "3118", "3211", "3241", "3261", "3271", "3273", "3312", "3314", "3315", "3323", "3335", "3353", "3362", "3379", "4238", "4244", "4522", "4811", "4841", "4881", "4882", "4883", "4884", "4921", "4922", "4931", "5617", "5621", "6242", "8111", "2361", "2362", "2371", "2373", "2381", "2382", "2383", "2389", "1112", "1114", "2211", "4412", "4832", "4911", "5173", "5413", "5416", "5613", "6241", "7225"]
+triggers = ['heat (stress|stroke|exhaustion|illness|related|cramps)', 'dehydrat', 'hyperthermia', 'environmental heat']
+verified = true
+scope_note = "Industries are Tables 1 to 3 of the directive (4 digit NAICS, general industry, construction and others)."
+text = """Heat related illness indoors and outdoors: heat stress, heat exhaustion, heat stroke, dehydration, cramping, hot environments, working in high temperature or humidity."""
+
+[[documents]]
+citation = "CPL 03-00-025"
+title = "National Emphasis Program on Falls"
+date = "2023-05-01"
+url = "https://www.osha.gov/enforcement/directives/cpl-03-00-025"
+industries = ["23"]
+triggers = ['\b(fell|falls?|falling)\s+(\w+\s+){0,4}(from|off)\b', 'fall to (a )?lower level', '\bfell\b.{0,40}\b\d+\s*(feet|foot|ft)\b']
+anywhere_triggers = ['(?=.*\b(fell|falls?|falling)\b)(?=.*(roof ?top|rooftop|on (a|the) roof|utility line|power line|cable line|arborist|tree trimming|trimming (a )?tree|holiday light|billboard|road sign|power ?wash|pressure ?wash|gutter|chimney|window clean|communication tower|cell tower))']
+verified = true
+scope_note = "Section II of the directive: every construction fall from height, and outside construction only ten activities (roof top work, utility lines, tree trimming, holiday lights, road signs and billboards, power washing buildings, gutters, chimneys, windows, communication towers). Other work at height needs area office approval, so it is not Category 1 here."
+text = """Falls while working at heights: in construction, any fall to a lower level; outside construction, falls during roof top work, utility line work, tree trimming, holiday light installation, sign and billboard maintenance, power washing, gutter, chimney and window cleaning, and communication towers."""
+
+[[documents]]
+citation = "CPL 03-00-026"
+title = "National Emphasis Program on Warehousing and Distribution Center Operations"
+date = "2026-07-31"
+url = "https://www.osha.gov/enforcement/directives/nep"
+industries = ["491110", "492110", "492210", "493110", "493120", "493130", "493190"]
+triggers = ['forklift|fork lift|powered industrial|pallet jack|order picker|reach truck|tugger', 'struck|caught|pinch|crush|conveyor', 'slip|trip|fell|fall', 'lift(ing|ed)?\b|carry|overexert|strain', 'heat (stress|stroke|exhaustion|illness|related)|dehydrat', 'fire|burn', 'rack|pallet|load|dock|trailer|box|package|stack']
+verified = true
+scope_note = "Read from the directive on 2026-11-19: Table 2 NAICS codes (postal processing and distribution centers, couriers, local delivery, warehousing; 491110 also holds post offices the data cannot tell apart). Triggers follow the hazards the directive lists: struck by, caught in, slips, trips and falls, powered industrial vehicles, material handling and storage, heat, ergonomics and fire."
+text = """Hazards in warehouses and distribution centers: powered industrial trucks and forklifts, pallet jacks, material handling and storage, stacked loads, conveyors, loading docks, slips, trips and falls, ergonomic and heat hazards."""
+
+[[documents]]
+citation = "CPL 03-00-008"
+title = "Revised Combustible Dust National Emphasis Program"
+date = "2023-01-30"
+url = "https://www.osha.gov/enforcement/directives/cpl-03-00-008"
+industries = []
+triggers = ['combustible dust', 'dust (explosion|fire|collector)', 'deflagrat']
+verified = false
+scope_note = "Scope not read from the directive; the triggers follow the program title."
+text = """Combustible dust fires, deflagrations and explosions: dust collectors, grain, wood, metal, plastic or food dust, flash fires, explosions in silos, ducts and process equipment."""
+
+[[documents]]
+citation = "CPL 02-00-161"
+title = "National Emphasis Program on Trenching and Excavation"
+date = "2018-10-01"
+url = "https://www.osha.gov/enforcement/directives/cpl-02-00-161"
+industries = []
+triggers = ['\btrench', 'excavat', 'cave[ -]?in']
+verified = false
+scope_note = "Scope not read from the directive; the triggers follow the program title."
+text = """Trench and excavation hazards: cave ins, collapse of trench walls, struck by spoil piles, protective systems, shoring, sloping, trench boxes."""
+
+[[documents]]
+citation = "CPL 03-00-018"
+title = "National Emphasis Program on Primary Metal Industries"
+date = "2014-10-20"
+url = "https://www.osha.gov/sites/default/files/enforcement/directives/CPL_03-00-018.pdf"
+industries = ["324199", "331111", "331112", "331210", "331221", "331312", "331314", "331316", "331411", "331419", "331421", "331423", "331492", "331511", "331513", "331524", "331525", "331528"]
+triggers = ['expos(ed|ure) to', 'overexpos', '\bfumes?\b', 'carbon monoxide', '\bsilica\b', '\blead (poisoning|exposure)', 'heat (stress|stroke|exhaustion|illness|related)', 'dehydrat', '\bnoise\b|hearing loss']
+verified = true
+scope_note = "Read from the directive on 2026-11-19: it targets chemical and physical health hazards (chemical exposures, noise, heat) in the 18 NAICS codes of Appendix B (17 in 331 plus coke ovens 324199). Programmed inspection goals ended in 2014; complaint and referral inspections there may be expanded. Burns and machine injuries in a foundry are outside it."
+text = """Health hazards in primary metal industries such as foundries, steel mills and smelters: chemical exposures, metal fumes and dusts, silica, lead, carbon monoxide, noise and heat stress."""
+
+[[documents]]
+citation = "CPL 03-00-021"
+title = "PSM Covered Chemical Facilities National Emphasis Program"
+date = "2017-01-17"
+url = "https://www.osha.gov/enforcement/directives/nep"
+industries = []
+triggers = ['anhydrous ammonia', 'ammonia (leak|release)', 'process safety', 'chemical release']
+verified = false
+scope_note = "Scope not read from the directive; the triggers follow the program title."
+text = """Process safety management at chemical facilities with highly hazardous chemicals: releases, fires, explosions, toxic exposures, ammonia refrigeration, process hazards."""
+
+[[documents]]
+citation = "CPL 03-00-023"
+title = "National Emphasis Program on Respirable Crystalline Silica"
+date = "2020-02-04"
+url = "https://www.osha.gov/enforcement/directives/nep"
+industries = []
+triggers = ['\bsilica\b']
+verified = false
+scope_note = "Scope not read from the directive; the triggers follow the program title."
+text = """Exposure to respirable crystalline silica dust from cutting, grinding, drilling or crushing stone, concrete, brick, sand or engineered stone."""
+
+[[documents]]
+citation = "CPL 03-00-009"
+title = "National Emphasis Program on Lead"
+date = "2008-08-14"
+url = "https://www.osha.gov/enforcement/directives/nep"
+industries = []
+triggers = ['\blead (poisoning|exposure)', 'blood lead']
+verified = false
+scope_note = "Scope not read from the directive; the triggers follow the program title."
+text = """Exposure to lead from smelting, battery manufacturing, soldering, abrasive blasting, demolition or lead based paint."""
+
+[[documents]]
+citation = "CPL 02-02-076"
+title = "National Emphasis Program on Hexavalent Chromium"
+date = "2010-02-23"
+url = "https://www.osha.gov/enforcement/directives/nep"
+industries = []
+triggers = ['hexavalent', '\bchrom(ium|ate)\b']
+verified = false
+scope_note = "Scope not read from the directive; the triggers follow the program title."
+text = """Exposure to hexavalent chromium from welding stainless steel, chrome plating, chromate pigments and coatings."""
+
+[[documents]]
+citation = "CPL 03-00-020"
+title = "National Emphasis Program on Shipbreaking"
+date = "2016-03-07"
+url = "https://www.osha.gov/enforcement/directives/nep"
+industries = []
+triggers = ['ship ?breaking', '(dismantl|scrapp)\w* (a |the )?(ship|vessel|barge)']
+verified = false
+scope_note = "Scope not read from the directive; the triggers follow the program title."
+text = """Hazards in shipbreaking: dismantling vessels, cutting torches, falls, fires, confined spaces, toxic materials such as asbestos and lead."""

@@ -1,0 +1,149 @@
+{
+  "event_baseline": {
+    "holdout_reports": 1000,
+    "accuracy": {
+      "full_code": 0.596,
+      "group_2_digit": 0.787,
+      "division_1_digit": 0.907
+    },
+    "accuracy_ci95": {
+      "full_code": [
+        0.565,
+        0.626
+      ],
+      "group_2_digit": [
+        0.761,
+        0.811
+      ],
+      "division_1_digit": [
+        0.887,
+        0.923
+      ]
+    },
+    "coverage_curve": [
+      {
+        "threshold": 0.0,
+        "coverage": 1.0,
+        "accuracy": 0.596
+      },
+      {
+        "threshold": 0.3,
+        "coverage": 0.88,
+        "accuracy": 0.648
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 0.695,
+        "accuracy": 0.718
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 0.509,
+        "accuracy": 0.8
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.19,
+        "accuracy": 0.932
+      }
+    ]
+  },
+  "oiics_recode": {
+    "recoded_2023_vs_real_2024": 0.064,
+    "real_2024_vs_real_2025": 0.047
+  },
+  "retrieval": {
+    "bm25_narrative_only": {
+      "cases": 51,
+      "strict_at_1": 0.137,
+      "strict_at_1_ci95": [
+        0.068,
+        0.257
+      ],
+      "strict_at_3": 0.392,
+      "strict_at_3_ci95": [
+        0.27,
+        0.529
+      ],
+      "lenient_at_1": 0.157,
+      "lenient_at_1_ci95": [
+        0.082,
+        0.28
+      ],
+      "lenient_at_3": 0.412,
+      "lenient_at_3_ci95": [
+        0.288,
+        0.548
+      ]
+    },
+    "bm25_narrative_and_codes": {
+      "cases": 51,
+      "strict_at_1": 0.157,
+      "strict_at_1_ci95": [
+        0.082,
+        0.28
+      ],
+      "strict_at_3": 0.294,
+      "strict_at_3_ci95": [
+        0.187,
+        0.43
+      ],
+      "lenient_at_1": 0.176,
+      "lenient_at_1_ci95": [
+        0.096,
+        0.303
+      ],
+      "lenient_at_3": 0.314,
+      "lenient_at_3_ci95": [
+        0.203,
+        0.45
+      ]
+    },
+    "hybrid_narrative_only": {
+      "cases": 51,
+      "strict_at_1": 0.176,
+      "strict_at_1_ci95": [
+        0.096,
+        0.303
+      ],
+      "strict_at_3": 0.314,
+      "strict_at_3_ci95": [
+        0.203,
+        0.45
+      ],
+      "lenient_at_1": 0.216,
+      "lenient_at_1_ci95": [
+        0.125,
+        0.346
+      ],
+      "lenient_at_3": 0.412,
+      "lenient_at_3_ci95": [
+        0.288,
+        0.548
+      ]
+    },
+    "hybrid_narrative_and_codes": {
+      "cases": 51,
+      "strict_at_1": 0.235,
+      "strict_at_1_ci95": [
+        0.14,
+        0.368
+      ],
+      "strict_at_3": 0.412,
+      "strict_at_3_ci95": [
+        0.288,
+        0.548
+      ],
+      "lenient_at_1": 0.294,
+      "lenient_at_1_ci95": [
+        0.187,
+        0.43
+      ],
+      "lenient_at_3": 0.51,
+      "lenient_at_3_ci95": [
+        0.377,
+        0.641
+      ]
+    }
+  }
+}

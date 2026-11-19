@@ -1,0 +1,19 @@
+# Downloads from OSHA and DOL are large and can be fetched again; see data/README.md.
+data/raw/*
+!data/raw/README.md
+
+.venv/
+__pycache__/
+*.py[cod]
+.env
+.DS_Store
+outputs/
+
+# Built from the raw data by the pipeline; rebuild with the scripts.
+data/processed/*
+!data/processed/.gitkeep
+indexes/
+*.sqlite
+.pytest_cache/
+.ruff_cache/
+*.egg-info/

@@ -1,0 +1,10 @@
+# The General Duty Clause of the OSH Act, which OSHA cites when no specific standard covers a
+# recognized hazard (overexertion, heat, workplace violence, many struck by hazards).
+# Source: Occupational Safety and Health Act of 1970, Section 5, 29 U.S.C. 654,
+# https://www.osha.gov/laws-regs/oshact/section5-duties
+
+[[documents]]
+citation = "OSH Act 5(a)(1)"
+title = "General Duty Clause"
+url = "https://www.osha.gov/laws-regs/oshact/section5-duties"
+text = """Each employer shall furnish to each of his employees employment and a place of employment which are free from recognized hazards that are causing or are likely to cause death or serious physical harm to his employees."""

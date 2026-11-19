@@ -1,0 +1,151 @@
+pair,rule,state,name_a,name_b,city_a,city_b,naics_a,naics_b,same_employer,notes
+P001,same,OHIO,"Rubber Recycling Technology, Inc.",Rubber Recycling Technology,CELINA,CELINA,326299,326299,yes,Kevin: confirmed same employer
+P002,same,ARKANSAS,Bearden Lumber Co,Bearden Lumber Company,BEARDEN,BEARDEN,321113,321113,yes,Hamad: confirmed same employer
+P003,same,RHODE ISLAND,HOMESTEAD BAKING COMPANY,Homestead Baking Co.,EAST PROVIDENCE,EAST PROVIDENCE,311812,311812,yes,Khoa: confirmed same employer
+P004,same,MASSACHUSETTS,"Lowe's Home Centers, LLC","LOWE'S HOME CENTERS, LLC",ABINGTON,QUINCY,444110,444110,yes,Kevin: confirmed same employer
+P005,same,WISCONSIN,"Machine Service, Inc.",Machine Service Incorporated,GREEN BAY,ELKHORN,336350,332710,yes,Hamad: confirmed same employer
+P006,same,MISSISSIPPI,"Hartson-Kennedy Cabinet Top Co., Inc.",Hartson-Kennedy Cabinet Top Company,GULFPORT,GULFPORT,337110,337110,yes,Khoa: confirmed same employer
+P007,same,OHIO,Steel Warehouse of Ohio,"Steel Warehouse of Ohio, LLC",WARREN,CLEVELAND,331221,484110,yes,Kevin: confirmed same employer
+P008,same,PENNSYLVANIA,Carpenter Technology Corporation,CARPENTER TECHNOLOGY CORPORATION,READING,ORWIGSBURG,331111,331111,yes,Hamad: confirmed same employer
+P009,same,NEW YORK,Penske Logistics,"Penske Logistics, LLC",SARANAC LAKE,NEWBURGH,488510,484121,yes,Khoa: confirmed same employer
+P010,same,ILLINOIS,Fervalue USA INC.,"Fervalue USA, LLC",FRANKLIN PARK,CHICAGO,311340,311821,yes,Kevin: confirmed same employer
+P011,same,PENNSYLVANIA,Sysco Philadelphia,"Sysco Philadelphia, LLC",PHILADELPHIA,PHILADELPHIA,424490,424420,yes,Hamad: confirmed same employer
+P012,same,OHIO,NORDSON XALOY CORPORATION,Nordson Xaloy Incorporated,AUSTINTOWN,AUSTINTOWN,423710,333999,yes,Khoa: confirmed same employer
+P013,same,CALIFORNIA,BAE SYSTEMS SAN DIEGO SHIP REPAIR INC.,BAE Systems San Diego Ship Repair Inc.,SAN DIEGO,SAN DIEGO,336611,336611,yes,Kevin: confirmed same employer
+P014,same,WISCONSIN,United Parcel Service,"United Parcel Service, Inc.",BARABOO,MIDDLETON,492210,484121,yes,Hamad: confirmed same employer
+P015,same,TEXAS,"DDDK, LLC.","DDDK, LLC",JACKSBORO,GRAFORD,213112,213112,yes,Khoa: confirmed same employer
+P016,same,TEXAS,Louisiana-Pacific Corporation,Louisiana Pacific Corporation,JASPER,CARTHAGE,444110,321113,yes,Kevin: confirmed same employer
+P017,same,FLORIDA,Southeastern Freight Lines,"SOUTHEASTERN FREIGHT LINES, INC.",MEDLEY,POMPANO BEACH,484110,484110,yes,Hamad: confirmed same employer
+P018,same,OKLAHOMA,Sheridan Production Company,"Sheridan Production Company, LLC",LAVERNE,BRADLEY,213112,213112,yes,Khoa: confirmed same employer
+P019,same,NEW YORK,Cafe Spice,"Cafe Spice, LLC",NEW WINDSOR,BEACON,311412,333241,yes,Kevin: confirmed same employer
+P020,same,MISSOURI,Vance Brothers Inc.,"Vance Brothers, Inc",KANSAS CITY,INDEPENDENCE,324121,237310,yes,Hamad: confirmed same employer
+P021,same,ALABAMA,"Georgia Pacific Wood Products, LLC",Georgia-Pacific Wood Products LLC,FRISCO CITY,BELK,321113,321113,yes,Khoa: confirmed same employer
+P022,same,GEORGIA,"APACHE MILLS, INC.",Apache Mills,CALHOUN,CALHOUN,326299,314110,yes,Kevin: confirmed same employer
+P023,same,TEXAS,Qualawash Holdings LLC,"Qualawash Holdings, LLC.",PASADENA,PASADENA,562998,811310,yes,Hamad: confirmed same employer
+P024,same,PENNSYLVANIA,"Central Transport, Inc.",Central Transport LLC,BATH,CHAMBERSBURG,493110,484110,yes,Khoa: confirmed same employer
+P025,same,TEXAS,"Integrity Services, LLC",Integrity Services,MIDLAND,MIDLAND,213111,213112,yes,Kevin: confirmed same employer
+P026,same,NEW YORK,The New York Public Library,New York Public Library,STATEN ISLAND,LONG ISLAND CITY,519120,519120,yes,Hamad: confirmed same employer
+P027,same,ILLINOIS,FedEx,FedEx Corporation,LINCOLN,SPRINGFIELD,484110,492110,yes,Khoa: confirmed same employer
+P028,same,FLORIDA,"WASTE PRO OF FLORIDA, INC.","Waste Pro oF Florida, Inc.",HOLLYWOOD,PALATKA,562111,562219,yes,Kevin: confirmed same employer
+P029,same,ALASKA,"Doyon Drilling, Inc.",Doyon Drilling Inc,ANCHORAGE,PRUDHOE BAY,211111,211111,yes,Hamad: confirmed same employer
+P030,same,TEXAS,"Express Energy Services, LLC",Express Energy Services,AMARILLO,ENCINAL,213112,213112,yes,Khoa: confirmed same employer
+P031,same,OHIO,"Ohio Valley Flooring, Inc.",OHIO VALLEY FLOORING,MASON,COLUMBUS,442210,423220,yes,Kevin: confirmed same employer
+P032,same,NEW YORK,JetBlue Airways Corporation,Jetblue Airways Corporation,JAMAICA,JAMAICA,481111,481111,yes,Hamad: confirmed same employer
+P033,same,NEW YORK,Metal Container Corp,Metal Container Corp.,NEW WINDSOR,NEW WINDSOR,332431,332431,yes,Khoa: confirmed same employer
+P034,same,PENNSYLVANIA,Peoples Natural Gas Company LLC,Peoples Natural Gas,GIBSONIA,TYRONE,486210,221210,yes,Kevin: confirmed same employer
+P035,same,GEORGIA,"MMR Constructors, Inc","MMR Constructors, Inc.",COMMERCE,MACON,238210,334515,yes,Hamad: confirmed same employer
+P036,same,OHIO,"SUNFIELD, INC","Sunfield, Inc.",HEBRON,HEBRON,336370,336370,yes,Khoa: confirmed same employer
+P037,same,FLORIDA,"Richard and Rice Construction Company, Inc.","Richard & Rice Construction Company, INC.",WILTON MANORS,NAPLES,236115,238130,yes,Kevin: confirmed same employer
+P038,same,PENNSYLVANIA,"H&K Group, Inc.",H&K Group,DOUGLASSVILLE,KING OF PRUSSIA,237990,237310,yes,Hamad: confirmed same employer
+P039,same,ARKANSAS,Americold Logistics,"Americold Logistics, LLC",WEST MEMPHIS,JOHNSON,493110,493120,yes,Khoa: confirmed same employer
+P040,same,LOUISIANA,THE MIGUES DELOACH COMPANY LLC,Migues Deloach Company,ALEXANDRIA,JENA,236220,236220,yes,Kevin: confirmed same employer
+P041,same,GEORGIA,R + L Carriers,R L Carriers,ELLENWOOD,ELLENWOOD,484121,488999,yes,Hamad: confirmed same employer
+P042,same,PENNSYLVANIA,Cabinetworks group,CabinetWorks Group,THOMPSONTOWN,MIFFLINBURG,337110,337110,yes,Khoa: confirmed same employer
+P043,same,ALABAMA,"ABH Enterprises, Inc.",ABH Enterprises,TUSCALOOSA,TUSCALOOSA,324122,324122,yes,Kevin: confirmed same employer
+P044,same,FLORIDA,"Nursery Supplies, Inc.",NURSERY SUPPLIES INC.,KISSIMMEE,KISSIMMEE,326199,326199,yes,Hamad: confirmed same employer
+P045,same,CONNECTICUT,EDCO Engineering,EDCO Engineering Inc.,NEWINGTON,NEWINGTON,332721,332721,yes,Khoa: confirmed same employer
+P046,same,ILLINOIS,CARLE FOUNDATION HOSPITAL,The Carle Foundation Hospital,URBANA,NORMAL,622110,622110,yes,Kevin: confirmed same employer
+P047,same,TEXAS,"EDC Ag Products Company, LLC","EDC AG Products Company, LLC",WHITEWRIGHT,WHITEWRIGHT,325314,325314,yes,Hamad: confirmed same employer
+P048,same,MISSISSIPPI,"Furniture Wood, Inc.","Furniture Wood, Inc",VARDAMAN,VARDAMAN,337121,337122,yes,Khoa: confirmed same employer
+P049,same,LOUISIANA,Elite MainFrame Solutions.,Elite Mainframe Solutions,NEW ORLEANS,NEW ORLEANS,236220,238310,yes,Kevin: confirmed same employer
+P050,same,PENNSYLVANIA,"Foot Locker, Inc.",Foot Locker Inc.,PITTSBURGH,PITTSBURGH,448210,448210,yes,Hamad: confirmed same employer
+P051,same,MISSISSIPPI,"Associated Wholesale Grocers, Inc.",Associated Wholesale Grocers,SOUTHAVEN,SOUTHAVEN,424410,424410,yes,Khoa: confirmed same employer
+P052,same,MISSISSIPPI,"MUELLER COPPER TUBE CO., INC.",Mueller Copper Tube,FULTON,FULTON,331421,331420,yes,Kevin: confirmed same employer
+P053,same,OHIO,Kroger,The Kroger Co.,PICKERINGTON,MASON,445110,445110,yes,Hamad: confirmed same employer
+P054,same,GEORGIA,Agri-Products Incorporated,Agri-Products Inc,FITZGERALD,FITZGERALD,321999,321113,yes,Khoa: confirmed same employer
+P055,same,NEW YORK,"Nelson Tree Service, LLC.","Nelson Tree Service, LLC",DOVER PLAINS,SCHUYLERVILLE,561730,561730,yes,Kevin: confirmed same employer
+P056,same,ALABAMA,KW Plastics Recycling Division,KW Plastics recycling division,TROY,TROY,326199,326199,yes,Hamad: confirmed same employer
+P057,same,TEXAS,"Alcon Laboratories, Inc.",Alcon Laboratories,FORT WORTH,FORT WORTH,339112,621511,yes,Khoa: confirmed same employer
+P058,same,PENNSYLVANIA,"Redner's Warehouse Markets, Inc.",Redner's Warehouse Markets,WYOMISSING,EASTON,445110,445110,yes,Kevin: confirmed same employer
+P059,same,COLORADO,Fedex Express,FEDEX EXPRESS,DENVER,LONE TREE,481112,492110,yes,Hamad: confirmed same employer
+P060,same,WISCONSIN,"Dave Jones, LLC","Dave Jones, Inc.",MADISON,STOUGHTON,238220,238220,yes,Khoa: confirmed same employer
+P061,same,CONNECTICUT,Sikorsky Aircraft,SIKORSKY AIRCRAFT CORPORATION,STRATFORD,STRATFORD,336411,336411,yes,Kevin: confirmed same employer
+P062,same,OHIO,"The Andersons, Inc.","The Andersons, Inc",UPPER SANDUSKY,MAUMEE,488210,332999,yes,Hamad: confirmed same employer
+P063,same,ILLINOIS,"Empire Comfort Systems, Inc.",Empire Comfort Systems Inc,BELLEVILLE,BELLEVILLE,333414,423730,yes,Khoa: confirmed same employer
+P064,same,RHODE ISLAND,Verizon New England,"Verizon New England, Inc.",PROVIDENCE,RIVERSIDE,517510,517911,yes,Kevin: confirmed same employer
+P065,same,TEXAS,"MMR Constructors, Inc",MMR CONSTRUCTORS INC.,INGLESIDE,ARANSAS PASS,238210,238990,yes,Hamad: confirmed same employer
+P066,same,OHIO,"Chrysler Group, LLC",Chrysler Group LLC,TOLEDO,TOLEDO,336111,336999,yes,Khoa: confirmed same employer
+P067,same,WISCONSIN,"BIEWER-WISCONSIN SAWMILL, INC.","Biewer-Wisconsin Sawmill, INC.",PRENTICE,PRENTICE,321113,321113,yes,Kevin: confirmed same employer
+P068,same,OHIO,"Johnson Bros. - West Salem, Inc.",Johnson Bros. West Salem Inc.,WEST SALEM,WEST SALEM,325212,325212,yes,Hamad: confirmed same employer
+P069,same,LOUISIANA,Associated Terminals,"Associated Terminals,LLC.",CONVENT,ARABI,488320,488320,yes,Khoa: confirmed same employer
+P070,same,LOUISIANA,ACME TRUCK LINE INC,"Acme Truck Line, Inc.",GRETNA,YOUNGSVILLE,484121,484110,yes,Kevin: confirmed same employer
+P071,same,TEXAS,Lazer Spot Inc,Lazer Spot,CORSICANA,PARIS,484121,541614,yes,Hamad: confirmed same employer
+P072,same,ILLINOIS,CBRE Inc,CBRE Inc.,CHICAGO,CHICAGO,561790,561210,yes,Khoa: confirmed same employer
+P073,same,GEORGIA,KERRY INC.,"Kerry, Inc.",ROME,ROME,425120,311999,yes,Kevin: confirmed same employer
+P074,same,OHIO,"R. S. Hanline and Co., Inc.",R.S. Hanline And Company Inc.,SHELBY,SHELBY,424480,424480,yes,Hamad: confirmed same employer
+P075,same,FLORIDA,Waste Management of Florida,Waste Management of Florida Inc.,STUART,TAMPA,562119,562119,yes,Khoa: confirmed same employer
+P076,same,NEBRASKA,"Quad Packaging, Inc.",Quad Packaging,OMAHA,OMAHA,322212,323111,yes,Kevin: confirmed same employer
+P077,same,WISCONSIN,"Kwik Trip, Inc.","Kwik trip, Inc.",OCONOMOWOC,WAUNAKEE,311511,447110,yes,Hamad: confirmed same employer
+P078,same,MISSISSIPPI,mckesson,McKesson Corporation,OLIVE BRANCH,OLIVE BRANCH,325412,493190,yes,Khoa: confirmed same employer
+P079,same,OHIO,Giant Eagle,GIANT EAGLE,STOW,NORTH ROYALTON,445110,445110,yes,Kevin: confirmed same employer
+P080,same,ALABAMA,Broadband Technical Resources,"Broadband Technical Resources, Inc.",TALLADEGA,CALERA,237130,238210,yes,Hamad: confirmed same employer
+P081,same,IDAHO,Glanbia Foods Inc.,"Glanbia Foods, Inc",RICHFIELD,BLACKFOOT,311514,311513,yes,Khoa: confirmed same employer
+P082,same,FLORIDA,"South Miami Hospital, Inc.",South Miami Hospital,SOUTH MIAMI,MIAMI,622110,622110,yes,Kevin: confirmed same employer
+P083,same,MISSISSIPPI,Rent-A-Center,Rent A Center,PICAYUNE,GULFPORT,532210,532299,yes,Hamad: confirmed same employer
+P084,same,NEW YORK,"GKN Aerospace Monitor, Inc","GKN Aerospace Monitor, Inc.",AMITYVILLE,AMITYVILLE,336411,332312,yes,Khoa: confirmed same employer
+P085,same,FLORIDA,"Baker Concrete Construction, Inc.","Baker Concrete Construction, Inc",KISSIMMEE,HOMESTEAD,238110,238110,yes,Kevin: confirmed same employer
+P086,same,OHIO,Chapin Custom Molding,"Chapin Custom Molding, Inc.",ELYRIA,ELYRIA,326199,326199,yes,Hamad: confirmed same employer
+P087,same,COLORADO,JBS CARRIERS,"JBS Carriers, Inc.",LA SALLE,GREELEY,484220,484110,yes,Khoa: confirmed same employer
+P088,same,NEW YORK,FedEx Express Corporation,FEDEX EXPRESS,JACKSON HEIGHTS,SYRACUSE,492110,492110,yes,Kevin: confirmed same employer
+P089,same,ILLINOIS,J.R. Short Milling Company,J. R. Short Milling Company,KANKAKEE,KANKAKEE,311824,311211,yes,Hamad: confirmed same employer
+P090,same,KANSAS,Mid-State Farmers Coop,"Mid-State Farmers COOp, Inc.",RUSH CENTER,OTIS,424910,424510,yes,Khoa: confirmed same employer
+P091,same,WISCONSIN,Walmart,"Walmart, Inc.",SHAWANO,BARABOO,452112,452210,yes,Kevin: confirmed same employer
+P092,same,FLORIDA,"Clyde Johnson Contracting & Roofing, Inc.","CLYDE JOHNSON CONTRACTING & ROOFING, INC.",OKEECHOBEE,LAKELAND,238160,238160,yes,Hamad: confirmed same employer
+P093,same,TEXAS,Independence Contract Drilling,"Independence Contract Drilling, Inc.",ODESSA,MIDLAND,213111,213111,yes,Khoa: confirmed same employer
+P094,same,NEW YORK,Lockheed Martin,Lockheed Martin Corporation,LIVERPOOL,SYRACUSE,334511,334511,yes,Kevin: confirmed same employer
+P095,same,HAWAII,Pearl Harbor Naval Shipyard & IMF,PEARL HARBOR NAVAL SHIPYARD & IMF,HONOLULU,PEARL HARBOR,336611,336611,yes,Hamad: confirmed same employer
+P096,same,TEXAS,"Texas Disposal Systems, Inc.",TEXAS DISPOSAL SYSTEMS,PAIGE,SEALY,562111,562998,yes,Khoa: confirmed same employer
+P097,same,NORTH CAROLINA,U.S. Dept. of Veterans Affairs,U.S. Dept of Veterans Affairs,ASHEVILLE,SALISBURY,622110,622110,yes,Kevin: confirmed same employer
+P098,same,TEXAS,Konecranes,"Konecranes, Inc.",LONGVIEW,HOUSTON,333923,333923,yes,Hamad: confirmed same employer
+P099,same,TEXAS,Great Lakes Dredge and Dock Company,Great Lakes Dredge and Dock,HOUSTON,HUMBLE,237990,237990,yes,Khoa: confirmed same employer
+P100,same,GEORGIA,"Trojan Battery Company, LLC",Trojan Battery Company,LITHONIA,SANDERSVILLE,335912,335911,yes,Kevin: confirmed same employer
+P101,possible,RHODE ISLAND,Jr Vinagro Corp.,J.R. Vinagro Corporation,JOHNSTON,JOHNSTON,423930,423930,yes,Hamad: confirmed same employer
+P102,possible,MISSOURI,"Play Power, INC.",PLAYPOWER,MONETT,MONETT,423910,423910,yes,Khoa: confirmed same employer
+P103,possible,MASSACHUSETTS,DEMOULAS,Demoulas Supermarkets Inc,TEWKSBURY,SHREWSBURY,445110,445110,yes,Kevin: confirmed same employer
+P104,possible,NORTH DAKOTA,Minnkota Power Cooperative,Minnkota Power,MANVEL,CENTER,221121,221112,yes,Hamad: confirmed same employer
+P105,possible,NEBRASKA,"JBS USA, LLC","JBS USA Holdings, Inc.",GRAND ISLAND,GRAND ISLAND,311611,311611,yes,Khoa: confirmed same employer
+P106,possible,TEXAS,"LEM Construction Company, Inc.",M Co Construction Inc,CONROE,IRVING,237110,237110,no,Kevin: Different companies (LEM Construction vs M Co Construction)
+P107,possible,IDAHO,Larsen Farms,"Blaine Larsen Farms, Inc.",HAMER,HAMER,311423,111211,yes,Hamad: confirmed same employer
+P108,possible,TEXAS,R.J. Carroll Company,"J. Carroll Weaver, Inc.",LONGVIEW,RUNGE,238210,237310,no,Khoa: Different companies (R.J. Carroll Company vs J. Carroll Weaver)
+P109,possible,LOUISIANA,AT&T Garage,AT&T,SHREVEPORT,METAIRIE,517919,517911,yes,Kevin: confirmed same employer
+P110,possible,UTAH,"USDA Forest Service, Rocky Mountain Research Station",U.S. Forest Service,OGDEN,SOUTH JORDAN,115310,115310,yes,Hamad: confirmed same employer
+P111,possible,MONTANA,Wells Fargo,Wells Fargo Bank NA,BILLINGS,GREAT FALLS,522110,522110,yes,Khoa: confirmed same employer
+P112,possible,PENNSYLVANIA,McDonald's,McDonalds,PENNDEL,YORK,722511,722513,yes,Kevin: confirmed same employer
+P113,possible,MONTANA,Dailys Premium Meats,DAILY'S PREMIUM MEATS INC.,MISSOULA,MISSOULA,311612,311612,yes,Hamad: confirmed same employer
+P114,possible,OHIO,Republic Steel,Republic Steel Wire Processing LLC,LORAIN,SOLON,331111,331222,yes,Khoa: confirmed same employer
+P115,possible,ALABAMA,"Industrial Services-Haleyville, Inc.",SGS Industrial Services Inc.,HALEYVILLE,EASTABOGA,238210,238290,no,Kevin: Different companies (Industrial Services-Haleyville vs SGS Industrial Services)
+P116,possible,NEBRASKA,CHIEF CONSTRUCTION,Chief Construction Office,GRAND ISLAND,GRAND ISLAND,236220,423330,yes,Hamad: confirmed same employer
+P117,possible,COLORADO,HOME DEPOT USA INC DBA HOME DEPOT #1502,"The Home Depot USA, Inc",ARVADA,CASTLE ROCK,444110,444110,yes,Khoa: confirmed same employer
+P118,possible,ILLINOIS,Cosco Corp.,"Costco, Inc.",BOLINGBROOK,MORRIS,493110,493120,no,Kevin: False fuzzy match (Cosco Corp vs Costco)
+P119,possible,CALIFORNIA,MARINE DEPOT MAINTENANCE COMMAND (MDMC),Marine Depot Maintenance Command,YERMO,BARSTOW,336120,336120,yes,Hamad: confirmed same employer
+P120,possible,MASSACHUSETTS,Stop and Shop Supermarkets,STOP & SHOP,ASSONET,BROCKTON,445110,445110,yes,Khoa: confirmed same employer
+P121,possible,OKLAHOMA,SpartanNash,SpartanNash Military,OKLAHOMA CITY,OKLAHOMA CITY,424490,493110,yes,Kevin: confirmed same employer
+P122,possible,WASHINGTON,Army & Air Force Exchange Service-Burger King North Fort Lewis,Army and Air Force Exchange Service,JOINT BASE LEWIS MCCHORD,JOINT BASE LEWIS MCCHORD,722513,447110,yes,Hamad: confirmed same employer
+P123,possible,GEORGIA,Kautex Textron,Kautex Textron Gmbh & Co.,LAVONIA,LAVONIA,336399,336399,yes,Khoa: confirmed same employer
+P124,possible,PENNSYLVANIA,Giant Foods Store #6083,The Giant Co.,ALDAN,CARLISLE,445110,445110,yes,Kevin: confirmed same employer
+P125,possible,SOUTH DAKOTA,"Menard, Inc.",Menard's,RAPID CITY,YANKTON,337110,444190,yes,Hamad: confirmed same employer
+P126,possible,GEORGIA,"Coca-Cola Bottling Company United, Inc.","Coco-Cola Bottling Company United-East, LLC",WAYCROSS,LAWRENCEVILLE,312111,312111,yes,Khoa: confirmed same employer
+P127,possible,WEST VIRGINIA,STALNAKER ENERGY CORPORATION,Stalnaker Energy Services LLC,SHIRLEY,PENNSBORO,211111,213112,yes,Kevin: confirmed same employer
+P128,possible,KANSAS,"SFC Global Supply Chain, Inc.",Schwans Global Supply Chain Inc,SALINA,SALINA,311412,311412,yes,Hamad: confirmed same employer
+P129,possible,MISSISSIPPI,Waste Pro,"Waste Pro USA, Inc.",GAUTIER,HERMANVILLE,562111,562112,yes,Khoa: confirmed same employer
+P130,possible,LOUISIANA,"Valero Services, Inc.",Valero,CHALMETTE,CHALMETTE,324110,324110,yes,Kevin: confirmed same employer
+P131,possible,NEW JERSEY,"Sysco, Inc.","Sysco Metro NY, LLC",JERSEY CITY,JERSEY CITY,493120,541614,yes,Hamad: confirmed same employer
+P132,possible,NEW YORK,United States Postal Service,United States Postal Service - Midwood Station,EAST HAMPTON,BROOKLYN,491110,491110,yes,Khoa: confirmed same employer
+P133,possible,ALABAMA,"Walmart Stores, Inc","Walmart Stores East, LP",MOBILE,CULLMAN,452112,452112,yes,Kevin: confirmed same employer
+P134,possible,SOUTH DAKOTA,Sanford Health,Sanford Health -Surgical Tower - Building 3,SIOUX FALLS,SIOUX FALLS,622110,622110,yes,Hamad: confirmed same employer
+P135,possible,ILLINOIS,COMMONWEALTH EDISON COMPANY,"Commonwealth Edison Company, dba ComEd",ROCKFORD,MAYWOOD,221122,221122,yes,Khoa: confirmed same employer
+P136,possible,IDAHO,Brigham Young University Idaho,Bringham Young University - Idaho,REXBURG,REXBURG,611310,611310,yes,Kevin: confirmed same employer
+P137,possible,ILLINOIS,"Menard, Inc.",MENARD'S INC.,PLANO,ELGIN,423310,444110,yes,Hamad: confirmed same employer
+P138,possible,COLORADO,"Halliburton Energy Services, Inc.",Halliburton,GRAND JUNCTION,GREELEY,213112,211111,yes,Khoa: confirmed same employer
+P139,possible,MISSISSIPPI,Georgia-Pacific Monticello LLC,Georgia Pacific,MONTICELLO,MONTICELLO,322219,322130,yes,Kevin: confirmed same employer
+P140,possible,PENNSYLVANIA,Akzo Nobel Coating,Akzo Nobel Coatings Inc,READING,READING,325510,325510,yes,Hamad: confirmed same employer
+P141,possible,TEXAS,United Rentals,"United Rentals North America, Inc",HUMBLE,LA PORTE,238910,532490,yes,Khoa: confirmed same employer
+P142,possible,WISCONSIN,Amcor,Amcor Flexibles Inc.,LANCASTER,MADISON,323112,326199,yes,Kevin: confirmed same employer
+P143,possible,LOUISIANA,URS Federal Technical Services-AECOM,AECOM,FORT POLK,FORT POLK,811111,921190,yes,Hamad: confirmed same employer
+P144,possible,CALIFORNIA,"Department of Justice, Bureau of Prisons",U.S. Department of Justice,VICTORVILLE,VICTORVILLE,922140,922140,yes,Khoa: confirmed same employer
+P145,possible,NORTH DAKOTA,"Schwans Home Services, Inc.",Schwans Company,VELVA,FARGO,424420,311412,yes,Kevin: confirmed same employer
+P146,possible,FLORIDA,Acousti Engineering Company of Florida,Acuosti Engineering Company of Florida,EGLIN AFB,ORLANDO,236220,238310,yes,Hamad: confirmed same employer
+P147,possible,NEBRASKA,Heartland Concrete Placement,ACI Concrete Placement,COLUMBUS,LINCOLN,327320,238110,no,Khoa: Different companies (Heartland Concrete Placement vs ACI Concrete Placement)
+P148,possible,KANSAS,"UNITED PRAIRIE AG, LLC",United Prairie Ag - Ulysses/Pucket,ULYSSES,ULYSSES,493130,424510,yes,Kevin: confirmed same employer
+P149,possible,LOUISIANA,"Catalyst Handling Resource, LLC.",Catalyst Handling Resources,CHALMETTE,PLAQUEMINE,237120,423840,yes,Hamad: confirmed same employer
+P150,possible,GEORGIA,"OA Logistics Services, Inc.","OA Logistics, LLC",PORT WENTWORTH,PORT WENTWORTH,541614,493110,yes,Khoa: confirmed same employer

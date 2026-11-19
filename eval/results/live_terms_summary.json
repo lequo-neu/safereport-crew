@@ -1,0 +1,83 @@
+{
+  "baseline": "retrieval_hybrid_narrative_and_codes",
+  "models": {
+    "claude": {
+      "cases": 51,
+      "strict_at_1": {
+        "baseline": 12,
+        "with_terms": 26,
+        "rate": 0.51,
+        "ci95": [
+          0.377,
+          0.641
+        ],
+        "gained": 14,
+        "lost": 0,
+        "mcnemar_p": 0.0001
+      },
+      "strict_at_3": {
+        "baseline": 21,
+        "with_terms": 36,
+        "rate": 0.706,
+        "ci95": [
+          0.57,
+          0.813
+        ],
+        "gained": 16,
+        "lost": 1,
+        "mcnemar_p": 0.0003
+      },
+      "lenient_at_3": {
+        "baseline": 26,
+        "with_terms": 38,
+        "rate": 0.745,
+        "ci95": [
+          0.611,
+          0.845
+        ],
+        "gained": 13,
+        "lost": 1,
+        "mcnemar_p": 0.0018
+      }
+    },
+    "gpt_nano": {
+      "cases": 51,
+      "strict_at_1": {
+        "baseline": 12,
+        "with_terms": 20,
+        "rate": 0.392,
+        "ci95": [
+          0.27,
+          0.529
+        ],
+        "gained": 10,
+        "lost": 2,
+        "mcnemar_p": 0.0386
+      },
+      "strict_at_3": {
+        "baseline": 21,
+        "with_terms": 31,
+        "rate": 0.608,
+        "ci95": [
+          0.471,
+          0.73
+        ],
+        "gained": 13,
+        "lost": 3,
+        "mcnemar_p": 0.0213
+      },
+      "lenient_at_3": {
+        "baseline": 26,
+        "with_terms": 33,
+        "rate": 0.647,
+        "ci95": [
+          0.51,
+          0.764
+        ],
+        "gained": 10,
+        "lost": 3,
+        "mcnemar_p": 0.0923
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+[project]
+name = "safereport-crew"
+version = "0.1.0"
+description = "Multi agent copilot that turns OSHA severe injury reports into inspection and prevention decisions (IE5374 Applied Generative AI, final project)"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+license = "MIT"
+authors = [{ name = "Seven Team-5374" }]
+dependencies = [
+    "pydantic>=2.14,<3",
+    "pandas>=3.1,<4",
+    "pyarrow>=18",
+    "duckdb>=1.2",
+    "rank-bm25>=0.2.2",
+    "rapidfuzz>=3.10",
+    "scikit-learn>=1.6",
+    # PuLP 3 and later dropped the bundled CBC solver and changed the variable API.
+    "pulp==2.9.0",
+    "langgraph==1.2.19",
+    "langgraph-checkpoint-sqlite==3.1.3",
+    "langchain-core>=1.8,<2",
+    "gradio==6.31.0",
+    "matplotlib>=3.11",
+    "python-docx>=1.1",
+]
+
+[project.optional-dependencies]
+# Dense retrieval. Kept apart because sentence-transformers pulls in torch.
+embeddings = ["sentence-transformers>=3.3", "faiss-cpu>=1.9"]
+# Hosted and local model clients; the offline backend needs none of them.
+models = ["anthropic>=2.11", "openai>=3.55", "google-genai>=3.6"]
+dev = ["pytest>=8", "ruff==0.17.4"]
+
+[project.scripts]
+safereport = "safereport.cli:main"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 110
+
+[tool.ruff.lint]
+future-annotations = true
+extend-select = ["E", "F", "B", "S", "RUF", "N", "W", "I", "T", "PERF", "PIE", "TID", "RET", "UP"]
+# BLE001: model and network failures are caught on purpose so a call can fall back to the next model.
+# PERF401: a plain loop with append often reads better than the extend it suggests.
+ignore = ["E501", "S101", "BLE001", "RUF001", "RUF002", "RUF003", "PERF401"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S", "T"]
+# Command line tools print their results on purpose.
+"src/safereport/cli.py" = ["T201"]
+"scripts/*" = ["T201"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+combine-as-imports = true
+lines-after-imports = 2
+known-first-party = ["safereport"]

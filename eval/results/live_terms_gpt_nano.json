@@ -1,0 +1,395 @@
+{
+  "model": "gpt_nano",
+  "retrieval": "hybrid",
+  "scores": {
+    "cases": 51,
+    "strict_at_1": 0.392,
+    "strict_at_1_ci95": [
+      0.27,
+      0.529
+    ],
+    "strict_at_3": 0.608,
+    "strict_at_3_ci95": [
+      0.471,
+      0.73
+    ],
+    "lenient_at_1": 0.431,
+    "lenient_at_1_ci95": [
+      0.305,
+      0.567
+    ],
+    "lenient_at_3": 0.647,
+    "lenient_at_3_ci95": [
+      0.51,
+      0.764
+    ]
+  },
+  "spend": [
+    {
+      "model": "gemini_flash",
+      "calls": 13,
+      "input_tokens": 1487,
+      "output_tokens": 266,
+      "cost": 0.0056,
+      "priced": false
+    },
+    {
+      "model": "gpt_nano",
+      "calls": 54,
+      "input_tokens": 6833,
+      "output_tokens": 124706,
+      "cost": 0.0502,
+      "priced": true
+    }
+  ],
+  "spent_total": 0.0559,
+  "terms": {
+    "C01": [
+      "Nip point",
+      "Rotating parts",
+      "Point of operation",
+      "Machine guarding",
+      "Hazardous energy",
+      "Lockout/Tagout",
+      "Servicing and maintenance"
+    ],
+    "C02": [
+      "Explosives handling",
+      "Explosive device",
+      "Electrical hazard",
+      "Pyrotechnic hazard",
+      "Testing and setup of explosive devices"
+    ],
+    "C05": [
+      "power press",
+      "point of operation",
+      "pinch point",
+      "crushing hazard",
+      "machine guarding",
+      "hazardous energy",
+      "servicing and maintenance"
+    ],
+    "C06": [
+      "Rotating machinery",
+      "Exposed moving parts",
+      "Exposure to contact with rotating parts"
+    ],
+    "C07": [
+      "slips, trips, and falls",
+      "trip hazard",
+      "fall hazard",
+      "stairway hazard",
+      "walking-working surface hazard"
+    ],
+    "C08": [
+      "hot surface burn hazard",
+      "radiant heat exposure hazard"
+    ],
+    "C09": [
+      "slips, trips, and falls",
+      "uneven walking surface"
+    ],
+    "C10": [
+      "overhead crane operation",
+      "magnetic lifting device",
+      "falling load hazard"
+    ],
+    "C11": [
+      "Table saw",
+      "Woodworking machinery",
+      "Machine guarding",
+      "Point of operation",
+      "Hazardous moving parts"
+    ],
+    "C12": [
+      "pinch point",
+      "crushing hazard",
+      "moving machinery parts",
+      "machinery guarding",
+      "servicing and maintenance",
+      "hazardous energy"
+    ],
+    "C13": [
+      "Fall from elevated surface",
+      "Falls to lower level",
+      "Unprotected elevated surface",
+      "Lack of fall protection",
+      "Fall hazard"
+    ],
+    "C14": [
+      "Slips, trips, and falls",
+      "Walking-Working Surfaces"
+    ],
+    "C15": [
+      "Abrasive wheel machinery",
+      "Exposed rotating parts",
+      "In-running nip points",
+      "Glove entanglement",
+      "Amputation from rotating equipment",
+      "Power transmission and drive system"
+    ],
+    "C16": [
+      "Abrasive wheel machinery",
+      "Exposed rotating parts",
+      "Portable power tools",
+      "Struck-by hazard (moving workpiece or plate)"
+    ],
+    "C17": [
+      "arc flash hazard",
+      "electrical hazard",
+      "exposed energized parts",
+      "work on or near energized parts",
+      "energized electrical equipment",
+      "hazardous energy"
+    ],
+    "C19": [
+      "entanglement in rotating machinery",
+      "unguarded rotating parts",
+      "loose clothing hazard",
+      "caught-in rotating equipment"
+    ],
+    "C21": [
+      "Moving machine parts",
+      "Machine guarding",
+      "Hazardous energy",
+      "Lockout/Tagout",
+      "Servicing and maintenance",
+      "Air under pressure"
+    ],
+    "C22": [
+      "Powered industrial truck",
+      "Caught-in/between hazard",
+      "Riding on a powered industrial truck"
+    ],
+    "C23": [
+      "Ladders",
+      "Fall hazard",
+      "Servicing and maintenance",
+      "Hazardous energy",
+      "Lockout/Tagout",
+      "Compressed air"
+    ],
+    "C24": [
+      "Pinch point hazard",
+      "Crushing hazard",
+      "Caught-in/between moving parts",
+      "Inadequate machine guarding",
+      "Servicing and maintenance hazard",
+      "Hazardous energy control (lockout/tagout)"
+    ],
+    "C25": [
+      "trip hazard",
+      "fall hazard",
+      "walking-working surface hazard"
+    ],
+    "C26": [
+      "Struck-by hazard",
+      "Falling object hazard",
+      "Compressed gas cylinder hazard"
+    ],
+    "C27": [
+      "Pinch point",
+      "Nip point",
+      "Moving machine parts",
+      "Point of operation",
+      "Lack of machine guarding"
+    ],
+    "C28": [
+      "moving machine parts",
+      "in-running nip points",
+      "blade contact hazard",
+      "point of operation hazard",
+      "amputation hazard"
+    ],
+    "C29": [
+      "Stairways",
+      "Falls from stairs",
+      "Slip, trip, and fall hazards on stairs",
+      "Walking-working surfaces"
+    ],
+    "C30": [
+      "powered industrial truck",
+      "falling load",
+      "suspended load",
+      "standing under a suspended load",
+      "struck-by hazard"
+    ],
+    "C31": [
+      "machine guarding",
+      "nip points",
+      "pinch points",
+      "crushing hazard",
+      "amputation hazard",
+      "entanglement hazard",
+      "point of operation",
+      "rotating parts"
+    ],
+    "C32": [
+      "trip hazard",
+      "obstructed walking surface",
+      "poor housekeeping"
+    ],
+    "C34": [
+      "exposed moving parts",
+      "machinery guarding",
+      "pinch point",
+      "point of operation",
+      "crushing hazard",
+      "hazardous energy control",
+      "lockout/tagout",
+      "servicing and maintenance"
+    ],
+    "C36": [
+      "Rotating machinery",
+      "Crushing hazard",
+      "Pinch point",
+      "Hot surface burn hazard",
+      "Machine guarding"
+    ],
+    "C37": [
+      "slips, trips, and falls",
+      "slip, trip, and fall hazard",
+      "fall hazard on walking-working surfaces"
+    ],
+    "C38": [
+      "hazardous chemical exposure",
+      "inhalation hazard",
+      "acute toxicity hazard"
+    ],
+    "C39": [
+      "Hot water burn hazard",
+      "Thermal burn hazard from hot liquids",
+      "Foot burn hazard from hot liquid entering footwear"
+    ],
+    "C41": [
+      "caught-in/between hazard",
+      "pinch point",
+      "exposed moving part",
+      "fall hazard",
+      "entanglement hazard"
+    ],
+    "C42": [
+      "Machine guarding",
+      "Point of operation",
+      "Lockout/Tagout",
+      "Hazardous energy control",
+      "Servicing and maintenance"
+    ],
+    "C43": [
+      "unguarded belt drive",
+      "moving machinery parts",
+      "lack of machine guarding",
+      "kickback from hand tool",
+      "struck-by from rotating equipment",
+      "mechanical energy release"
+    ],
+    "C44": [
+      "Unsecured load",
+      "Struck-by hazard",
+      "Fall hazard",
+      "Crushing hazard",
+      "Rolling object hazard",
+      "Inadequate load restraint"
+    ],
+    "C45": [
+      "machine guarding",
+      "dangerous moving parts",
+      "nip points",
+      "point of operation",
+      "hazardous energy",
+      "lockout/tagout",
+      "servicing and maintenance"
+    ],
+    "C46": [
+      "Falling object",
+      "Dropped object hazard",
+      "Struck-by hazard"
+    ],
+    "C47": [
+      "band saw",
+      "exposed blade",
+      "moving machine parts",
+      "machine guarding"
+    ],
+    "C48": [
+      "Fall from elevation",
+      "Unprotected edge on elevated surface",
+      "Unprotected sides and edges of elevated surface",
+      "Lack of guardrails on elevated surface"
+    ],
+    "C49": [
+      "rotating machinery",
+      "in-running nip points",
+      "pinch points",
+      "crushing hazard",
+      "unguarded moving parts",
+      "machine guarding",
+      "hazardous energy",
+      "point of operation"
+    ],
+    "C50": [
+      "Crushing hazard",
+      "Caught-in/between hazard",
+      "Struck-by hazard",
+      "Slips, trips, and falls hazard"
+    ],
+    "C52": [
+      "machine guarding",
+      "point of operation",
+      "exposed moving parts",
+      "rotating parts",
+      "amputation hazard",
+      "unguarded machinery"
+    ],
+    "C53": [
+      "Rotating machinery",
+      "Lockout/Tagout",
+      "Hazardous energy",
+      "Air under pressure",
+      "Servicing and maintenance"
+    ],
+    "C54": [
+      "Machine guarding",
+      "Machinery hazards",
+      "Pinch points",
+      "Setting up and adjusting machinery"
+    ],
+    "C56": [
+      "machine guarding",
+      "moving machine parts",
+      "point of operation",
+      "unintended start-up",
+      "nip points",
+      "hazardous energy",
+      "servicing and maintenance"
+    ],
+    "C57": [
+      "Powered industrial truck",
+      "Forklift tip-over",
+      "Caught-between hazard",
+      "Backing up powered industrial truck",
+      "Forklift operation on incline or ramp",
+      "Fall from elevated surface"
+    ],
+    "C58": [
+      "machine guarding",
+      "moving machine parts",
+      "pinch points",
+      "nip points",
+      "point of operation"
+    ],
+    "C59": [
+      "Power saw hazard",
+      "Rotating blade hazard",
+      "Exposed moving parts",
+      "Inadequate machine guarding",
+      "Woodworking machinery hazard",
+      "Amputation hazard"
+    ],
+    "C60": [
+      "Powered industrial truck",
+      "Pedestrian exposure to a powered industrial truck",
+      "Narrow-aisle forklift operation"
+    ]
+  }
+}

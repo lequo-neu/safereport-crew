@@ -1,0 +1,68 @@
+# Models SafeReport Crew may call, and how the router moves between them.
+#
+# Model IDs were checked on 2026-11-19 against each provider's own model list (see `note`).
+# Check them again before any live run: a retired ID is replaced here, with no code change.
+# `prices` are US dollars per million tokens (input, output); a model without a confirmed
+# price has none, and its cost is reported as unknown rather than guessed. `context_window`
+# is left out until it is read from the provider's page.
+#
+# `prior` is a starting guess of the share of steps the model gets right, by step type. It is
+# not a measurement: the evaluation replaces it with measured values, and the trace marks every
+# routing choice that still rests on a prior.
+
+[router]
+# Accuracy a model must reach on a step before the router trusts it, by case difficulty.
+bar = { simple = 0.80, moderate = 0.88, hard = 0.95 }
+# Order tried when a call times out, hits a rate limit or gets a server error.
+fallback_order = ["claude", "gemini_flash", "gpt_nano", "gemma_local"]
+# Below this Intake confidence the step moves up to a stronger model, and the code goes to a person.
+min_confidence = 0.70
+# When the top two standards score closer than this, the Standards step moves up.
+min_retrieval_margin = 0.05
+# Tries on one model before moving down the fallback chain, and the wait between them.
+retries_per_model = 1
+backoff_seconds = 2.0
+
+[[models]]
+name = "claude"
+label = "Claude Sonnet 5.5"
+provider = "anthropic"
+model_id = "claude-sonnet-5-5"
+# Looked up for our earlier course work on 2026-11-03.
+prices = [2.00, 10.00]
+roles = ["retrieve", "decide"]
+prior = { code = 0.90, retrieve = 0.90, decide = 0.92, write = 0.92 }
+checked_on = "2026-11-19"
+note = "Anthropic's current Sonnet."
+
+[[models]]
+name = "gpt_nano"
+label = "GPT 5 nano"
+provider = "openai"
+model_id = "gpt-5-nano"
+prices = [0.05, 0.40]
+roles = ["code"]
+prior = { code = 0.82, retrieve = 0.75, decide = 0.75, write = 0.80 }
+checked_on = "2026-11-19"
+note = "Listed on OpenAI's model page (snapshot gpt-5-nano-2025-08-07). One third party lists retirement on 2026-12-11; recheck before the demo."
+
+[[models]]
+name = "gemini_flash"
+label = "Gemini 3.5 Flash"
+provider = "google"
+model_id = "gemini-3.5-flash"
+roles = ["write"]
+prior = { code = 0.85, retrieve = 0.85, decide = 0.85, write = 0.92 }
+checked_on = "2026-11-19"
+note = "Generally available in Google's docs; one Google page says requests now forward to Gemini 3.6 Flash. No price confirmed."
+
+[[models]]
+name = "gemma_local"
+label = "Gemma 4 E4B (local)"
+provider = "local"
+model_id = "google/gemma-4-e4b"
+prices = [0.0, 0.0]
+roles = ["private"]
+prior = { code = 0.75, retrieve = 0.70, decide = 0.70, write = 0.75 }
+checked_on = "2026-11-19"
+note = "On the LM Studio hub; served by LM Studio on this machine."

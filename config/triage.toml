@@ -1,0 +1,26 @@
+# Assumptions of the weekly inspection list. They are ours, not OSHA's; the team agrees on them
+# and the Area Director can change them per run. See src/safereport/triage.py.
+
+# Inspector days of the replayed week when a request names none.
+default_capacity = 40.0
+
+# What each Category 2 factor adds to a report's priority.
+[weights]
+amputation = 3.0
+loss_of_eye = 3.0
+hospitalized = 2.0              # per person, at most two
+fatality_potential = 2.0
+failed_safeguard = 2.0
+temporary_worker = 1.5
+specific_standard = 1.0
+common_in_industry = 1.0        # times the hazard's share of the industry's reports
+possible_emphasis_program = 1.0 # a program whose scope we have not read from its directive
+
+# Inspector days one on site inspection takes, by hazard; any other hazard takes `other`.
+[inspection_days]
+machine = 2.5
+fall_height = 2.0
+chemical = 3.0
+fire = 3.0
+crane_load = 2.5
+other = 1.5
