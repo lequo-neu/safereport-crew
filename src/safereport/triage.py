@@ -21,6 +21,7 @@ from typing import Literal
 import pulp
 
 from safereport.config import PROJECT_ROOT
+from safereport.employers import normalize_name
 from safereport.schemas import IntakeResult, Report
 from safereport.signals import mentions_failed_safeguard, mentions_minor_worker, mentions_temporary_worker
 
@@ -176,7 +177,7 @@ def plan_week(cases: list[Case], capacity: float, rules: Rules | None = None) ->
             forced[case.report_id] = "Category 1: " + "; ".join(t.criterion for t in case.category_one)
         elif case.report_id in rules.force_inspection:
             forced[case.report_id] = "set to inspection by the Area Director"
-        elif case.employer.lower() in {e.lower() for e in rules.inspect_employers}:
+        elif normalize_name(case.employer) in {normalize_name(e) for e in rules.inspect_employers}:
             forced[case.report_id] = f"rule: inspect every report from {case.employer}"
         if case.report_id in forced:
             problem += pick[case.report_id] == 1

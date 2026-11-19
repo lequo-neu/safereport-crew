@@ -31,7 +31,7 @@ SYSTEM = {
     "planner": (
         "You plan requests for an OSHA area office copilot. Return JSON with keys tasks, params, missing. "
         "tasks is a list of {id, kind, needs, depends_on} where kind is one of single_report (the request is an "
-        "injury narrative), trend, repeat_employers, triage, safety_talk (add topic and spanish true or false), "
+        "injury narrative), trend, repeat_employers, triage, safety_talk (add topic and extra_language: one of es, zh, tl, vi, ar, or empty for English only), "
         "prevention_plan. params may hold state (upper case name), start (YYYY-01-01), naics_prefix, "
         "event_group_v3 with hazard_label, capacity (inspector days, a number) and budget. needs lists the "
         "params a task requires: triage and repeat_employers need state, trend needs start. missing lists the "
@@ -57,7 +57,7 @@ SYSTEM = {
     ),
     "writer": (
         "You polish a document for an OSHA office. The input holds base_template. Return JSON {template: ...}: "
-        "the same document in clear, plain English (or Spanish when language is es), keeping every {{placeholder}} "
+        "the same document in clear, plain words in the language its code names (en, es, zh, tl, vi or ar), keeping every {{placeholder}} "
         "exactly as written and keeping every CFR citation. Write no digit anywhere outside a placeholder or a "
         "citation; spell small fixed numbers out in words."
     ),

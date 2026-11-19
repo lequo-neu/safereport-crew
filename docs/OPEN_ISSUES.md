@@ -80,7 +80,40 @@ Updated on 19 November 2026, after the team decisions and the second independent
 11. **Model IDs move.** `gpt-5-nano` is listed by one third party for retirement on 11 December
     2026, and `gemini-3.5-flash` forwards to 3.6 Flash. Recheck before the demo.
 
+## Found while building the app (Phase 3)
+
+* **The Standards agent cited a paragraph nobody had checked.** For a laminator jam it cited
+  1910.147(a)(2)(iii)(A), the cord and plug exemption. Retrieval is measured at section level, so
+  the crew now cites the section, quotes its opening, and shows the closest paragraph apart for a
+  person to check. The runner up section is no longer called a secondary citation.
+* **A dead provider slowed every call.** Each call retried it after two seconds. A model that
+  fails every retry with an outage is now skipped for 60 seconds (`cooldown_seconds`).
+* **Typed decisions in the table were error prone.** Rows now move with two pick lists, and the
+  employer rule ignores case, commas and suffixes such as Inc.
+* **Offline letters cite the top BM25 section** (about 41% right on the key). With `--live`, the
+  Standards agent adds model terms (61% to 71%).
+
+* **The week asked for a person to sign letters unread.** A picked row now shows its narrative,
+  checks, employer history (with why an earlier report does or does not count as a repeat) and
+  the letter as it will be sent, on the same page as the approval.
+* **A state map of report counts would mislead**, so there is none: State Plan states are
+  almost absent from this federal file (California 539 reports, Texas 17,491) and there is no
+  employment to divide by.
+
+* **Edge cases found in UI testing.** Negative, blank or absurd inspector days are refused before
+  planning (zero stays allowed: a week without spare days is real, and the plan then says how
+  many days the Category 1 reports need). An empty week (Wyoming, 17 to 23 November 2025) says
+  so and cannot be approved. A safety talk needs one of the four topics.
+
 ## Still open
+
+* **A fall standard for an injury that was not a fall** (added on 19 November 2026, with the
+  team's agreement). A section of 1910.22, .23, .28, .29 or .140 needs an injury where the worker
+  fell. Measured once on the answer key, the rule flagged 2 of the 10 fall cases (C14, C32): the
+  offline Intake reads "heel caught on a cart" as a machine. The rule was not adjusted to those
+  cases; it is a check for a person (an amber badge, a line under the answer) and the critic does
+  not change the citation. On the Texas week it flags 4 reports: rope around a capstan, scale off
+  a crane load and a beam on a forklift are right; a worker who jumped off a trailer did fall.
 
 * **Router accuracies.** The router still chooses by the priors in `config/models.toml` (0.90
   for Claude on retrieval, 0.75 for GPT 5 nano). The live numbers come from the final test set,

@@ -71,3 +71,22 @@ def test_usage_is_logged_with_cost(router: Router):
     row = router.log.rows("r2")[0]
     assert row["model"] == "gpt_nano" and row["input_tokens"] == 1000
     assert row["cost"] == pytest.approx(record.cost) and row["cost"] > 0
+
+
+def test_a_model_in_an_outage_is_skipped_until_its_cool_down_ends():
+    settings = load_model_settings()
+    router = offline_router(settings, {"decide": lambda prompt: "plan"})
+    router.backends["claude"] = OfflineBackend(name="claude", handlers={"decide": lambda p: "plan"},
+                                               failures={"decide": ["server_error"] * 2})  # fmt: skip
+    waits, now = [], [0.0]
+    router.sleep, router.clock = waits.append, lambda: now[0]
+    router.call("decide", "{}", run_id="first")
+    assert waits == [settings.router.backoff_seconds], "the first outage is retried once"
+    _, record = router.call("decide", "{}", run_id="second")
+    assert record.model == "gemini_flash" and record.fallback_from == "claude"
+    assert len(waits) == 1 and not router.log.rows("second")[0]["error"], "no wait, no call to claude"
+    now[0] = settings.router.cooldown_seconds + 1
+    _, record = router.call("decide", "{}", run_id="third")
+    assert record.model == "claude" and "claude" not in router.down, (
+        "after the cool down claude answers again"
+    )

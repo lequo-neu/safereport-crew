@@ -22,6 +22,8 @@ min_retrieval_margin = 0.05
 # Tries on one model before moving down the fallback chain, and the wait between them.
 retries_per_model = 1
 backoff_seconds = 2.0
+# A model that failed every retry with an outage is skipped for this long, then tried again.
+cooldown_seconds = 60.0
 
 [[models]]
 name = "claude"

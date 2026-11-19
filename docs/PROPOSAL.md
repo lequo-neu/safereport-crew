@@ -30,7 +30,7 @@ Each report goes to an OSHA area office, which must choose between an **on site 
 | **Safety manager** at a small or mid size plant (secondary user) | which hazards to fix first with the yearly budget; what to train on | **N11** injuries in plants of their industry and state, and the trend; 76% of manufacturing employers filed only one report in eleven years, so their own history is too thin | trend and similar injury questions with charts | 2 |
 | | | **N12** the standards for those hazards in plain words | plain language summaries | 1 |
 | | | **N13** what to fix first within the budget | prevention plan (extension) | 8 |
-| | | **N14** a safety talk for a shift in English and Spanish | Writer, Word export | 6 |
+| | | **N14** a safety talk for a shift in English and, if the crew needs it, one of Spanish, Chinese, Tagalog, Vietnamese or Arabic | Writer, Word export | 6 |
 | **Admin** | models, keys, private mode | **N15** control what each model sees and what it costs | AI controls page, cost logs | 7 |
 
 **Not for:** workers and the public (OSHA already publishes the reports), and decisions without a person: every inspection, letter and plan is approved by someone. We replay past weeks of published reports, with one state standing in for one office's territory; a live OSHA feed is outside the project.

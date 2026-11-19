@@ -63,3 +63,19 @@ def test_seeded_guarding_errors_on_jam_and_cleaning_cases_of_the_key_are_caught(
     assert len(key) == 11
     # The rule needs the narrative to name the servicing activity; most lockout cases do.
     assert caught >= 9
+
+
+def test_a_fall_standard_needs_a_worker_who_fell_and_a_person_decides():
+    hit = check_citation(
+        facts(hazard_type="crane_load", machine_or_hazard="crane"), "1910.28(b)(1)", naics="331"
+    )
+    assert [i.rule for i in hit] == ["fall_only"] and hit[0].fix is False, (
+        "flagged for a person, not corrected"
+    )
+    for hazard in ("fall_height", "ladder", "same_level", "other"):
+        assert check_citation(facts(hazard_type=hazard), FALL_SECTIONS[hazard], naics="331") == [], hazard
+    assert check_citation(facts(hazard_type="crane_load"), "1910.179(b)(1)", naics="331") == []
+
+
+FALL_SECTIONS = {"fall_height": "1910.28(b)(1)", "ladder": "1910.23(b)(1)", "same_level": "1910.22(a)(1)",
+                 "other": "1910.28"}  # fmt: skip

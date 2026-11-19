@@ -43,6 +43,7 @@ from safereport.redaction import redact
 from safereport.retrieval import IndexRegistry
 from safereport.router import Mode, Router, Signals
 from safereport.schemas import CITATION, DIRECTIVE, GENERAL_DUTY, IntakeResult, Report
+from safereport.talk_languages import extra_language
 from safereport.triage import (
     DEFAULT_CAPACITY,
     Case,
@@ -107,6 +108,9 @@ class Services:
     # so the critic can be shown catching a wrong or invented citation.
     seeded_pick: dict[str, str] | None = None
     similar: Any = None  # SimilarReports; None skips the similar injury search
+    # Where confirmed and rejected employer matches are kept (a DecisionStore); None keeps them
+    # in memory only.
+    decisions: Any = None
     _employers: dict[str, EmployerIndex] = field(default_factory=dict)
     _lock: threading.Lock = field(default_factory=threading.Lock)
 
@@ -116,7 +120,7 @@ class Services:
         with self._lock:
             if state not in self._employers:
                 rows = self.store.frame("SELECT * FROM reports WHERE upper(state) = ?", [state])
-                self._employers[state] = EmployerIndex(rows)
+                self._employers[state] = EmployerIndex(rows, store=self.decisions)
             return self._employers[state]
 
 
@@ -270,10 +274,15 @@ def build_graph(services: Services, checkpointer=None):
             return {"primary": seeded["primary"], "secondary": seeded.get("secondary", ""), "quote": ""}
         if intake.hazard_type in NO_SPECIFIC or not found.sections:
             return {"primary": GENERAL_DUTY, "secondary": "", "quote": services.registry.general_duty().text}
+        # The section is cited: retrieval is measured at section level, and the closest paragraph
+        # can be the wrong one (for a laminator jam, the cord and plug exemption of 1910.147). The
+        # paragraph is kept for a person to check. A secondary comes only from a domain rule; the
+        # runner up section is a candidate, not a citation.
         best = found.sections[0].best.document
-        citation = best.citation if best.exact_citation else best.section
-        secondary = found.sections[1].section if len(found.sections) > 1 else ""
-        return {"primary": citation, "secondary": secondary, "quote": best.text[:600]}
+        opening = services.citations.text(best.section)[:600] or best.text[:600]
+        paragraph = best.citation if best.exact_citation and best.citation != best.section else ""
+        return {"primary": best.section, "secondary": "", "quote": opening, "paragraph": paragraph,
+                "paragraph_text": best.text[:600] if paragraph else ""}  # fmt: skip
 
     def industry_share(report: Report, code: str = "") -> float:
         """Share of the industry's reports since 2022 in the same estimated OIICS 3 event group.
@@ -455,7 +464,9 @@ def build_graph(services: Services, checkpointer=None):
             "SELECT count(*) AS n FROM reports WHERE starts_with(naics, ?) AND regexp_matches(lower(narrative), ?)",
             [prefix, words.get(task["topic"], "lock")],
         )["n"].iloc[0]  # fmt: skip
-        finding = {"kind": "safety_talk", "topic": task["topic"], "spanish": task.get("spanish", False),
+        # English always, and at most one more language for the floor crew.
+        extra, _ = extra_language(task.get("extra_language") or ("es" if task.get("spanish") else ""))
+        finding = {"kind": "safety_talk", "topic": task["topic"], "languages": ["en", *([extra] if extra else [])],
                    "facts": {"topic_reports": (int(count), "ReportStore", True), "since": ("2015", "data", True)}}  # fmt: skip
         return {"done": [task["id"]], "findings": {task["id"]: finding},
                 "trace": [_trace("Analyst", f"{count} reports on {task['topic']}", tool="ReportStore")]}  # fmt: skip
@@ -634,7 +645,7 @@ def build_graph(services: Services, checkpointer=None):
                        "single_year": finding.get("single_year", False)}  # fmt: skip
             yield f"{task_id}:answer", payload, finding["facts"]
         elif kind == "safety_talk":
-            for language in ("en", "es") if finding["spanish"] else ("en",):
+            for language in finding["languages"]:
                 yield (f"{task_id}:talk_{language}", {"kind": "safety_talk", "topic": finding["topic"], "language": language},
                        finding["facts"])  # fmt: skip
         elif kind == "triage":
@@ -714,13 +725,18 @@ def build_graph(services: Services, checkpointer=None):
                 for issue in check_citation(facts, finding["pick"]["primary"], finding["pick"].get("secondary", ""),
                                             finding["report"]["naics"], "1926" in services.registry.retrievers):  # fmt: skip
                     issues.append({"doc": task_id, "rule": issue.rule, "message": issue.message,
-                                   "suggestion": issue.suggestion, "route": "standards", "task": task_id})  # fmt: skip
+                                   "suggestion": issue.suggestion, "route": "standards" if issue.fix else "person",
+                                   "task": task_id})  # fmt: skip
             if finding["kind"] == "triage":
                 issues += plan_issues(finding)
                 issues += triage_citation_issues(task_id, finding)
         writer_retries = state.get("writer_retries", 0)
         update: dict[str, Any] = {"issues": issues}
-        summary = f"{len(issues)} issues" if issues else "every citation, number and rule checks out"
+        fixes = [i for i in issues if i["route"] != "person"]
+        checks = len(issues) - len(fixes)
+        summary = f"{len(fixes)} issues" if fixes else "every citation, number and rule checks out"
+        if checks:
+            summary += f"; {checks} left for a person to check"
         update["trace"] = [
             _trace("Decision critic", summary, tool="CitationIndex, domain checks, FactLedger")
         ]
@@ -751,7 +767,7 @@ def build_graph(services: Services, checkpointer=None):
             for issue in check_citation(facts, pick["primary"], pick.get("secondary", ""), item["report"]["naics"],
                                         "1926" in services.registry.retrievers):  # fmt: skip
                 problems.append({**where, "rule": issue.rule, "message": f"{report_id}: {issue.message}",
-                                 "suggestion": issue.suggestion})  # fmt: skip
+                                 "suggestion": issue.suggestion, "route": "standards" if issue.fix else "person"})  # fmt: skip
         return problems
 
     def _citation_ok(citation: str) -> bool:
@@ -812,7 +828,7 @@ def build_graph(services: Services, checkpointer=None):
             )
             findings[issue["task"]] = finding
         update: dict[str, Any] = {"findings": findings, "writer_retries": state.get("writer_retries", 0) + 1,
-                                  "trace": [_trace("Decision critic", f"sent {len(state.get('issues', []))} issues back")]}  # fmt: skip
+                                  "trace": [_trace("Decision critic", f"sent {sum(i['route'] == 'standards' for i in state.get('issues', []))} issues back")]}  # fmt: skip
         if overrides:
             update["pick_overrides"] = overrides
         return update
@@ -880,7 +896,11 @@ def build_graph(services: Services, checkpointer=None):
                                                   "trace": [_trace("Area Director", "asked for changes; resuming at the Optimizer")]})  # fmt: skip
 
     def finish(state: CrewState) -> dict[str, Any]:
-        return {"answer": state.get("answer") or finalize(state, [])}
+        # Checks left for a person (route "person") are listed under the answer; nothing else is open here.
+        return {
+            "answer": state.get("answer")
+            or finalize(state, [i for i in state.get("issues", []) if i["route"] == "person"])
+        }
 
     def finalize(state: CrewState, issues: list[dict[str, Any]]) -> str:
         """Render every draft once the retries are spent.
@@ -915,10 +935,14 @@ def build_graph(services: Services, checkpointer=None):
                 )
             parts.append(ledger.render(template))
         warnings = sorted(
-            {i["message"] for i in issues if i["route"] == "standards" and i["rule"] != "unknown_citation"}
+            {
+                i["message"]
+                for i in issues
+                if i["route"] in ("standards", "person") and i["rule"] != "unknown_citation"
+            }
         )
         if warnings:
-            parts.append("Still flagged by the Decision critic, for a person to check:\n"
+            parts.append("For a person to check before this goes out:\n"
                          + "\n".join(f"* {w}" for w in warnings))  # fmt: skip
         for finding in state.get("findings", {}).values():
             if finding["kind"] == "note":

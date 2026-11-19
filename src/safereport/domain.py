@@ -21,6 +21,9 @@ MECHANICAL_PRESS = re.compile(
 )
 NO_SPECIFIC_STANDARD = {"overexertion", "violence", "bite", "heat"}
 FALL_SECTION = {"ladder": "1910.23", "fall_height": "1910.28", "same_level": "1910.22"}
+# Walking working surfaces and fall protection: they fit only an injury where the worker fell.
+FALL_PROTECTION = {"1910.22", "1910.23", "1910.28", "1910.29", "1910.140"}
+NOT_READ = {"other", "unknown", ""}
 
 
 @dataclass
@@ -28,6 +31,8 @@ class DomainIssue:
     rule: str
     message: str
     suggestion: str
+    # False for a rule that a person checks: the critic shows it but does not change the citation.
+    fix: bool = True
 
 
 def _section(citation: str) -> str:
@@ -81,6 +86,22 @@ def check_citation(
                 "fall_family",
                 f"a {facts.hazard_type.replace('_', ' ')} fall is {expected}, not {first}",
                 f"cite {expected}",
+            )
+        )
+    if (
+        first in FALL_PROTECTION
+        and facts.hazard_type not in FALL_SECTION
+        and facts.hazard_type not in NOT_READ
+    ):
+        # "Scale fell 7 feet off the caster onto his foot" is a struck by injury: the worker did not fall.
+        issues.append(
+            DomainIssue(
+                "fall_only",
+                f"{first} is about falls, but the worker was hurt by {facts.hazard_type.replace('_', ' ')}",
+                "cite the standard for what hurt the worker",
+                # Measured once on the answer key: 2 of the 10 fall cases were flagged, because the offline
+                # Intake reads "heel caught on a cart" as a machine. So a person decides, not the critic.
+                fix=False,
             )
         )
     if any(c.startswith("1926.") for c in cited) and not naics.startswith("23"):

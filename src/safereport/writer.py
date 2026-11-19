@@ -10,6 +10,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from safereport.talk_languages import LEADS, TRANSLATIONS
+
 
 TALKS: dict[str, dict[str, dict[str, Any]]] = {
     "lockout": {
@@ -103,6 +105,8 @@ TALKS: dict[str, dict[str, dict[str, Any]]] = {
         },
     },
 }
+for _topic, _languages in TRANSLATIONS.items():
+    TALKS[_topic].update(_languages)
 TALKS["ladder"] = TALKS["fall"]
 TALKS["slip"] = TALKS["fall"]
 
@@ -158,12 +162,9 @@ def draft(payload: dict[str, Any]) -> dict[str, Any]:
             "Area Director"
         )
     elif kind == "safety_talk":
-        talk = TALKS.get(payload.get("topic", "lockout"), TALKS["lockout"])[payload.get("language", "en")]
-        lead = (
-            "En las plantas como la suya hubo {{topic_reports}} lesiones graves de este tipo desde {{since}}."
-            if payload.get("language") == "es"
-            else "Plants like yours reported {{topic_reports}} severe injuries of this kind since {{since}}."
-        )
+        language = payload.get("language", "en")
+        talk = TALKS.get(payload.get("topic", "lockout"), TALKS["lockout"])[language]
+        lead = LEADS[language]
         template = (
             f"# {talk['title']}\n\n{lead} {talk['why']}\n\n{_bullets(talk['points'])}\n\n{talk['close']}"
         )
