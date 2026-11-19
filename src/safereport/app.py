@@ -518,10 +518,18 @@ def build_app(crew: Crew) -> gr.Blocks:
 
         refreshed = [table, active, week_map, week_events, to_inspect, to_letter, match_panel, week_trace, source,
                      downloads]  # fmt: skip
-        load.click(lambda s, d, sess: (*views.load_week(crew, sess, s, d), d, sess), [state, days, session],
-                   [*week_outputs, capacity, session]).then(after_week, [show_rows, session], refreshed)  # fmt: skip
+
+        def run_week(state_name, inspector_days, sess):
+            return (*views.load_week(crew, sess, state_name, inspector_days), inspector_days, sess)
+
+        load.click(run_week, [state, days, session], [*week_outputs, capacity, session]).then(
+            after_week, [show_rows, session], refreshed)  # fmt: skip
+        # Reset puts every filter back and plans the default week again, so the controls at the top and
+        # the list, figures and map below always describe the same week.
         reset.click(lambda: ("Texas", 40, "All", EMPTY_CASE, gr.HighlightedText(value=[], visible=False), "", "", "", ""),
-                    None, [state, days, show_rows, q_letter, q_narrative, q_checks, q_rule, q_context, q_draft])  # fmt: skip
+                    None, [state, days, show_rows, q_letter, q_narrative, q_checks, q_rule, q_context, q_draft]).then(
+            run_week, [state, days, session], [*week_outputs, capacity, session]).then(
+            after_week, [show_rows, session], refreshed)  # fmt: skip
         changes.click(
             lambda t, c, r, ro, up, down, sess: (*views.ask_for_changes(crew, sess, t, c, r, ro, up, down), sess),
             [table, capacity, rule, role, to_inspect, to_letter, session], [*week_outputs, session],
