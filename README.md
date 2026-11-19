@@ -31,7 +31,7 @@ safereport ui --live         # models with an API key answer; costs money, cappe
 |---|---|---|
 | Triage officer | This week's reports | filter the list (Category 1, needs review, inspections, letters), inspect any report beside the list, move rows, add notes, resolve employer matches, download the selection as CSV |
 | Area Director | This week's reports | the same, and approve the list (the run resumes from its saved state) |
-| Plant safety manager | Trends and prevention | trends by state, industry and event; a safety talk in English and Spanish |
+| Plant safety manager | Trends and prevention | trends by state, industry and event; a safety talk in English plus at most one of Spanish, Chinese, Tagalog, Vietnamese or Arabic |
 | Admin | AI controls and evaluation | routing mode, redaction, a simulated outage of any provider, model calls log |
 
 The week page follows OSHA's Severe Injury Dashboard and an EHS triage desk: totals of
@@ -79,6 +79,7 @@ safereport ask "An employee's hand was pulled into the rollers of a laminator wh
 safereport ask "Find caught in machinery injuries in Texas since 2022, check which employers reported more than once, then plan this week's inspections with 40 inspector days." --approve
 safereport ask "Plan this week's inspections with 40 inspector days." --answer state=Texas --approve
 safereport ask "Write a ten minute safety talk on lockout for my night shift, in English and Spanish."
+safereport ask "Write a forklift safety talk for the next shift in English and Vietnamese."
 safereport ask "..." --mode private
 safereport ask "..." --live          # calls the models whose API keys are set; costs money
 safereport employer-pairs            # scores the hand check of employer matching
@@ -99,7 +100,7 @@ picks it makes are a stand in, not a result to report; see [docs/OPEN_ISSUES.md]
    `Send` branch each, where **Intake**, **Standards** and the **Analyst** run on models.
 3. The **Optimizer** applies OSHA's Category 1 rules, then a PuLP integer program spends the
    inspector days left; with too few days a relaxed model says how many more are needed.
-4. The **Writer** drafts briefs, RRI letters, safety talks (English and Spanish) and answers with
+4. The **Writer** drafts briefs, RRI letters, safety talks (English plus at most one of Spanish, Chinese, Tagalog, Vietnamese or Arabic) and answers with
    every number as a FactLedger placeholder.
 5. The **Decision critic** checks every citation against eCFR, the OSHA domain rules, every number
    and the plan rules, and sends work back at most twice per loop.

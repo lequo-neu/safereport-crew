@@ -229,6 +229,7 @@ def main() -> None:
     run.add_argument(
         "--answer", action="append", default=[], help="answer a Planner question, e.g. state=Texas"
     )
+    run.add_argument("--live", action="store_true", help="let models with an API key answer; costs money")
     args = parser.parse_args()
     if args.command == "check":
         check()
