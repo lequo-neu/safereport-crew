@@ -9,15 +9,68 @@ The plan is in [docs/PROPOSAL.md](docs/PROPOSAL.md); related products are compar
 
 ## Status
 
-Phase 2 of 4 done. The seven agents run as a LangGraph graph on a deterministic offline backend,
-so everything below works locally with no API key. Live model clients are added near the end of
-the project, when the keys are used.
+Phase 3 of 4 done. The seven agents run as a LangGraph graph behind a Gradio app with a view per
+role. Everything works locally with no API key on a deterministic offline backend; with `--live`,
+the models whose keys are set answer for real, cached and capped at the team's budget.
 
 | Phase | What it built |
 |---|---|
 | 0 | answer key, model config, schemas, offline backend |
 | 1 | Parquet and DuckDB data layer, eCFR retrieval (BM25 plus FAISS), baseline event coder, employer matching, redaction |
 | 2 | the crew: Planner, Intake, Standards, Analyst, Optimizer, Decision critic, Writer; router with escalation and fallback; triage integer program; domain checks; FactLedger; interrupts for questions and approval; live adapters for Anthropic, OpenAI, Google and LM Studio; similar injury search over all narratives |
+| 3 | the Gradio app: a view per role, chat with a live trace, Evidence view, the week's editable list with approval and a matches panel, trends and safety talks, AI controls with simulated outages, the evaluation page with a Pareto chart, CSV and Word downloads |
+
+## Run the app
+
+```bash
+safereport ui                # http://localhost:7860, offline rules
+safereport ui --live         # models with an API key answer; costs money, capped at $1.50
+```
+
+| Role | Opens on | Can also |
+|---|---|---|
+| Triage officer | This week's reports | filter the list (Category 1, needs review, inspections, letters), inspect any report beside the list, move rows, add notes, resolve employer matches, download the selection as CSV |
+| Area Director | This week's reports | the same, and approve the list (the run resumes from its saved state) |
+| Plant safety manager | Trends and prevention | trends by state, industry and event; a safety talk in English plus at most one of Spanish, Chinese, Tagalog, Vietnamese or Arabic |
+| Admin | AI controls and evaluation | routing mode, redaction, a simulated outage of any provider, model calls log |
+
+The week page follows OSHA's Severe Injury Dashboard and an EHS triage desk: totals of
+reports, Category 1, hospitalizations, amputations and losses of an eye at the top; the list on
+the left and a case inspector on the right (narrative, checks, history, the letter as it will be
+sent); the decision bar below; then reports by geography beside the top five events and what
+each inspector day buys. RRI replies are dated five working days out, federal holidays skipped.
+Agent and model details stay in a closed "Routing & audit log" drawer and on the admin page. The
+map tiles come from CARTO and OpenStreetMap, so the browser needs the internet for them.
+
+Every role has Ask (chat beside the trace of agents, models, routing reasons, cost and time), the
+Evidence view (the narrative with the words the Intake agent used, beside the rule and its check
+badges) and Downloads. Sign in is off by default and the role is picked at the top; set
+`SAFEREPORT_PASSWORD` to require it, with the accounts `triage`, `director`, `manager` and `admin`.
+
+## Languages: an English office, talks in the crew's language
+
+The app, the evidence, the citations and every letter stay in English; only the safety talk for
+the next shift comes in a second language, at most one, chosen from the five most spoken at home
+after English.
+
+* **Why the office stays in English.** Triage officers, Area Directors and admins work from
+  OSHA's reports, 29 CFR 1910 and RRI letters, all in English. A translated interface invites a
+  mistranslated rule, and the Evidence view highlights the narrative by character offsets that
+  translation would break.
+* **Why the talk does not.** OSHA asks that training be given "in a language and vocabulary
+  workers can understand" (Training Standards Policy Statement, 28 April 2010). In the American
+  Community Survey for 2025 (1 year estimates, table B16001, people age 5 and over), 74,190,755
+  people, 22.9%, speak a language other than English at home, so about 77.1% speak only English.
+  The most spoken are Spanish (44,921,985), Chinese (3,775,645), Tagalog (1,969,835), Vietnamese
+  (1,659,708) and Arabic (1,366,367). Counts as summarized by
+  [Access Multilingual](https://accessmultilingual.com/resources/languages-spoken-in-the-united-states-census-2024);
+  check them against data.census.gov before quoting, and note that the 2025 sample was smaller
+  after a six week pause in data collection.
+* **One extra language, not many.** A shift talk is read aloud to one crew; English plus the
+  crew's language keeps the handout to two pages and the review to one native speaker.
+* **The translations are drafts.** They were written with an AI assistant
+  (`src/safereport/talk_languages.py`) and must be read by a native speaker before a plant uses
+  them. Word files set the script: an East Asian font for Chinese, right to left for Arabic.
 
 ## Try the crew
 
@@ -26,6 +79,7 @@ safereport ask "An employee's hand was pulled into the rollers of a laminator wh
 safereport ask "Find caught in machinery injuries in Texas since 2022, check which employers reported more than once, then plan this week's inspections with 40 inspector days." --approve
 safereport ask "Plan this week's inspections with 40 inspector days." --answer state=Texas --approve
 safereport ask "Write a ten minute safety talk on lockout for my night shift, in English and Spanish."
+safereport ask "Write a forklift safety talk for the next shift in English and Vietnamese."
 safereport ask "..." --mode private
 safereport ask "..." --live          # calls the models whose API keys are set; costs money
 safereport employer-pairs            # scores the hand check of employer matching
@@ -46,7 +100,7 @@ picks it makes are a stand in, not a result to report; see [docs/OPEN_ISSUES.md]
    `Send` branch each, where **Intake**, **Standards** and the **Analyst** run on models.
 3. The **Optimizer** applies OSHA's Category 1 rules, then a PuLP integer program spends the
    inspector days left; with too few days a relaxed model says how many more are needed.
-4. The **Writer** drafts briefs, RRI letters, safety talks (English and Spanish) and answers with
+4. The **Writer** drafts briefs, RRI letters, safety talks (English plus at most one of Spanish, Chinese, Tagalog, Vietnamese or Arabic) and answers with
    every number as a FactLedger placeholder.
 5. The **Decision critic** checks every citation against eCFR, the OSHA domain rules, every number
    and the plan rules, and sends work back at most twice per loop.

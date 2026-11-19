@@ -35,6 +35,9 @@ INDUSTRIES = {
     "construction": "23",
     "manufacturing": "3",
 }
+# Words that ask for a talk in one more language; the first one named wins.
+TALK_LANGUAGE_WORDS = {"es": r"spanish|español", "zh": r"chinese|mandarin|cantonese|中文", "tl": r"tagalog|filipino",
+                       "vi": r"vietnamese|tiếng việt", "ar": r"arabic|العربية"}  # fmt: skip
 # Hazard words to an OIICS 3 event group prefix, so trends can cross January 2024.
 HAZARDS = {
     "caught in machinery": "653",
@@ -169,8 +172,11 @@ def plan_request(request: str, today: date | None = None) -> dict[str, Any]:
                 ),
                 "lockout",
             )
+            language = next(
+                (code for code, words in TALK_LANGUAGE_WORDS.items() if re.search(words, lower)), ""
+            )
             tasks.append({"id": "talk", "kind": "safety_talk", "needs": [], "depends_on": [],
-                          "topic": topic, "spanish": "spanish" in lower or "español" in lower})  # fmt: skip
+                          "topic": topic, "extra_language": language})  # fmt: skip
         if budget or "prevention" in lower:
             tasks.append({"id": "prevention", "kind": "prevention_plan", "needs": [], "depends_on": []})
             if budget:

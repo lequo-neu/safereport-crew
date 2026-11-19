@@ -19,7 +19,8 @@ PAYLOADS = [
     {"kind": "repeat_answer"},
     {"kind": "triage_summary", "infeasible": True},
     {"kind": "plant_memo", "citation": "1910.147"},
-    *({"kind": "safety_talk", "topic": topic, "language": language} for topic in TALKS for language in ("en", "es")),
+    *({"kind": "safety_talk", "topic": topic, "language": language}
+      for topic in TALKS for language in ("en", "es", "zh", "tl", "vi", "ar")),
 ]  # fmt: skip
 
 
@@ -89,3 +90,36 @@ def test_planner_lists_missing_parameters():
 def test_a_pasted_narrative_is_one_report():
     plan = plan_request("An employee's hand was pulled into the rollers while clearing a jam.")
     assert [t["kind"] for t in plan["tasks"]] == ["single_report"]
+
+
+@pytest.mark.parametrize("language", ["es", "zh", "tl", "vi", "ar"])
+def test_every_topic_has_its_talk_in_each_language(language):
+    from safereport.ledger import FactLedger
+
+    for topic in ("lockout", "machine guarding", "fall", "forklift"):
+        english = draft({"kind": "safety_talk", "topic": topic, "language": "en"})["template"]
+        text = draft({"kind": "safety_talk", "topic": topic, "language": language})["template"]
+        assert text != english and "{{topic_reports}}" in text and "{{since}}" in text
+        ledger = FactLedger()
+        ledger.add("topic_reports", 2183, "ReportStore")
+        ledger.add("since", "2015", "data")
+        assert ledger.untraced(text) == [] and ledger.unknown(text) == [], (topic, language)
+        assert "2,183" in ledger.render(text)
+
+
+def test_word_exports_set_the_script_of_each_language():
+    import io
+    import zipfile
+
+    from safereport.outputs import word_document
+
+    def body(language, text):
+        with zipfile.ZipFile(io.BytesIO(word_document(text, language))) as archive:
+            return archive.read("word/document.xml").decode("utf-8")
+
+    assert "Khóa nguồn trước khi đưa tay vào" in body("vi", "# Khóa nguồn trước khi đưa tay vào")
+    chinese = body("zh", "# 伸手之前先上锁")
+    assert "伸手之前先上锁" in chinese and 'w:eastAsia="Microsoft YaHei"' in chinese
+    arabic = body("ar", "# اقفل الطاقة قبل أن تمد يدك\n\n* أوقف الآلة")
+    assert "<w:bidi/>" in arabic and "<w:rtl/>" in arabic and 'w:val="right"' in arabic
+    assert "<w:bidi/>" not in body("en", "# Lockout")

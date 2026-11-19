@@ -60,6 +60,9 @@ class RouterSettings(BaseModel):
     min_retrieval_margin: float = Field(ge=0)
     retries_per_model: int = Field(ge=0)
     backoff_seconds: float = Field(ge=0)
+    # After a model fails every retry with an outage (server error, timeout, rate limit), the
+    # router skips it for this long, so one dead provider does not slow every later call.
+    cooldown_seconds: float = Field(default=60.0, ge=0)
 
 
 class ModelSettings(BaseModel):

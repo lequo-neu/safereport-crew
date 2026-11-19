@@ -40,13 +40,57 @@ def trend_chart(trend: pd.DataFrame, title: str) -> bytes:
     return _png(figure)
 
 
-def sensitivity_chart(rows: list[dict]) -> bytes:
-    """What each added inspector day buys."""
+def sensitivity_chart(rows: list[dict], current: float | None = None, floor: float | None = None) -> bytes:
+    """What each added inspector day buys, with this week's days and the Category 1 minimum marked."""
     figure = Figure(figsize=(6, 3), dpi=120)
     axes = figure.subplots()
     axes.plot([r["capacity"] for r in rows], [r["priority_covered"] for r in rows], color=INK, marker="o")
+    if floor:
+        axes.axvline(floor, color=ACCENT, linestyle=":", linewidth=1.2)
+        axes.annotate(f"Category 1 needs {floor:g}", (floor, 0.04), xycoords=("data", "axes fraction"),
+                      xytext=(4, 0), textcoords="offset points", color=ACCENT, fontsize=8)  # fmt: skip
+    if current is not None:
+        axes.axvline(current, color=MUTED, linewidth=1.2)
+        axes.annotate(f"this week {current:g}", (current, 0.92), xycoords=("data", "axes fraction"),
+                      xytext=(4, 0), textcoords="offset points", color=MUTED, fontsize=8)  # fmt: skip
     axes.set_xlabel("inspector days")
     axes.set_ylabel("priority covered")
+    axes.spines[["top", "right"]].set_visible(False)
+    return _png(figure)
+
+
+def pareto_front(points: list[dict]) -> list[dict]:
+    """The points no other point beats on both cost and accuracy, cheapest first."""
+    front, best = [], -1.0
+    for point in sorted(points, key=lambda p: (p["cost"], -p["accuracy"])):
+        if point["accuracy"] > best:
+            front.append(point)
+            best = point["accuracy"]
+    return front
+
+
+def pareto_chart(points: list[dict], measure: str = "standards found in the top 3") -> bytes:
+    """Cost of one run over the answer key against accuracy, with the frontier drawn through it."""
+    figure = Figure(figsize=(8, 3.6), dpi=120)
+    axes = figure.subplots()
+    front = pareto_front(points)
+    axes.plot(
+        [p["cost"] for p in front], [p["accuracy"] for p in front], color=MUTED, linestyle="--", linewidth=1
+    )
+    for point in points:
+        on_front = point in front
+        axes.scatter([point["cost"]], [point["accuracy"]], s=60, zorder=3,
+                     color=INK if on_front else "white", edgecolors=INK)  # fmt: skip
+        low, high = point.get("ci95", (point["accuracy"], point["accuracy"]))
+        axes.vlines(point["cost"], low, high, color=MUTED, linewidth=1, zorder=2)
+        axes.annotate(point["label"], (point["cost"], point["accuracy"]), textcoords="offset points",
+                      xytext=(8, -3), fontsize=8, color=INK)  # fmt: skip
+    axes.set_xlabel("dollars per run over the key")
+    # Room on the right for the label of the dearest point.
+    axes.set_xlim(-0.05 * max(p["cost"] for p in points) - 1e-4, 1.35 * max(p["cost"] for p in points) + 1e-4)
+    axes.set_ylabel(measure)
+    axes.set_ylim(0, 1)
+    axes.yaxis.set_major_formatter(lambda value, _: f"{value:.0%}")
     axes.spines[["top", "right"]].set_visible(False)
     return _png(figure)
 
@@ -66,8 +110,18 @@ def triage_csv(rows: list[dict]) -> str:
     return buffer.getvalue()
 
 
-def word_document(markdown: str) -> bytes:
-    """A Word file from the Writer's text: "#" lines become headings, "*" lines bullets."""
+# Fonts Word has on Windows and macOS for each script; Latin text keeps the template's own.
+EAST_ASIAN_FONT = "Microsoft YaHei"
+COMPLEX_SCRIPT_FONT = "Arial"
+WORD_LANGUAGE = {"en": "en-US", "es": "es-US", "zh": "zh-CN", "tl": "fil-PH", "vi": "vi-VN", "ar": "ar-SA"}
+
+
+def word_document(markdown: str, language: str = "en") -> bytes:
+    """A Word file from the Writer's text: "#" lines become headings, "*" lines bullets.
+
+    `language` sets the proofing language and the script: Chinese gets an East Asian font, and
+    Arabic runs right to left with right aligned paragraphs, so a talk prints as it should read.
+    """
     document = WordDocument()
     for line in markdown.splitlines():
         if line.startswith("# "):
@@ -78,9 +132,37 @@ def word_document(markdown: str) -> bytes:
             document.add_paragraph(_plain(line[2:]), style="Intense Quote")
         elif line.strip():
             document.add_paragraph(_plain(line))
+    for paragraph in document.paragraphs:
+        _script(paragraph, language)
     buffer = io.BytesIO()
     document.save(buffer)
     return buffer.getvalue()
+
+
+def _script(paragraph, language: str) -> None:
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.oxml import OxmlElement
+    from docx.oxml.ns import qn
+
+    right_to_left = language == "ar"
+    if right_to_left:
+        paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        paragraph._p.get_or_add_pPr().append(OxmlElement("w:bidi"))
+    for run in paragraph.runs:
+        properties = run._r.get_or_add_rPr()
+        fonts = properties.find(qn("w:rFonts"))
+        if fonts is None:
+            fonts = OxmlElement("w:rFonts")
+            properties.insert(0, fonts)
+        if language == "zh":
+            fonts.set(qn("w:eastAsia"), EAST_ASIAN_FONT)
+        if right_to_left:
+            fonts.set(qn("w:cs"), COMPLEX_SCRIPT_FONT)
+            properties.append(OxmlElement("w:rtl"))
+        tag = OxmlElement("w:lang")
+        tag.set(qn("w:bidi" if right_to_left else ("w:eastAsia" if language == "zh" else "w:val")),
+                WORD_LANGUAGE.get(language, "en-US"))  # fmt: skip
+        properties.append(tag)
 
 
 def _plain(text: str) -> str:

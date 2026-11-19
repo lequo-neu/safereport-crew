@@ -122,6 +122,9 @@ def difficulty(signals: Signals, settings: ModelSettings) -> Difficulty:
     return "simple" if count == 0 else "moderate" if count == 1 else "hard"
 
 
+OUTAGES = ("server_error", "timeout", "rate_limit")
+
+
 @dataclass
 class Router:
     settings: ModelSettings
@@ -129,6 +132,9 @@ class Router:
     log: UsageLog = field(default_factory=UsageLog)
     measured: dict[tuple[str, str], float] = field(default_factory=dict)
     sleep: Callable[[float], None] = time.sleep
+    clock: Callable[[], float] = time.monotonic
+    # Models in an outage: name to (time it may be tried again, the error that put it there).
+    down: dict[str, tuple[float, ModelError]] = field(default_factory=dict)
 
     def accuracy(self, model: ModelSpec, step: StepType) -> tuple[float, bool]:
         """Measured accuracy when the evaluation has one, else the config's prior (flagged)."""
@@ -181,7 +187,12 @@ class Router:
             order += [m for m in self.settings.fallback_after(choice.model.name) if m.name in self.backends]
         reason = choice.reason + (" [prior, not yet measured]" if choice.based_on_prior else "")
         failed_from, last_error = "", None
-        for model in order:
+        for position, model in enumerate(order):
+            until, error = self.down.get(model.name, (0.0, None))
+            # A model in an outage is skipped until its cool down ends, unless it is the last hope.
+            if error is not None and self.clock() < until and position < len(order) - 1:
+                failed_from, last_error = model.name, error
+                continue
             for attempt in range(self.settings.router.retries_per_model + 1):
                 started = time.perf_counter()
                 try:
@@ -214,7 +225,10 @@ class Router:
                     reply.seconds or time.perf_counter() - started,
                 )  # fmt: skip
                 self.log.add(record)
+                self.down.pop(model.name, None)
                 return reply, record
+            if last_error is not None and last_error.kind in OUTAGES:
+                self.down[model.name] = (self.clock() + self.settings.router.cooldown_seconds, last_error)
             failed_from = model.name
         raise RuntimeError(f"every model failed for {step}: {last_error}")
 

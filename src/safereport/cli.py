@@ -219,6 +219,9 @@ def main() -> None:
     live.add_argument("--smoke", type=int, default=0, help="show terms for this many reports outside the key")
     live.add_argument("--score", action="store_true", help="run once over the answer key and score it")
     commands.add_parser("live-summary", help="compare the scored live runs with the baseline (no calls)")
+    ui = commands.add_parser("ui", help="serve the Gradio app (offline rules unless --live)")
+    ui.add_argument("--port", type=int, default=7860)
+    ui.add_argument("--live", action="store_true", help="let models with an API key answer; costs money")
     run = commands.add_parser("ask", help="run the crew on a request with the offline backend")
     run.add_argument("request")
     run.add_argument("--mode", default="lowest_cost", choices=["lowest_cost", "best_quality", "private"])
@@ -226,6 +229,7 @@ def main() -> None:
     run.add_argument(
         "--answer", action="append", default=[], help="answer a Planner question, e.g. state=Texas"
     )
+    run.add_argument("--live", action="store_true", help="let models with an API key answer; costs money")
     args = parser.parse_args()
     if args.command == "check":
         check()
@@ -245,6 +249,10 @@ def main() -> None:
         employer_pairs(args.draw)
     elif args.command == "eval-live":
         eval_live(args.model, args.smoke, args.score)
+    elif args.command == "ui":
+        from safereport.app import launch
+
+        launch(port=args.port, live=args.live)
     elif args.command == "live-summary":
         from safereport import live_eval
 

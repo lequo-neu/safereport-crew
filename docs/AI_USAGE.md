@@ -37,6 +37,12 @@ Where AI tools touched this project, what they did, and how the team checked it.
 yes or no, with the labeller named in each note. The "same" rule held for 100 of 100 pairs; 45 of
 the 50 possible pairs were the same employer.
 
+## The safety talk translations
+
+The Spanish, Chinese, Tagalog, Vietnamese and Arabic texts of the four safety talks were drafted
+with an AI assistant. No team member is a native speaker of all five, so each needs a native
+speaker's review before a plant prints it; the README says so beside the feature.
+
 ## The product's own use of models
 
 * At run time the crew calls up to four models (Claude Sonnet 5.5, GPT 5 nano, Gemini 3.5 Flash,

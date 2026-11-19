@@ -107,6 +107,15 @@ def test_a_hand_written_number_is_retried_then_left_out(small_services):
     assert writers[0] == "gpt_nano" and writers[-1] == "claude"  # the retry moved up a model
 
 
+def test_a_talk_in_english_and_vietnamese(small_services):
+    out = build_graph(small_services, InMemorySaver()).invoke(
+        {"request": "Write a forklift safety talk for the next shift in English and Vietnamese."},
+        run_config(),
+    )
+    assert "Forklifts and people" in out["answer"] and "Xe nâng và con người" in out["answer"]
+    assert "Montacargas" not in out["answer"], "one extra language, not two"
+
+
 def test_spanish_safety_talk(small_services):
     out = build_graph(small_services, InMemorySaver()).invoke(
         {"request": "Write a ten minute safety talk on lockout for my night shift, in English and Spanish."},
@@ -240,7 +249,12 @@ def test_demo_three_tasks_on_a_real_texas_week(real):
     assert 0 < stage2 < len(rows), "only the unclear, severe or borderline reports get model branches"
     assert all(r["decision"] == "inspection" for r in rows if r["category_one"])
     critic = [t["summary"] for t in state["trace"] if t["agent"] == "Decision critic"]
-    assert critic[-1] == "every citation, number and rule checks out", critic
+    assert critic[-1].startswith("every citation, number and rule checks out"), critic
+    # A fall standard for an injury that was not a fall is left for a person, and the list keeps it.
+    checks = [i for i in state["issues"] if i["rule"] == "fall_only"]
+    assert checks and all(i["route"] == "person" for i in checks)
+    scale = next(r for r in rows if r["report_id"] == "20251111443")  # metal scale fell off a crane load
+    assert scale["standard"] == "1910.28"
     valet = next(r for r in rows if r["report_id"] == "20251111613")  # a road vehicle: no Part 1910 standard
     assert valet["standard"] == "OSH Act 5(a)(1)"
     assert state["findings"]["triage"]["sensitivity"] and state["findings"]["triage"]["csv"].startswith(
