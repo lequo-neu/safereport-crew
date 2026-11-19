@@ -128,6 +128,41 @@ def eval_baselines(dense: bool) -> None:
     print(f"Written to {RESULTS_DIR}")
 
 
+def answering(
+    backends: dict, live: bool, mode: str, local: frozenset[str] = frozenset({"gemma_local"})
+) -> str:
+    """Which models answer this run, and whether any of it can cost money."""
+    real = sorted(name for name, backend in backends.items() if type(backend).__name__ != "OfflineBackend")
+    if real:
+        paid = any(name not in local for name in real)
+        return f"Models answering live: {', '.join(real)} ({'paid calls, capped' if paid else 'local, free'})"
+    line = f"Models answering: {', '.join(sorted(backends))} (offline rules, free)"
+    if live and mode == "private":
+        line += "; LM Studio is not running, so the local model is not used"
+    elif live:
+        line += "; no API key or local server was found"
+    return line
+
+
+def planner_answers(question: dict, given: dict[str, str]) -> dict[str, str]:
+    """Answer the Planner from `--answer` values, else from the keyboard.
+
+    With nothing to read (a script, a pipe, CI), the command stops and names the `--answer` to add
+    instead of failing with a traceback.
+    """
+    reply = {}
+    for missing, text in zip(question["missing"], question["questions"], strict=True):
+        if given.get(missing):
+            reply[missing] = given[missing]
+            continue
+        try:
+            reply[missing] = input(f"{text} ")
+        except EOFError:
+            example = "Texas" if missing == "state" else "VALUE"
+            raise SystemExit(f"\n{text} Run again with --answer {missing}={example}.") from None
+    return reply
+
+
 def ask(request: str, mode: str, approve: bool, answers: list[str], live: bool = False) -> None:
     """Run the crew once on the offline backend and print the answer and the trace.
 
@@ -139,10 +174,8 @@ def ask(request: str, mode: str, approve: bool, answers: list[str], live: bool =
     from safereport.graph import build_graph, load_services, run_config, sqlite_checkpointer
 
     services = load_services(mode=mode, live=live)
-    print(
-        f"Models answering: {', '.join(sorted(services.router.backends))}"
-        f" ({'live where a key is set' if live else 'offline rules'})"
-    )
+    local = frozenset(m.name for m in services.settings.models if m.is_local)
+    print(answering(services.router.backends, live, mode, local))
     graph = build_graph(services, sqlite_checkpointer())
     config = run_config()
     given = dict(item.split("=", 1) for item in answers)
@@ -150,11 +183,7 @@ def ask(request: str, mode: str, approve: bool, answers: list[str], live: bool =
     while "__interrupt__" in out:
         question = out["__interrupt__"][0].value
         if "missing" in question:
-            reply = {
-                m: given.get(m) or input(f"{q} ")
-                for m, q in zip(question["missing"], question["questions"], strict=True)
-            }
-            out = graph.invoke(Command(resume=reply), config)
+            out = graph.invoke(Command(resume=planner_answers(question, given)), config)
             continue
         for row in question["rows"]:
             print(
@@ -222,6 +251,12 @@ def main() -> None:
     ui = commands.add_parser("ui", help="serve the Gradio app (offline rules unless --live)")
     ui.add_argument("--port", type=int, default=7860)
     ui.add_argument("--live", action="store_true", help="let models with an API key answer; costs money")
+    ui.add_argument(
+        "--mode",
+        default="lowest_cost",
+        choices=["lowest_cost", "best_quality", "private"],
+        help="routing at start; with --live, private uses only the local LM Studio model (free)",
+    )
     run = commands.add_parser("ask", help="run the crew on a request with the offline backend")
     run.add_argument("request")
     run.add_argument("--mode", default="lowest_cost", choices=["lowest_cost", "best_quality", "private"])
@@ -252,7 +287,7 @@ def main() -> None:
     elif args.command == "ui":
         from safereport.app import launch
 
-        launch(port=args.port, live=args.live)
+        launch(port=args.port, live=args.live, mode=args.mode)
     elif args.command == "live-summary":
         from safereport import live_eval
 

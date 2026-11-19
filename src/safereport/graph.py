@@ -89,6 +89,15 @@ class CrewState(TypedDict, total=False):
     answer: str
 
 
+# The parameters each kind of task needs, which are also the only ones the Planner may ask for.
+TASK_NEEDS: dict[str, tuple[str, ...]] = {
+    "triage": ("state",),
+    "repeat_employers": ("state",),
+    "trend": ("start",),
+}
+ASKABLE = frozenset(n for needs in TASK_NEEDS.values() for n in needs)
+
+
 @dataclass
 class Services:
     """Everything the agents use, built once and shared by every run."""
@@ -311,9 +320,10 @@ def build_graph(services: Services, checkpointer=None):
         plan = _restored(reply.data or {}, hidden.restore) if hidden else (reply.data or {})
         params = {**plan.get("params", {}), **state.get("params", {})}
         tasks = plan.get("tasks", [])
-        missing = sorted({n for t in tasks for n in t.get("needs", []) if n not in params}) or plan.get(
-            "missing", []
-        )
+        # Only the parameters the code can use are asked for; a model that lists a free form need
+        # ("Date of occurrence") would otherwise stop the run on a question nothing reads.
+        needed = {n for t in tasks for n in (*TASK_NEEDS.get(t.get("kind", ""), ()), *t.get("needs", []))}
+        missing = sorted(n for n in needed & ASKABLE if n not in params)
         if not tasks:
             missing = ["request"]
         summary = ", ".join(t["kind"] for t in tasks) or "nothing it can do yet"
@@ -985,6 +995,7 @@ def load_services(
 ) -> Services:
     """Services on the built data. With `live`, every model that has a key (or the local LM Studio
     server) answers for real; with none available, or without `live`, the offline rules answer.
+    In private mode only the local model gets a live backend, so no key is used.
 
     `dense` switches the embeddings on or off for both the standards search and the similar
     injury search; left as None, they are used when the embedding model is in the local cache.
@@ -1001,7 +1012,7 @@ def load_services(
         from safereport.providers import live_backends
         from safereport.spend import guarded
 
-        backends = live_backends(settings)
+        backends = live_backends(settings, local_only=mode == "private")
         if backends:
             # Every live call goes through the response cache and the team's spend cap.
             router.backends = guarded(backends, settings)

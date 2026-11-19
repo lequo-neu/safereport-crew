@@ -456,7 +456,9 @@ def build_app(crew: Crew) -> gr.Blocks:
                 with gr.Group(visible=False) as controls:
                     section("AI controls", "controls")
                     with gr.Row():
-                        mode = gr.Radio(list(views.MODES), value="Lowest cost", label="Routing")
+                        mode = gr.Radio(
+                            list(views.MODES), value=views.mode_label(crew.services.mode), label="Routing"
+                        )
                         redact = gr.Checkbox(True, label="Hide names and addresses from cloud models")
                         switched_off = gr.CheckboxGroup([s.label for s in crew.services.settings.models],
                                                         label="Simulate an outage")  # fmt: skip
@@ -607,10 +609,10 @@ def _check_password(username: str, password: str) -> bool:
     return username in ACCOUNTS and bool(expected) and hmac.compare_digest(password, expected)
 
 
-def launch(port: int = 7860, live: bool = False) -> None:
+def launch(port: int = 7860, live: bool = False, mode: str = "lowest_cost") -> None:
     from safereport.graph import load_services
 
-    crew = Crew.start(load_services(live=live))
+    crew = Crew.start(load_services(mode=mode, live=live))
     sign_in = bool(os.environ.get("SAFEREPORT_PASSWORD"))
     build_app(crew).launch(
         server_port=port, theme=theme(), css=CSS, head=tab_script(), allowed_paths=[str(crew.folder / "downloads")],

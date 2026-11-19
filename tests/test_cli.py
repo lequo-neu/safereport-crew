@@ -35,3 +35,54 @@ def test_ask_accepts_every_documented_flag(monkeypatch, argv, expected):
     monkeypatch.setattr(sys, "argv", ["safereport", *argv])
     cli.main()
     assert seen == [expected]
+
+
+QUESTION = {"missing": ["state"], "questions": ["Which state should I look at?"]}
+
+
+def test_planner_answers_come_from_the_flags_first(monkeypatch):
+    monkeypatch.setattr("builtins.input", lambda _: pytest.fail("asked although --answer gave it"))
+    assert cli.planner_answers(QUESTION, {"state": "Texas"}) == {"state": "Texas"}
+
+
+def test_planner_answers_are_typed_in_when_no_flag_gives_them(monkeypatch):
+    monkeypatch.setattr("builtins.input", lambda _: "Ohio")
+    assert cli.planner_answers(QUESTION, {}) == {"state": "Ohio"}
+
+
+def test_planner_question_without_input_names_the_flag(monkeypatch):
+    def no_input(_):
+        raise EOFError
+
+    monkeypatch.setattr("builtins.input", no_input)
+    with pytest.raises(SystemExit, match="--answer state=Texas"):
+        cli.planner_answers(QUESTION, {})
+
+
+class OfflineBackend:  # named like the real one: the check is by type name
+    pass
+
+
+def test_the_first_line_says_whether_a_run_can_cost_money():
+    offline = {"claude": OfflineBackend(), "gemma_local": OfflineBackend()}
+    assert cli.answering(offline, live=False, mode="lowest_cost").endswith("(offline rules, free)")
+    assert "LM Studio is not running" in cli.answering(offline, live=True, mode="private")
+    assert cli.answering({"gemma_local": object()}, live=True, mode="private").endswith("(local, free)")
+    assert "paid calls" in cli.answering({"claude": object()}, live=True, mode="lowest_cost")
+
+
+@pytest.mark.parametrize(
+    ("argv", "expected"),
+    [
+        (["ui"], {"port": 7860, "live": False, "mode": "lowest_cost"}),
+        (["ui", "--live", "--mode", "private"], {"port": 7860, "live": True, "mode": "private"}),
+    ],
+)
+def test_ui_takes_a_starting_mode(monkeypatch, argv, expected):
+    import safereport.app
+
+    seen = []
+    monkeypatch.setattr(safereport.app, "launch", lambda **kwargs: seen.append(kwargs))
+    monkeypatch.setattr(sys, "argv", ["safereport", *argv])
+    cli.main()
+    assert seen == [expected]

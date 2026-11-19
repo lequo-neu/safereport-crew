@@ -189,6 +189,18 @@ def test_a_pasted_name_and_phone_never_reach_the_planner(small_services):
     assert "Texas" in seen[0] and "1910.147" in out["answer"]
 
 
+def test_the_planner_asks_only_for_what_the_code_can_use(small_services):
+    # Gemma 4 E4B in private mode asked for "Date of occurrence" on a pasted narrative.
+    def chatty(prompt):
+        return {"tasks": [{"id": "report", "kind": "single_report", "needs": ["Date of occurrence"],
+                           "depends_on": []}], "params": {}, "missing": ["Date of occurrence"]}  # fmt: skip
+
+    for backend in small_services.router.backends.values():
+        backend.handlers["planner"] = chatty
+    out = build_graph(small_services, InMemorySaver()).invoke({"request": JAM}, run_config())
+    assert "__interrupt__" not in out and "1910.147" in out["answer"]
+
+
 def test_a_pasted_report_is_dated_to_the_replayed_week(small_services):
     out = build_graph(small_services, InMemorySaver()).invoke({"request": JAM}, run_config())
     finding = next(f for f in out["findings"].values() if f["kind"] == "single_report")

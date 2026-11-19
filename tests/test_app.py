@@ -397,3 +397,8 @@ def test_trends_draw_four_outcomes_and_mark_state_plan_states(crew):
     assert dict(zip(federal.locations, federal.z, strict=True))["TX"] == 5 and list(outlined.locations) == [
         "TX"
     ]
+
+
+def test_the_routing_page_opens_on_the_starting_mode():
+    assert {views.mode_label(mode) for mode in views.MODES.values()} == set(views.MODES)
+    assert views.mode_label("private") == "Private (local model only)"

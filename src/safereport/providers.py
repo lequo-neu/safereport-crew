@@ -26,6 +26,8 @@ from safereport.writer import draft
 LM_STUDIO_URL = os.environ.get("LM_STUDIO_URL", "http://localhost:1234/v1")
 # Seconds before a model call gives up; a hung provider then falls back instead of stalling a run.
 REQUEST_TIMEOUT = 60.0
+# A local model on a laptop thinks before it answers; give it longer than a cloud API.
+LOCAL_TIMEOUT = 180.0
 
 SYSTEM = {
     "planner": (
@@ -180,9 +182,14 @@ class OpenAIBackend:
     def complete(self, step: str, prompt: str) -> Reply:
         import openai
 
+        local = self.base_url is not None
         if self.client is None:
-            local = {"base_url": self.base_url, "api_key": "lm-studio"} if self.base_url else {}
-            self.client = openai.OpenAI(timeout=REQUEST_TIMEOUT, **local)
+            server = {"base_url": self.base_url, "api_key": "lm-studio"} if local else {}
+            self.client = openai.OpenAI(timeout=LOCAL_TIMEOUT if local else REQUEST_TIMEOUT, **server)
+        # LM Studio rejects {"type": "json_object"} (it takes only "json_schema" or "text"), so a
+        # local model gets no response_format: the system prompt asks for JSON and parse_json
+        # reads the object from the reply.
+        json_mode = {} if local else {"response_format": {"type": "json_object"}}
 
         task = STEP_TASKS.get(step, step)
         started = time.perf_counter()
@@ -193,7 +200,7 @@ class OpenAIBackend:
                     {"role": "system", "content": SYSTEM[task]},
                     {"role": "user", "content": prepare(task, prompt)},
                 ],
-                response_format={"type": "json_object"},
+                **json_mode,
             )
         except openai.APITimeoutError as error:
             raise ModelError("timeout", self.name) from error
@@ -269,8 +276,14 @@ def lm_studio_running(url: str = LM_STUDIO_URL) -> bool:
         return False
 
 
-def live_backends(settings: ModelSettings, environ: dict[str, str] | None = None) -> dict[str, Any]:
-    """A backend for every configured model whose key (or local server) is available."""
+def live_backends(
+    settings: ModelSettings, environ: dict[str, str] | None = None, local_only: bool = False
+) -> dict[str, Any]:
+    """A backend for every configured model whose key (or local server) is available.
+
+    `local_only` (private mode) leaves every cloud model out, even when its key is set, so nothing
+    leaves the machine and nothing is paid for, whatever the routing page is set to later.
+    """
     if environ is None:
         from safereport.config import load_env_file
 
@@ -278,6 +291,8 @@ def live_backends(settings: ModelSettings, environ: dict[str, str] | None = None
         environ = dict(os.environ)
     backends: dict[str, Any] = {}
     for spec in settings.models:
+        if local_only and spec.provider != "local":
+            continue
         if spec.provider == "anthropic" and (
             environ.get("ANTHROPIC_API_KEY") or environ.get("ANTHROPIC_AUTH_TOKEN")
         ):

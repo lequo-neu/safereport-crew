@@ -91,21 +91,34 @@ def test_a_reply_that_is_not_json_is_bad_output():
     assert caught.value.kind == "bad_output"
 
 
-def test_openai_and_lm_studio_use_json_mode():
-    calls = []
-
+def _fake_chat(calls):
     def create(**kwargs):
         calls.append(kwargs)
         message = SimpleNamespace(content=json.dumps({"terms": ["powered industrial truck"]}))
         return SimpleNamespace(choices=[SimpleNamespace(message=message)],
                                usage=SimpleNamespace(prompt_tokens=50, completion_tokens=10))  # fmt: skip
 
-    fake = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
-    reply = OpenAIBackend(SETTINGS.model("gpt_nano"), client=fake).complete(
+    return SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+
+
+def test_openai_uses_json_mode():
+    calls = []
+    reply = OpenAIBackend(SETTINGS.model("gpt_nano"), client=_fake_chat(calls)).complete(
         "standards_terms", json.dumps({"narrative": "forklift"})
     )
     assert reply.data == {"terms": ["powered industrial truck"]}
     assert calls[0]["response_format"] == {"type": "json_object"} and calls[0]["model"] == "gpt-5-nano"
+
+
+def test_lm_studio_gets_no_json_mode():
+    # LM Studio answers 400 to {"type": "json_object"}; the reply is read with parse_json instead.
+    calls = []
+    backend = OpenAIBackend(
+        SETTINGS.model("gemma_local"), client=_fake_chat(calls), base_url="http://localhost:1234/v1"
+    )
+    reply = backend.complete("standards_terms", json.dumps({"narrative": "forklift"}))
+    assert reply.data == {"terms": ["powered industrial truck"]}
+    assert "response_format" not in calls[0] and calls[0]["model"] == "google/gemma-4-e4b"
 
 
 def test_gemini_reads_usage_metadata():
@@ -144,3 +157,17 @@ def test_only_models_with_keys_get_a_live_backend(monkeypatch: pytest.MonkeyPatc
     assert live_backends(SETTINGS, environ={}) == {}
     found = live_backends(SETTINGS, environ={"OPENAI_API_KEY": "test-key"})
     assert list(found) == ["gpt_nano"] and isinstance(found["gpt_nano"], OpenAIBackend)
+
+
+def test_private_mode_leaves_every_cloud_key_unused(monkeypatch: pytest.MonkeyPatch):
+    keys = {"ANTHROPIC_API_KEY": "k", "OPENAI_API_KEY": "k", "GOOGLE_API_KEY": "k"}
+    monkeypatch.setattr("safereport.providers.lm_studio_running", lambda url="": True)
+    assert sorted(live_backends(SETTINGS, environ=keys)) == [
+        "claude",
+        "gemini_flash",
+        "gemma_local",
+        "gpt_nano",
+    ]
+    assert list(live_backends(SETTINGS, environ=keys, local_only=True)) == ["gemma_local"]
+    monkeypatch.setattr("safereport.providers.lm_studio_running", lambda url="": False)
+    assert live_backends(SETTINGS, environ=keys, local_only=True) == {}

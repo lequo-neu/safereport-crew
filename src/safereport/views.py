@@ -1171,7 +1171,8 @@ def models_table(crew: Crew) -> pd.DataFrame:
     for spec in crew.services.settings.models:
         backend = crew.services.router.backends.get(spec.name)
         if backend is None:
-            status = "no key or server"
+            # Started with --live --mode private, cloud models are left out even when a key is set.
+            status = "no key or server, or left out in private mode"
         elif isinstance(backend, Outage):
             status = "outage (simulated)"
         else:
@@ -1182,6 +1183,11 @@ def models_table(crew: Crew) -> pd.DataFrame:
                      f"{measured:.1%}" if measured is not None else ""])  # fmt: skip
     return pd.DataFrame(rows, columns=["Model", "Provider", "Model ID", "Price per M tokens (in / out)", "Status",
                                        "Routing prior, retrieval", "Measured on the key, top 3 (not used to route)"])  # fmt: skip
+
+
+def mode_label(mode: str) -> str:
+    """The routing page's label for a mode, so the page opens on the mode the app started with."""
+    return next(label for label, value in MODES.items() if value == mode)
 
 
 def apply_controls(crew: Crew, mode_label: str, redact: bool, outages: list[str]):

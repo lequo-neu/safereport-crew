@@ -119,3 +119,15 @@ def test_answer_key_case_needs_a_reason_without_a_standard():
         {**base, "primary_standard": "", "no_standard_reason": "vague narrative"}
     )
     assert not ok.has_standard
+
+
+def test_a_small_model_reply_is_read_as_meant():
+    # Gemma 4 E4B in private mode: nulls, a number for the code, labels outside the lists.
+    result = IntakeResult.model_validate(
+        {"report_id": "1", "activity": "clearing a jam", "hazard_type": "rollers", "machine_or_hazard": "laminator",
+         "material": None, "injury": "crush", "event_code": 6411, "source_code": None, "confidence": 1.4,
+         "fatality_potential": None, "missing_facts": None}
+    )  # fmt: skip
+    assert (result.activity, result.hazard_type, result.event_code) == ("unknown", "other", "6411")
+    assert (result.material, result.source_code, result.confidence) == ("", "", 1.0)
+    assert result.fatality_potential is False and result.missing_facts == []

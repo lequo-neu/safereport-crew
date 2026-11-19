@@ -1,217 +1,450 @@
 # SafeReport Crew
 
-A multi agent copilot that turns OSHA severe injury reports into inspection and prevention decisions.
-Final project for IE5374 Applied Generative AI, by **Seven Team-5374**: Quoc Hung Le (Kevin), Hamad Al Sulaimi, Khoa Tran.
+**A multi agent copilot that helps an OSHA area office decide, for each severe injury report,
+whether to send an inspector or a letter, and helps a plant learn from injuries like its own.**
 
-The plan is in [docs/PROPOSAL.md](docs/PROPOSAL.md); related products are compared in
-[docs/RELATED_PRODUCTS.md](docs/RELATED_PRODUCTS.md); the answer key follows
-[docs/LABELING_GUIDE.md](docs/LABELING_GUIDE.md).
+Final project for IE5374 Applied Generative AI, by **Seven Team-5374**: Quoc Hung Le (Kevin),
+Hamad Al Sulaimi, Khoa Tran. Phases 0 to 3 of 4 are built; 291 tests pass offline.
 
-## Status
-
-Phase 3 of 4 done. The seven agents run as a LangGraph graph behind a Gradio app with a view per
-role. Everything works locally with no API key on a deterministic offline backend; with `--live`,
-the models whose keys are set answer for real, cached and capped at the team's budget.
-
-| Phase | What it built |
+| If you want to | Go to |
 |---|---|
-| 0 | answer key, model config, schemas, offline backend |
-| 1 | Parquet and DuckDB data layer, eCFR retrieval (BM25 plus FAISS), baseline event coder, employer matching, redaction |
-| 2 | the crew: Planner, Intake, Standards, Analyst, Optimizer, Decision critic, Writer; router with escalation and fallback; triage integer program; domain checks; FactLedger; interrupts for questions and approval; live adapters for Anthropic, OpenAI, Google and LM Studio; similar injury search over all narratives |
-| 3 | the Gradio app: a view per role, chat with a live trace, Evidence view, the week's editable list with approval and a matches panel, trends and safety talks, AI controls with simulated outages, the evaluation page with a Pareto chart, CSV and Word downloads |
+| run it in ten minutes, with no API key and no cost | [Quick start](#quick-start-for-a-ta) |
+| see where each of the five course requirements is met | [Requirements map](#how-the-project-meets-the-five-requirements) |
+| understand who it is for and what they need | [Users and their needs](#users-and-their-needs) |
+| see how the agents work together | [How it works](#how-it-works) |
+| check the measured results | [Results](#results) |
+| read the full plan | [docs/PROPOSAL.md](docs/PROPOSAL.md) |
 
-## Run the app
+## The problem in one minute
 
-```bash
-safereport ui                # http://localhost:7860, offline rules
-safereport ui --live         # models with an API key answer; costs money, capped at $1.50
+When a worker in the US is hospitalized, loses a limb or loses an eye at work, the employer
+must report it to OSHA, the federal workplace safety agency, within 24 hours. OSHA has
+published **105,996** of these reports (January 2015 to November 2025). Each one is a short
+story in free text, such as "an employee's hand was pulled into the rollers while clearing a jam".
+
+For every report, an OSHA area office has to choose:
+
+```mermaid
+flowchart LR
+  R[/Severe injury report/] --> D{Area office decides}
+  D -->|serious, or a rule says so| I[On site inspection<br/>an inspector visits]
+  D -->|otherwise| L[RRI letter<br/>the employer investigates<br/>and replies in 5 working days]
 ```
 
-| Role | Opens on | Can also |
-|---|---|---|
-| Triage officer | This week's reports | filter the list (Category 1, needs review, inspections, letters), inspect any report beside the list, move rows, add notes, resolve employer matches, download the selection as CSV |
-| Area Director | This week's reports | the same, and approve the list (the run resumes from its saved state) |
-| Plant safety manager | Trends and prevention | trends by state, industry and event; a safety talk in English plus at most one of Spanish, Chinese, Tagalog, Vietnamese or Arabic |
-| Admin | AI controls and evaluation | routing mode, redaction, a simulated outage of any provider, model calls log |
+Only 33.5% of reports led to an inspection, because inspector days are scarce. Today staff read
+every story, look up the employer's history by hand and search the regulations themselves.
+SafeReport Crew does that reading, checking and planning, then hands a proposed list to a
+person, who approves or changes it. **Nothing is sent without a person's approval.**
 
-The week page follows OSHA's Severe Injury Dashboard and an EHS triage desk: totals of
-reports, Category 1, hospitalizations, amputations and losses of an eye at the top; the list on
-the left and a case inspector on the right (narrative, checks, history, the letter as it will be
-sent); the decision bar below; then reports by geography beside the top five events and what
-each inspector day buys. RRI replies are dated five working days out, federal holidays skipped.
-Agent and model details stay in a closed "Routing & audit log" drawer and on the admin page. The
-map tiles come from CARTO and OpenStreetMap, so the browser needs the internet for them.
+<details>
+<summary><b>Words used in this README</b> (click to open)</summary>
 
-Every role has Ask (chat beside the trace of agents, models, routing reasons, cost and time), the
-Evidence view (the narrative with the words the Intake agent used, beside the rule and its check
-badges) and Downloads. Sign in is off by default and the role is picked at the top; set
-`SAFEREPORT_PASSWORD` to require it, with the accounts `triage`, `director`, `manager` and `admin`.
+| Word | Meaning |
+|---|---|
+| OSHA | the US Occupational Safety and Health Administration |
+| Area office, Area Director | the local OSHA office and the person who signs off on its decisions |
+| RRI letter | Rapid Response Investigation: a letter asking the employer to investigate and reply within five working days |
+| Category 1 | OSHA's "must inspect" rules: two or more hospitalized, a worker under 18, a similar report from the employer within 12 months, a hazard under an emphasis program, imminent danger |
+| Inspector day | one inspector working one day; in our assumptions an inspection takes 1.5 to 3 days by hazard ([config/triage.toml](config/triage.toml)) |
+| 29 CFR 1910, eCFR | the general industry safety regulations, read from the official electronic Code of Federal Regulations |
+| General Duty Clause | OSH Act Section 5(a)(1), used when no specific rule covers a hazard |
+| OIICS | OSHA's codes for what happened (event), what caused it (source) and the injury |
+| State Plan states | states that run their own safety program; most of their reports are not in this data |
 
-## Languages: an English office, talks in the crew's language
+</details>
 
-The app, the evidence, the citations and every letter stay in English; only the safety talk for
-the next shift comes in a second language, at most one, chosen from the five most spoken at home
-after English.
+## Quick start for a TA
 
-* **Why the office stays in English.** Triage officers, Area Directors and admins work from
-  OSHA's reports, 29 CFR 1910 and RRI letters, all in English. A translated interface invites a
-  mistranslated rule, and the Evidence view highlights the narrative by character offsets that
-  translation would break.
-* **Why the talk does not.** OSHA asks that training be given "in a language and vocabulary
-  workers can understand" (Training Standards Policy Statement, 28 April 2010). In the American
-  Community Survey for 2025 (1 year estimates, table B16001, people age 5 and over), 74,190,755
-  people, 22.9%, speak a language other than English at home, so about 77.1% speak only English.
-  The most spoken are Spanish (44,921,985), Chinese (3,775,645), Tagalog (1,969,835), Vietnamese
-  (1,659,708) and Arabic (1,366,367). Counts as summarized by
-  [Access Multilingual](https://accessmultilingual.com/resources/languages-spoken-in-the-united-states-census-2024);
-  check them against data.census.gov before quoting, and note that the 2025 sample was smaller
-  after a six week pause in data collection.
-* **One extra language, not many.** A shift talk is read aloud to one crew; English plus the
-  crew's language keeps the handout to two pages and the review to one native speaker.
-* **The translations are drafts.** They were written with an AI assistant
-  (`src/safereport/talk_languages.py`) and must be read by a native speaker before a plant uses
-  them. Word files set the script: an East Asian font for Chinese, right to left for Arabic.
+Everything below runs **offline, with no API key and no cost.** The offline backend answers
+every model step from fixed rules, so you see the full flow of agents, routing and checks.
 
-## Try the crew
-
-```bash
-safereport ask "An employee's hand was pulled into the rollers of a laminator while clearing a jam."
-safereport ask "Find caught in machinery injuries in Texas since 2022, check which employers reported more than once, then plan this week's inspections with 40 inspector days." --approve
-safereport ask "Plan this week's inspections with 40 inspector days." --answer state=Texas --approve
-safereport ask "Write a ten minute safety talk on lockout for my night shift, in English and Spanish."
-safereport ask "Write a forklift safety talk for the next shift in English and Vietnamese."
-safereport ask "..." --mode private
-safereport ask "..." --live          # calls the models whose API keys are set; costs money
-safereport employer-pairs            # scores the hand check of employer matching
+```mermaid
+flowchart LR
+  A[Step 1<br/>Install<br/>a few minutes] --> B[Step 2<br/>Download the OSHA file<br/>in a browser, 16 MB]
+  B --> C[Step 3<br/>Build data and indexes<br/>a few minutes]
+  C --> D[Step 4<br/>safereport check]
+  D --> E[Step 5<br/>safereport ui<br/>open localhost:7860]
 ```
 
-"This week" replays 17 to 23 November 2025 (31 Texas reports), the last full week in the data.
-The triage assumptions (priority weights, inspector days per inspection, default days of a
-week) live in [config/triage.toml](config/triage.toml). Each run prints the answer and the trace: the agent, the model the router chose and why, and
-what each step found. The offline backend answers every model step from fixed rules, so the
-picks it makes are a stand in, not a result to report; see [docs/OPEN_ISSUES.md](docs/OPEN_ISSUES.md).
-
-## How a request runs
-
-1. The **Planner** splits the request into sub tasks with their dependencies and stops to ask
-   when a required parameter (a state, a start year) is missing.
-2. For a week of reports, **stage 1** codes every report without a model (baseline, rules, BM25,
-   employer matching); only unclear, severe or borderline reports go to **stage 2**, one LangGraph
-   `Send` branch each, where **Intake**, **Standards** and the **Analyst** run on models.
-3. The **Optimizer** applies OSHA's Category 1 rules, then a PuLP integer program spends the
-   inspector days left; with too few days a relaxed model says how many more are needed.
-4. The **Writer** drafts briefs, RRI letters, safety talks (English plus at most one of Spanish, Chinese, Tagalog, Vietnamese or Arabic) and answers with
-   every number as a FactLedger placeholder.
-5. The **Decision critic** checks every citation against eCFR, the OSHA domain rules, every number
-   and the plan rules, and sends work back at most twice per loop.
-6. The graph pauses for the **Area Director**, who approves or edits rows; the run resumes at the
-   Optimizer from the SQLite checkpoint, and each decision goes to the decision log.
-
-## Set up
-
-Python 3.11 to 3.13.
+**1. Install** (Python 3.11 to 3.13)
 
 ```bash
 python3.12 -m venv .venv
+```
+
+```bash
 source .venv/bin/activate
+```
+
+```bash
 pip install -e ".[dev,embeddings]"
 ```
 
-`embeddings` adds sentence-transformers (with torch) and FAISS for dense retrieval; without it
-retrieval runs on BM25 alone.
+`embeddings` adds sentence transformers, torch and FAISS. Leave it out for a lighter install;
+retrieval then runs on BM25 alone and the results are weaker.
 
-## Build the data and indexes
+**2. Download the reports.** OSHA's site blocks scripted downloads, so open
+https://www.osha.gov/severe-injury-reports in a browser, click "Download the full SIR data set"
+and put `January2015toNovember2025.zip` in `data/raw/`. Details in [data/raw/README.md](data/raw/README.md).
 
-1. Download the OSHA Severe Injury Reports as described in [data/raw/README.md](data/raw/README.md).
-2. Build everything (a few minutes the first time; the embedding model is downloaded once):
-
-```bash
-safereport build-data
-safereport fetch-ecfr
-safereport build-index
-safereport train-baseline
-```
-
-| Command | What it writes | Notes |
-|---|---|---|
-| `build-data` | `data/processed/reports.parquet` | 105,996 reports with a `split` column: train (2015 to 2024), holdout (the 1,000 2025 reports listed in `data/splits/holdout_2025.csv`), recent (other 2025) |
-| `fetch-ecfr` | `data/raw/ecfr/title-29-part-1910.xml` | eCFR as of 10 November 2026, public API, no key |
-| `build-index` | `indexes/` | paragraphs of Part 1910, the General Duty Clause and 12 emphasis programs (`data/reference/`), BM25 plus `BAAI/bge-small-en-v1.5` embeddings in FAISS |
-| `train-baseline` | `indexes/event_baseline.joblib` | TF IDF and logistic regression on OIICS event codes, scored on the holdout |
-
-`train-baseline` also writes `data/processed/event_codes_v3.parquet`, an OIICS 3 event code for
-every report (OSHA's own from 2024, estimated before; see below). `safereport eval-baselines`
-scores every baseline and writes the numbers to [eval/results](eval/results). Tests that need the
-built data are skipped when it is missing; everything else runs offline with no API key.
-
-## Phase 1 results
-
-Measured on 19 November 2026; full numbers in [eval/results/phase1_baselines.json](eval/results/phase1_baselines.json).
-
-| What | Result |
-|---|---|
-| Event coding baseline on the 1,000 report 2025 holdout | full code 59.6%, two digit group 78.7%, one digit division 90.7% |
-| Same baseline, coding only when confidence is at least 0.7 | 51% of reports coded, 80% of them right (at 0.9: 19% coded, 93% right) |
-| Standards retrieval without a model, top 3, narrative and OSHA codes (strict / lenient) | BM25 29.4% / 31.4%; BM25 plus embeddings 41.2% (95% interval 28.8 to 54.8) / 51.0% (37.7 to 64.1) |
-
-The key has 51 cases with a standard (C20 was corrected to no specific standard by the team),
-so one case moves a rate by about 2 points and every rate is reported with its 95% Wilson
-interval in `eval/results/phase1_baselines.json`.
-
-**OSHA changed its event codes in January 2024.** From 2024 the reports use OIICS 3: about 65% of
-the 2024 codes never appear before, and the same code can mean something else (group 64 is
-"caught in machinery" in OIICS 2 and "struck by a falling object" in OIICS 3). So:
-
-* the baseline is trained on OIICS 3 reports (2024, and 2025 outside the holdout), not on 2015 to 2024;
-* the data layer refuses an event code or event title filter over a period that spans January 2024;
-* `event_group_v3` filters across all years using the baseline's OIICS 3 code for older reports,
-  marked as estimated. The recoded 2023 groups differ from the real 2024 groups by a total
-  variation of 0.064, against 0.047 between the real 2024 and 2025.
-
-Retrieval without a model is weak because narratives say "forklift" and "rollers" while the rules
-say "powered industrial truck" and "nip points". In Phase 2 the Standards agent adds terms in the
-language of the rules before searching (the `terms` argument of `IndexRegistry.search`).
-
-## Live results: model terms for the Standards agent
-
-Each model ran once over the 51 cases, with the same retrieval (BM25 plus embeddings, narrative
-and OSHA codes) and a prompt checked for format on reports outside the key, so nothing was tuned
-on the key. "Gained" and "lost" count the cases the run gets and the baseline misses, and the
-reverse; p is the exact McNemar test on those pairs. Numbers in
-[eval/results/live_terms_summary.json](eval/results/live_terms_summary.json).
-
-| Top 3, strict | Hits of 51 | Rate (95% interval) | Gained / lost | p |
-|---|---|---|---|---|
-| No model (baseline) | 21 | 41.2% (28.8 to 54.8) | | |
-| GPT 5 nano terms | 31 | 60.8% (47.1 to 73.0) | 13 / 3 | 0.021 |
-| Claude Sonnet 5.5 terms | 36 | 70.6% (57.0 to 81.3) | 16 / 1 | 0.0003 |
-
-* At the top position, Claude finds the primary section for 26 cases (51.0%) against 12 without a
-  model; lenient top 3 (primary or secondary) is 38 (74.5%).
-* Claude against GPT 5 nano: 7 cases gained, 2 lost (p 0.18), so on 51 cases the gap between the
-  two models is not settled.
-* Cost per call was about $0.0016 for Claude and $0.0009 for GPT 5 nano, which spends about 2,300
-  reasoning tokens per call. The whole experiment cost $0.14 of the team's $1.50 cap.
-* Gemini 3.5 Flash (forwarding to 3.6 Flash) returned 503 and 429 errors for most calls on 19
-  November and was not scored.
+**3. Build the data and indexes** (the eCFR text comes from a public API with no key; the
+embedding model downloads once)
 
 ```bash
-safereport eval-live --model claude --smoke 3   # format check on reports outside the key
-safereport eval-live --model claude --score     # one run over the key (cached, capped)
-safereport live-summary                         # every scored run against the baseline, no calls
+safereport build-data && safereport fetch-ecfr && safereport build-index && safereport train-baseline
 ```
 
-## Check
+**4. Check that everything is ready**
 
 ```bash
 safereport check
+```
+
+**5. Open the app**
+
+```bash
+safereport ui
+```
+
+Then go to http://localhost:7860. A five minute tour:
+
+| Step | Do this | You should see |
+|---|---|---|
+| 1 | Keep "Triage officer", Texas, 40 inspector days, click **Load week** | 31 reports, 9 Category 1, 20 inspections and 11 RRI letters, with a reason on each row |
+| 2 | Click any row | the case inspector: the story with highlighted words, the checks, the employer's history, the letter as it will be sent |
+| 3 | Pick "Area Director" at the top, move a row in the decision bar, click **Ask for changes** | "Plan updated with N changed rows" and what changed |
+| 4 | Click **Approve** | the run resumes from its saved state and the decision is logged |
+| 5 | Open **Ask** and try an example | the answer beside a trace of agents, models, reasons, cost and time |
+| 6 | Pick "Plant safety manager", open **Trends and prevention**, write a lockout talk with Vietnamese as the extra language | a yearly chart, a state map, and two Word files (English and Vietnamese) |
+| 7 | Pick "Admin", simulate an outage of Claude, ask again | the router falls back to another model and says why |
+
+The same crew runs from the command line:
+
+```bash
+safereport ask "Plan this week's inspections with 40 inspector days." --answer state=Texas --approve
+```
+
+### What costs money
+
+The default is offline: without `--live`, no model is called at all.
+
+| Command | Who answers | Cost |
+|---|---|---|
+| `safereport ui`, `safereport ask "..."`, `pytest`, every build command | offline rules, no model | **free** |
+| `safereport ui --live --mode private`, `safereport ask "..." --live --mode private` | only Gemma 4 E4B in LM Studio on this machine; cloud keys are not loaded | **free** |
+| `--live` with `lowest_cost` or `best_quality` (and API keys in `.env`) | Claude, GPT 5 nano, Gemini, Gemma | **paid**; every reply is cached and all paid calls stop at the team's cap of $1.50 |
+
+The first line of every `ask` run says which it is, for example
+`Models answering live: gemma_local (local, free)`. For the free local path, start the LM Studio
+server with `google/gemma-4-e4b` loaded (default address `http://localhost:1234/v1`, or set
+`LM_STUDIO_URL`); if it is not running, the run says so and the offline rules answer. Keys are
+read from `.env` (never committed): `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GOOGLE_API_KEY`.
+
+## How the project meets the five requirements
+
+The course asks for five things. Each row says where it lives in the code and how to see it.
+
+| Requirement | What we built | Where in the code | See it |
+|---|---|---|---|
+| **1. Handles open ended queries** | users ask in their own words; the Planner splits a request into sub tasks with dependencies and asks back when a state or a year is missing | `graph.py` (Planner node), `providers.py` | Ask tab; `safereport ask "Plan this week's inspections with 40 inspector days."` asks "Which state should I look at?" |
+| **2. Multi agent architecture** | seven agents on LangGraph with distinct roles: reasoning (Planner, Intake, Standards, Analyst), optimization (Optimizer), decision making (Decision critic), generation (Writer) | `graph.py`, `triage.py`, `domain.py`, `writer.py` | the trace under every answer |
+| **3. Interactive user interface** | a Gradio app with a view per role: the week's list beside a case inspector, editable rows, approval with resume, charts, maps, CSV and Word downloads | `app.py`, `views.py` | `safereport ui` |
+| **4. Three or more LLMs with routing** | Claude Sonnet 5.5, GPT 5 nano, Gemini 3.5 Flash and local Gemma 4 E4B; the router picks by step, accuracy bar, confidence and cost, and falls back across providers | `router.py`, `config/models.toml`, `backends.py` | Admin page: routing mode, simulated outage, model calls log, Pareto chart |
+| **5. Scalability and adaptability** | each agent is a node; models, prices and triage weights live in config; DuckDB on Parquet over 105,996 reports; indexes chosen by industry; new months added as files | `data.py`, `retrieval.py`, `config/` | swap a model in `config/models.toml`, no code change |
+
+### Beyond the baseline
+
+```mermaid
+mindmap
+  root((SafeReport Crew))
+    Agents
+      Parallel branch per report with Send
+      Critic sends work back, at most 2 retries
+      Human approval with resume from SQLite
+    Decisions
+      OSHA Category 1 rules as hard rules
+      Integer program for inspector days
+      Relaxed model says how many days are missing
+    Trust
+      Every citation checked against eCFR
+      Every number traced to a FactLedger entry
+      OSHA domain rules on each standard
+    Models
+      Escalation on low confidence
+      Fallback with a 60 second cool down
+      Names hidden from cloud models
+      Paid calls cached and capped
+    Data
+      70,593 employer spellings matched
+      Partial years compared month for month
+      OIICS code change in 2024 handled
+```
+
+## Users and their needs
+
+Four roles, each opening on its own page. The main user is the triage officer; the plant
+safety manager is a secondary user.
+
+```mermaid
+flowchart LR
+  T([Triage officer]) --> W[This week's reports]
+  AD([Area Director]) --> W
+  AD --> AP[Approve the list]
+  M([Plant safety manager]) --> TR[Trends and prevention]
+  AN([Admin]) --> AC[AI controls and evaluation]
+  T & AD & M & AN --> ASK[Ask, Evidence view, Downloads]
+```
+
+| User | Need | What answers it | Status |
+|---|---|---|---|
+| Triage officer | **N1** each report coded with its severity, in seconds | stage 1 coding with a confidence threshold | built |
+| | **N2** the employer's history across all its spellings (Walmart alone has 340) | employer matching and the matches panel | built |
+| | **N3** the rule that applies, with the words that support it | Standards agent and Evidence view | built |
+| | **N4** OSHA's Category 1 check, with the criterion that triggered it | Category 1 rules | built |
+| | **N5** an RRI letter that asks for the facts the story leaves out | missing facts list and the Writer | built |
+| | **N6** a whole week at once | two stage batch | built |
+| Area Director | **N7** a proposed list with a reason on every row | the Optimizer | built |
+| | **N8** change any row or rule and see the new list | editable list, resume from saved state | built |
+| | **N9** what one more or one fewer inspector day changes | inspector day chart | built |
+| | **N10** a record of each decision and who made it | decision log | built |
+| Plant safety manager | **N11** injuries in plants like theirs, and the trend | trends with charts and maps | built |
+| | **N12** the rules for those hazards in plain words | plain language summaries | built |
+| | **N13** what to fix first within the budget | prevention plan | phase 4 |
+| | **N14** a shift safety talk in English and, if needed, one of Spanish, Chinese, Tagalog, Vietnamese or Arabic | Writer and Word export | built |
+| Admin | **N15** control what each model sees and what it costs | AI controls page, cost log | built |
+
+A day for the area office, end to end:
+
+```mermaid
+sequenceDiagram
+  actor T as Triage officer
+  participant C as SafeReport Crew
+  actor D as Area Director
+  T->>C: Load the Texas week, 40 inspector days
+  C->>C: code 31 reports, check the rules, plan the days
+  C-->>T: proposed list, one reason per row
+  T->>C: open a report, resolve an employer match, add a note
+  D->>C: move a row, add "always inspect" for an employer
+  C->>C: resume from the Optimizer and recheck
+  C-->>D: new list and what changed
+  D->>C: Approve
+  C-->>D: decision log, CSV, letters as Word files
+```
+
+## How it works
+
+```mermaid
+flowchart TD
+  U([Request in plain words]) --> P[Planner]
+  P -. a state or a year is missing .-> Q[/Ask the user/]
+  Q -.-> P
+  P --> S1[Stage 1 for every report<br/>classifier, rules, employer match, BM25]
+  S1 -- unclear, severe or near the cut --> B{{One branch per report}}
+  B --> I[Intake] --> St[Standards]
+  B --> A[Analyst]
+  St --> M[Merge]
+  A --> M
+  S1 -- clear --> M
+  M --> O[Optimizer]
+  O --> W[Writer]
+  W --> C[Decision critic]
+  C -- breaks a plan rule, at most 2 retries --> O
+  C -- a citation or a number fails, at most 2 retries --> W
+  C --> H[/Area Director approves/]
+  H -- ask for changes --> O
+  H -- approve --> L[(Decision log and exports)]
+```
+
+| Agent | Kind | What it does |
+|---|---|---|
+| **Planner** | reasoning | splits the request into sub tasks, asks for missing details, sends each report of a week down its own branch |
+| **Intake** | reasoning | reads the story: activity, machine, injury, severity, event code with a confidence, and the facts it leaves out |
+| **Standards** | reasoning with retrieval | searches the regulations (BM25 plus embeddings) with terms a model writes in the language of the rules, and cites the section and paragraph |
+| **Analyst** | reasoning over data | DuckDB queries, similar past injuries, employer history, trends and charts |
+| **Optimizer** | optimization | OSHA's Category 1 rules first, then an integer program (PuLP) that spends the inspector days left; when there are too few days, a relaxed model says how many more are needed |
+| **Writer** | generation | inspection briefs, RRI letters, safety talks, answers; every number is a placeholder filled from a FactLedger |
+| **Decision critic** | decision making | checks every citation against eCFR, the OSHA domain rules, every number and the plan rules, and sends work back |
+
+**Why two stages?** Three model calls per report would be about 85 calls for one Texas week and
+over 500 nationwide. Stage 1 codes every report without a model in seconds; only the reports
+that need it go to the model branches (19 of 31 in the Texas week).
+
+### How the router picks a model
+
+```mermaid
+flowchart TD
+  S[A step needs a model] --> C{Cheapest model whose accuracy<br/>clears the bar for this step}
+  C --> R[Call it]
+  R --> OK{Good answer?}
+  OK -- yes --> Done([Use it, log tokens, cost and time])
+  OK -- low confidence, close standards,<br/>or the critic rejects it --> Up[Move up to a stronger model] --> R
+  R -- timeout, rate limit, server error --> F[Next provider in the fallback chain<br/>Claude, Gemini, GPT, local]
+  F --> R
+  F -. provider failed every retry .-> CD[Skip it for 60 seconds]
+```
+
+Three routing modes: **Lowest cost**, **Best quality**, and **Private**, which keeps every step on
+the local model (start the app in it with `safereport ui --live --mode private`). In the other two, a redaction step replaces employer names, addresses and
+people's names with placeholders before any call to a cloud model.
+
+### What keeps the answers safe
+
+* **No citation without the official text.** The critic checks each section against eCFR and
+  OSHA domain rules (a jam cleared on a running machine needs 1910.147; 1910.217 only for
+  mechanical power presses; 1910.178 only for powered industrial trucks). On the Texas week it
+  corrected 12 standards before the list was shown.
+* **No number without a source.** The Writer puts placeholders, and only numbers the tools
+  recorded fill them.
+* **No trend on unequal periods.** The data ends in November 2025, so 2025 is compared with the
+  same eleven months of earlier years: a plain yearly count shows a 3.6% fall, the fair
+  comparison a 4.5% rise.
+* **A person decides.** The graph stops for approval, and every decision is logged with its
+  reason and approver.
+* **A spending cap.** Paid calls are cached and stop at $1.50 in total.
+
+## The app, page by page
+
+The app follows the plain style of OSHA's Severe Injury Dashboard (blue menu, serif headings,
+outcome figures, record tables) and uses no official government mark.
+
+| Page | Who | What is on it |
+|---|---|---|
+| **This week's reports** | Triage officer, Area Director | totals at the top; the list on the left with filters (All, Category 1, Needs review, Inspection, RRI letter) and a CSV of the selection; a case inspector on the right; the decision bar (move rows, notes, an always inspect rule, Ask for changes, Approve); a map of the week beside the top five events; the inspector day chart; the employer matches panel; a closed routing and audit log |
+| **Ask** | everyone | chat beside the trace, an inline chart, the brief as a Word file |
+| **Evidence view** | everyone | the story with the words the Intake agent used, beside the cited rule, its checks and the employer's history |
+| **Trends and prevention** | Plant safety manager | outcome figures, a yearly chart of four outcomes over the same months, a state map that marks State Plan states, the top five events, the safety talk |
+| **AI controls and evaluation** | Admin | routing mode, redaction, a simulated outage per provider, the model table, the evaluation tables, the Pareto chart of cost against accuracy, every model call |
+| **Downloads** | everyone | the list as CSV; briefs, letters, summary and talks as Word files |
+
+Sign in is off by default and the role is picked at the top. Set `SAFEREPORT_PASSWORD` to
+require it, with the accounts `triage`, `director`, `manager` and `admin`.
+
+**Languages.** The office works in English: OSHA's reports, the regulations and the letters are
+in English, and the Evidence view highlights the story by character position, which translation
+would break. Only the safety talk, read aloud to a crew, comes in one more language, chosen from
+the five most spoken at home after English in the 2025 American Community Survey (table B16001,
+as summarized by [Access Multilingual](https://accessmultilingual.com/resources/languages-spoken-in-the-united-states-census-2024)):
+Spanish, Chinese, Tagalog, Vietnamese and Arabic. The translations were drafted with an AI
+assistant and need a native speaker's review before a plant uses them.
+
+## Results
+
+The test set is our **answer key of 60 manufacturing reports** (51 with a standard, 9 under the
+General Duty Clause), labelled with a written guide ([docs/LABELING_GUIDE.md](docs/LABELING_GUIDE.md))
+and reviewed by all three of us. It is a final test set: no prompt, weight or threshold was tuned
+on it, and every rate has a 95% Wilson interval, because one case moves a rate by about 2 points.
+
+**Does a model help find the right regulation?** Share of the 51 cases where the right section
+is in the top 3 (strict):
+
+```mermaid
+xychart-beta
+  title "Right section in the top 3 (51 cases)"
+  x-axis ["BM25 only", "BM25 + embeddings", "+ GPT 5 nano terms", "+ Claude terms"]
+  y-axis "Percent of cases" 0 --> 100
+  bar [29.4, 41.2, 60.8, 70.6]
+```
+
+| Top 3, strict | Hits of 51 | Rate (95% interval) | Gained / lost against no model | Exact McNemar p |
+|---|---|---|---|---|
+| No model (BM25 plus embeddings) | 21 | 41.2% (28.8 to 54.8) | | |
+| GPT 5 nano writes the search terms | 31 | 60.8% (47.1 to 73.0) | 13 / 3 | 0.021 |
+| Claude Sonnet 5.5 writes the search terms | 36 | 70.6% (57.0 to 81.3) | 16 / 1 | 0.0003 |
+
+* Claude puts the right section first in 26 cases (51.0%), against 12 without a model.
+* Claude against GPT 5 nano: 7 gained, 2 lost (p 0.18), so 51 cases do not settle which is better.
+* The whole experiment cost $0.14 of the $1.50 cap. Gemini 3.5 Flash returned server errors for
+  most calls on 19 November 2026 and was not scored.
+
+**Event coding without a model** (TF IDF and logistic regression, 1,000 held out 2025 reports):
+59.6% on the full code, 78.7% on the two digit group, 90.7% on the one digit division. Coding
+only when the confidence is at least 0.7 covers 51% of reports, 80% of them right.
+
+**Employer matching:** of 150 hand checked name pairs, the "same" rule held for 100 of 100 and
+45 of 50 "possible" pairs were one employer, so possible matches wait for a person.
+
+All numbers are in [eval/results](eval/results). Reproduce them without any paid call:
+
+```bash
+safereport eval-baselines
+```
+
+```bash
+safereport live-summary
+```
+
+**OSHA changed its event codes in January 2024** (OIICS 2 to OIICS 3; group 64 means "caught in
+machinery" before and "struck by a falling object" after). So the coder is trained on OIICS 3
+reports, the data layer refuses an event code filter across January 2024, and older reports get
+an estimated OIICS 3 code, marked as estimated on every chart.
+
+## Repository map
+
+```text
+src/safereport/
+  graph.py         the seven agents as a LangGraph graph, interrupts, checkpoints
+  router.py        model choice, escalation, fallback, cool down
+  providers.py     Anthropic, OpenAI, Google and LM Studio adapters
+  offline.py       the offline backend used without keys and in tests
+  triage.py        Category 1 rules and the inspector day integer program
+  domain.py        OSHA domain checks used by the critic
+  retrieval.py     BM25, FAISS and the index registry (Part 1910, Part 1926 when built)
+  data.py          DuckDB over Parquet, filters that respect the 2024 code change
+  employers.py     employer matching and saved match decisions
+  redaction.py     names and addresses hidden from cloud models
+  writer.py        templates for briefs, letters, talks and answers
+  spend.py         reply cache and the $1.50 cap
+  app.py, views.py the Gradio app
+config/            models.toml (models, prices, router), triage.toml (weights, days)
+data/labels/       the answer key and the three reviewers' files
+eval/results/      every measured number
+docs/              proposal, labelling guide, related products, open issues, AI use
+tests/             291 tests, offline, no keys
+```
+
+## For developers
+
+```bash
 pytest -q
+```
+
+```bash
 ruff check . && ruff format --check .
 ```
 
-`python scripts/merge_labels.py` rebuilds `data/labels/answer_key.csv` from the three label files
-and `data/labels/settlements.csv`.
+| Command | What it does |
+|---|---|
+| `safereport build-data` | writes `data/processed/reports.parquet` with a `split` column: train (2015 to 2024), holdout (the 1,000 2025 reports in `data/splits/holdout_2025.csv`), recent (other 2025) |
+| `safereport fetch-ecfr` | downloads Part 1910 from the eCFR API |
+| `safereport build-index` | indexes Part 1910, the General Duty Clause and 12 emphasis programs with BM25 and `BAAI/bge-small-en-v1.5` in FAISS |
+| `safereport train-baseline` | trains the event coder and writes an OIICS 3 code for every report |
+| `safereport employer-pairs` | scores the hand check of employer matching |
+| `safereport eval-live --model claude --smoke 3` | **paid:** format check on reports outside the key |
+| `safereport eval-live --model claude --score` | **paid:** one scored run over the key, cached and capped |
+| `python scripts/merge_labels.py` | rebuilds `data/labels/answer_key.csv` from the three label files |
+
+Tests that need the built data skip when it is missing, so the suite also runs on a fresh clone,
+as in CI (`.github/workflows/ci.yml`, started by hand for now). Triage weights and inspector days
+per inspection are in [config/triage.toml](config/triage.toml).
+
+## Limits
+
+* Most State Plan states are missing from the data, and only reported injuries appear.
+* 2025 covers January to November only; trends compare the same months.
+* Without a model, the cited standard is the top retrieval result, right for about 41% of the
+  key, so offline letters need a person's check.
+* OSHA's past inspection choices reflect its own staffing; they are a reference, not proof.
+* The reports cannot be linked to the citations OSHA issued (the inspection numbers do not match).
+* Inspector days per inspection are assumptions, shown as values you can change.
+* The week map plans no travel; one state stands in for one office's territory. Map tiles come
+  from CARTO and OpenStreetMap, so the browser needs the internet for them.
+* Phase 4 is next: router accuracies measured outside the key, a seeded domain check set, the
+  inspection AUC, batch savings, the router on the Pareto chart, and the prevention plan.
+
+More in [docs/OPEN_ISSUES.md](docs/OPEN_ISSUES.md); how we used AI tools is in
+[docs/AI_USAGE.md](docs/AI_USAGE.md); related products are compared in
+[docs/RELATED_PRODUCTS.md](docs/RELATED_PRODUCTS.md).
 
 ## License
 
-MIT, Seven Team-5374.
+MIT, Seven Team-5374. Not an official U.S. government website or product.

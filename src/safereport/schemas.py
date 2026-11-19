@@ -130,6 +130,28 @@ class IntakeResult(BaseModel):
     missing_facts: list[str] = Field(default_factory=list)
     spans: list[Span] = Field(default_factory=list)
 
+    @model_validator(mode="before")
+    @classmethod
+    def _tidy(cls, data: object) -> object:
+        """Read a small model's reply as meant: null for an empty field, a number for a code, a
+        label outside the lists. Seen with Gemma 4 E4B in private mode ("material": null)."""
+        if not isinstance(data, dict):
+            return data
+        data = {k: v for k, v in data.items() if v is not None}
+        for name in ("report_id", "machine_or_hazard", "material", "injury", "event_code", "source_code"):
+            value = data.get(name, "")
+            data[name] = str(value) if isinstance(value, int | float) else value
+        if data.get("activity") not in Activity.__args__:
+            data["activity"] = "unknown"
+        if data.get("hazard_type") not in HazardType.__args__:
+            data["hazard_type"] = "other"
+        try:
+            data["confidence"] = min(max(float(data.get("confidence", 0.0)), 0.0), 1.0)
+        except (TypeError, ValueError):
+            data["confidence"] = 0.0
+        data.setdefault("fatality_potential", False)
+        return data
+
     def spans_outside(self, narrative: str) -> list[Span]:
         """Spans that point past the end of the narrative; a model that invents offsets fails here."""
         return [s for s in self.spans if s.end > len(narrative)]
