@@ -6,10 +6,14 @@ Seven Team-5374. Written on 20 November 2026. How we work is in [CONTRIBUTING.md
 |---|---|---|
 | Hamad Al Sulaimi | `hmdsulaimi` | builds and measures (triage, evaluation), writes the report |
 | Khoa Tran | `trankhoa0210` | builds and measures (standards, routing), makes the slides and the demo script |
-| Quoc Hung Le (Kevin) | `lequo-neu` | reviews every pull request when asked, owns the repository settings |
+| Quoc Hung Le (Kevin) | `lequo-neu` | reviews every pull request when asked, owns the repository settings, folds the results into the README and proposal at the end of the Basic stage |
 
-The work is split evenly between Hamad and Khoa. Kevin reviews and merges; he does not take tasks
-from this list, so nobody waits on him for anything but a review.
+The work is split evenly between Hamad and Khoa. Kevin reviews and merges, and takes no task from
+this list beyond folding the results into the shared documents, so nobody waits on him for
+anything but a review.
+
+The safety talk translations get a native speaker's review, as the README and proposal promise:
+Hamad reads the Arabic (in B1) and Khoa the Vietnamese (in B5).
 
 ## Where we start
 
@@ -41,6 +45,21 @@ The course deadlines come later (check Canvas), so the days after 28 November ar
 Every task ends in a pull request that meets its outputs below and the definition of done in
 CONTRIBUTING.md. Each task has its own GitHub issue, named by its code (issues #2 to #13).
 
+**Shared dates inside the stage.** B3 and B7 depend on each other: each needs 15 cases checked by
+the other person.
+
+| When | What |
+|---|---|
+| 22 November, noon | Hamad sends Khoa the 15 cases of B3 to check; Khoa sends Hamad the 15 cases of B7 |
+| 23 November, noon | each returns the 15 checked cases |
+| 23 November, night | every Basic pull request is merged |
+
+**Results go in their own files, not in the README.** B2, B3, B4, B6 and B7 each write only their
+own file in `eval/results/` (and `data/labels/`). The pull request description gives the sentence
+or table row the README should show. When the last Basic pull request is merged, Kevin updates
+`README.md`, `docs/PROPOSAL.md` and `docs/OPEN_ISSUES.md` from those files in one pass, so five
+pull requests never edit the same table.
+
 ### Hamad
 
 **B1. Review the triage logic and the app.**
@@ -52,24 +71,29 @@ CONTRIBUTING.md. Each task has its own GitHub issue, named by its code (issues #
 * Walk the README tour with all four roles on a laptop and at phone width. Try every move of the
   Director: a row to inspection and back, a note cleared, a rule removed, an imminent danger flag
   set and removed, Approve with open employer matches.
-* Outputs: `docs/reviews/hamad.md` with what you checked and what you found; one issue per defect.
+* Native speaker review of the Arabic safety talks (`ar` in `src/safereport/talk_languages.py`):
+  read all four topics, and open one Word file to check that it reads right to left. The README
+  and the proposal promise this review before a plant uses a translation.
+* Outputs: `docs/reviews/hamad.md` with what you checked and what you found, the corrected Arabic
+  text in a pull request if anything is wrong; one issue per defect.
 
 **B2. Inspection priority against OSHA's own choices.**
 * ROC AUC of the priority score against whether OSHA inspected, on the 2025 reports, beside the
   baseline "severity alone". Say in the result that past practice is a reference, not the truth.
 * Outputs: a command (for example `safereport eval-priority`), `eval/results/inspection_auc.json`
-  with the AUC and its 95% interval, a test on the small file, a row in the README results.
+  with the AUC and its 95% interval, a test on the small file, the README row in the PR description.
 
 **B3. Hand check of the Category 1 rules on 100 reports.**
 * Draw 100 reports from the 2025 holdout (a seed in the script), mark for each whether it meets
   a Category 1 criterion and which one, following `docs/LABELING_GUIDE.md`. Khoa checks 15 of them.
 * Outputs: `data/labels/category1_check.csv`, a scoring command, recall and false alarms with 95%
-  intervals in `eval/results/`, the agreement on the 15 shared cases, a row in the README results.
+  intervals in `eval/results/`, the agreement on the 15 shared cases, the README row in the PR
+  description. The 15 cases go to Khoa by 22 November at noon.
 
 **B4. What the two stage batch saves.**
 * Run the Texas week with every report through stage 2 and with the two stages, offline. Count
   the model calls, the estimated cost and the decisions that change.
-* Outputs: a command, `eval/results/batch_savings.json`, a row in the README results.
+* Outputs: a command, `eval/results/batch_savings.json`, the README row in the PR description.
 
 ### Khoa
 
@@ -80,22 +104,30 @@ CONTRIBUTING.md. Each task has its own GitHub issue, named by its code (issues #
 * Read 20 of the 33 construction reports the new falling object filter (`retrieval.py`,
   `FALLING_THING`) takes out of the Falls program: each must be an object falling on a worker.
 * Check an RRI letter against OSHA's practice (five working days, root cause, abatement
-  verification, posting certificate), and the talk translations in any language you read well.
-* Outputs: `docs/reviews/khoa.md` with what you checked and what you found; one issue per defect.
+  verification, posting certificate).
+* Native speaker review of the Vietnamese safety talks (`vi` in `src/safereport/talk_languages.py`):
+  read all four topics and open one Word file. Kevin can give a second reading on request.
+* Outputs: `docs/reviews/khoa.md` with what you checked and what you found, the corrected
+  Vietnamese text in a pull request if anything is wrong; one issue per defect.
 
 **B6. Seeded errors for the domain checks.**
 * Copy the answer key with wrong citations put in on purpose (a guarding section for a jam, a
   press section outside presses, a forklift section for a car, an invented section; at least 20).
 * Outputs: `data/labels/seeded_errors.csv`, a scoring command, errors caught and correct labels
-  wrongly rejected in `eval/results/seeded_checks.json`, a row in the README results.
+  wrongly rejected in `eval/results/seeded_checks.json`, the README row in the PR description.
 
 **B7. Router accuracies measured outside the answer key.**
 * Label the standard for 50 reports of the 2025 holdout that are not in the key, following the
-  labelling guide. Hamad checks 15 of them.
+  labelling guide. Hamad checks 15 of them; send them by 22 November at noon.
 * Run each model once on them with `--live` (Khoa is the only person who runs paid calls in this
   stage; stay inside the cap) and give the router these accuracies in place of its priors.
+* If Gemini 3.5 Flash fails again with 503 or 429 errors, as it did on 19 November: retry it once,
+  only if the budget left allows. If it still fails, record it as unavailable (date and error) in
+  the result file, keep its prior in `config/models.toml` marked "not measured", and update the
+  measured values for Claude and GPT 5 nano only.
 * Outputs: `data/labels/router_slice.csv`, `eval/results/router_slice.json`, the measured values
-  in `config/models.toml` with their source, the agreement on the 15 shared cases, the money spent.
+  in `config/models.toml` with their source, the agreement on the 15 shared cases, the money spent,
+  the README row in the PR description.
 
 **B8. The router on the Pareto chart, and a cap on parallel calls.**
 * Add the router's own point to the cost against accuracy chart on the Evaluation page.

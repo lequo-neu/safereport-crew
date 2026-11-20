@@ -29,8 +29,10 @@ A task is done when its pull request:
 * meets the outputs written for it in docs/TEAM_PLAN.md;
 * passes `ruff check .`, `ruff format --check .` and `pytest -q`, with tests for what it adds,
   and the tests run offline with no API key and no data download;
-* says in the README or the proposal what changed for a user, and every number it adds comes from
-  a file in `eval/results/` with the command that wrote it;
+* says what changed for a user, and every number it adds comes from a file in `eval/results/`
+  with the command that wrote it. In the Basic stage a pull request does not edit the README,
+  proposal or open issues tables: it puts the row in its description, and Kevin updates those
+  files in one pass at the end of the stage (see docs/TEAM_PLAN.md);
 * lists in the description how you checked it (commands run, pages tried).
 
 ## Data, keys and money

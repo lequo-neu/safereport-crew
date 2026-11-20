@@ -10,7 +10,7 @@ Closes #
 
 - [ ] `ruff check .` and `ruff format --check .` pass
 - [ ] `pytest -q` passes, with tests for what this adds (offline, no key, no data download)
-- [ ] Every new number comes from a file in `eval/results/`, and the README or proposal says how to reproduce it
+- [ ] Every new number comes from a file in `eval/results/` with the command that wrote it (in the Basic stage, the README row goes in this description, not in the README)
 - [ ] No `.env`, key, raw data, processed data, index or `outputs/` file is in the diff
 - [ ] Nothing was tuned on the answer key
 
