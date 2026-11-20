@@ -4,8 +4,8 @@ Seven Team-5374. Written on 20 November 2026. How we work is in [CONTRIBUTING.md
 
 | Who | GitHub | Role from now on |
 |---|---|---|
-| Hamad Al Sulaimi | `hmdsulaimi` | builds and measures (triage, evaluation), writes the report |
-| Khoa Tran | `trankhoa0210` | builds and measures (standards, routing), makes the slides and the demo script |
+| Hamad Al Sulaimi | `hmdsulaimi` | builds and measures (triage, evaluation), shares the submission work with Khoa |
+| Khoa Tran | `trankhoa0210` | builds and measures (standards, routing), shares the submission work with Hamad |
 | Quoc Hung Le (Kevin) | `lequo-neu` | reviews every pull request when asked, owns the repository settings, folds the results into the README and proposal at the end of the Basic stage |
 
 The work is split evenly between Hamad and Khoa. Kevin reviews and merges, and takes no task from
@@ -43,7 +43,7 @@ The course deadlines come later (check Canvas), so the days after 28 November ar
 ## Basic stage: 20 to 23 November
 
 Every task ends in a pull request that meets its outputs below and the definition of done in
-CONTRIBUTING.md. Each task has its own GitHub issue, named by its code (issues #2 to #13).
+CONTRIBUTING.md. Each task has its own GitHub issue, named by its code (issues #2 to #14).
 
 **Shared dates inside the stage.** B3 and B7 depend on each other: each needs 15 cases checked by
 the other person.
@@ -146,15 +146,26 @@ pull requests never edit the same table.
 
 ## Submission stage: 26 to 28 November
 
-**Hamad: the report.** Problem, users and needs, data and answer key, architecture, triage logic,
+All four tasks belong to Hamad and Khoa together. You split them between you as you see fit, and
+write who does which part in each issue by 26 November at noon, so nothing is done twice or
+left out.
+
+**S1. The report.** Problem, users and needs, data and answer key, architecture, triage logic,
 evaluation with every number taken from `eval/results/`, limits, AI use. PDF in `docs/report/`.
 
-**Khoa: the slides and the demo script.** 8 to 12 slides and a live demo script that follows the
+**S2. The slides and the demo script.** 8 to 12 slides and a live demo script that follows the
 README tour, with a backup run recorded offline in case the network fails on the day.
 
-**Both: the video.** Each records the part of the demo they built; Khoa puts it together.
+**S3. The video.** The demo, each part shown by the person who built it, put together in one video.
 
-Kevin reviews all three before 28 November at night.
+**S4. The submission.** Everything handed in, in the form the course asks for (check Canvas):
+* a fresh clone of `main` passes the README quick start and `pytest -q`;
+* Kevin tags the submitted commit (for example `v1.0.0`) when you ask him, so the code handed in
+  is the code we tested;
+* the report, the slides, the video link and the repository link are submitted, and a screenshot
+  or the confirmation of each submission is attached to the issue.
+
+Kevin reviews S1 to S3 before 28 November at night and checks S4 with you.
 
 ## If time runs short
 
