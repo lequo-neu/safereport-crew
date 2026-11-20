@@ -40,7 +40,8 @@ jobs:
           cache: pip
           cache-dependency-path: pyproject.toml
       - name: Install
-        run: python -m pip install -e ".[dev]"
+        # The model clients are installed so the adapter tests run; no key is set, so nothing is called.
+        run: python -m pip install -e ".[dev,models]"
       - name: Lint
         run: |
           ruff check .

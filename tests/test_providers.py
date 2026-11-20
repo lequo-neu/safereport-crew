@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 from types import SimpleNamespace
 
@@ -18,6 +19,20 @@ from safereport.providers import (
     parse_json,
     prepare,
 )
+
+
+def _installed(module: str) -> bool:
+    try:
+        return importlib.util.find_spec(module) is not None
+    except ModuleNotFoundError:  # "google.genai" without the google package
+        return False
+
+
+def needs(module: str):
+    """The SDK adapters import their client; without the models extra these tests are skipped."""
+    return pytest.mark.skipif(
+        not _installed(module), reason=f"{module} comes with pip install -e '.[models]'"
+    )
 
 
 SETTINGS = load_model_settings()
@@ -53,6 +68,7 @@ class FakeAnthropic:
         )
 
 
+@needs("anthropic")
 def test_claude_intake_reply_becomes_spans_from_quoted_evidence():
     fake = FakeAnthropic(text="```json\n" + json.dumps(INTAKE_REPLY) + "\n```")
     reply = AnthropicBackend(SETTINGS.model("claude"), client=fake).complete("intake", INTAKE)
@@ -65,6 +81,7 @@ def test_claude_intake_reply_becomes_spans_from_quoted_evidence():
     assert sent["betas"] == ["server-side-fallback-2026-07-01"] and "OSHA" in sent["system"]
 
 
+@needs("anthropic")
 def test_claude_errors_become_fallback_signals():
     import anthropic
     import httpx2
@@ -83,6 +100,7 @@ def test_claude_errors_become_fallback_signals():
     assert caught.value.kind == "refusal"
 
 
+@needs("anthropic")
 def test_a_reply_that_is_not_json_is_bad_output():
     with pytest.raises(ModelError) as caught:
         AnthropicBackend(
@@ -101,6 +119,7 @@ def _fake_chat(calls):
     return SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
 
 
+@needs("openai")
 def test_openai_uses_json_mode():
     calls = []
     reply = OpenAIBackend(SETTINGS.model("gpt_nano"), client=_fake_chat(calls)).complete(
@@ -110,6 +129,7 @@ def test_openai_uses_json_mode():
     assert calls[0]["response_format"] == {"type": "json_object"} and calls[0]["model"] == "gpt-5-nano"
 
 
+@needs("openai")
 def test_lm_studio_gets_no_json_mode():
     # LM Studio answers 400 to {"type": "json_object"}; the reply is read with parse_json instead.
     calls = []
@@ -121,6 +141,7 @@ def test_lm_studio_gets_no_json_mode():
     assert "response_format" not in calls[0] and calls[0]["model"] == "google/gemma-4-e4b"
 
 
+@needs("google.genai")
 def test_gemini_reads_usage_metadata():
     def generate_content(**kwargs):
         return SimpleNamespace(text=json.dumps({"terms": ["ladder"]}),
