@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import date
 
+import pandas as pd
 import pytest
 
 from safereport.data import REPORTS_PARQUET, ReportStore
@@ -125,3 +126,12 @@ def test_a_decision_settles_every_report_of_the_pair_and_survives_a_restart(
         "1": "same",
         "2": "same",
     }
+
+
+def test_a_generic_one_word_name_is_not_a_match_by_itself():
+    index = EmployerIndex(pd.DataFrame({
+        "id": ["1", "2"], "employer": ["STEEL CO INC", "Steel Dynamics"], "city": ["HOUSTON", "AUSTIN"],
+        "zip": ["77001", "78701"], "state": ["TEXAS", "TEXAS"], "naics": ["331110", "331110"],
+        "event_date": [pd.Timestamp("2025-01-02"), pd.Timestamp("2025-02-03")],
+    }))  # fmt: skip
+    assert index.history("STEEL CO INC", "TEXAS", naics="331110", exclude_id="1") == []

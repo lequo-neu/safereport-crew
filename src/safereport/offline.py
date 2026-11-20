@@ -131,9 +131,9 @@ def plan_request(request: str, today: date | None = None) -> dict[str, Any]:
     hazard = next(((words, code) for words, code in HAZARDS.items() if words in lower), None)
     if hazard:
         params["hazard_label"], params["event_group_v3"] = hazard
-    days = re.search(r"(\d+(?:\.\d+)?)\s+inspector days", lower)
+    days = re.search(r"(-?\d[\d,]*(?:\.\d+)?)\s+inspector days", lower)
     if days:
-        params["capacity"] = float(days.group(1))
+        params["capacity"] = float(days.group(1).replace(",", ""))
     budget = re.search(r"\$\s?([\d,]+)", text)
 
     is_narrative = bool(

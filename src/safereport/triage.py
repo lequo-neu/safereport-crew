@@ -14,6 +14,7 @@ inspector days an inspection takes, and the days of a week when a request names 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import math
 from pathlib import Path
 import tomllib
 from typing import Literal
@@ -57,6 +58,30 @@ ASSUMPTIONS = load_assumptions()
 DEFAULT_WEIGHTS = ASSUMPTIONS["weights"]
 INSPECTION_DAYS = {k: v for k, v in ASSUMPTIONS["inspection_days"].items() if k != "other"}
 DEFAULT_DAYS = ASSUMPTIONS["inspection_days"]["other"]
+# More inspector days than any area office has in a week: a typo, not a plan.
+MAX_DAYS = 500.0
+
+
+def checked_capacity(value: object, default: float) -> tuple[float, str]:
+    """Inspector days from a request or a model, and why they were not used when they cannot be.
+
+    Zero is a real week (a holiday, an office short of staff); a negative, non numeric or huge
+    value is replaced by the default and the reason is shown with the plan.
+    """
+    try:
+        days = float(str(value).replace(",", ""))
+    except (TypeError, ValueError):
+        return default, f"{value!r} is not a number of inspector days, so the plan uses {default:g}."
+    if not math.isfinite(days) or days < 0:
+        return default, f"{days:g} inspector days cannot be planned, so the plan uses {default:g}."
+    if days > MAX_DAYS:
+        return (
+            default,
+            f"{days:g} inspector days is more than an office has in a week, so the plan uses {default:g}.",
+        )
+    return days, ""
+
+
 DEFAULT_CAPACITY = ASSUMPTIONS["default_capacity"]
 
 
@@ -90,6 +115,9 @@ class Rules:
     force_letter: set[str] = field(default_factory=set)
     inspect_employers: set[str] = field(default_factory=set)
     notes: dict[str, str] = field(default_factory=dict)
+    # Reports the Area Director judged an imminent danger: OSHA's fifth Category 1 criterion, which
+    # no narrative rule can decide.
+    imminent_danger: set[str] = field(default_factory=set)
 
 
 @dataclass
@@ -177,6 +205,8 @@ def plan_week(cases: list[Case], capacity: float, rules: Rules | None = None) ->
             forced[case.report_id] = "Category 1: " + "; ".join(t.criterion for t in case.category_one)
         elif case.report_id in rules.force_inspection:
             forced[case.report_id] = "set to inspection by the Area Director"
+        elif case.report_id in rules.force_letter:
+            pass  # the Director's move of this row beats the rule for its employer
         elif normalize_name(case.employer) in {normalize_name(e) for e in rules.inspect_employers}:
             forced[case.report_id] = f"rule: inspect every report from {case.employer}"
         if case.report_id in forced:

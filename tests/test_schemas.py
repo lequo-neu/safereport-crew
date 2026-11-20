@@ -8,7 +8,16 @@ from pydantic import ValidationError
 import pytest
 
 from safereport.config import PROJECT_ROOT
-from safereport.schemas import GENERAL_DUTY, AnswerKeyCase, Citation, IntakeResult, Report, Span, cfr_section
+from safereport.schemas import (
+    GENERAL_DUTY,
+    AnswerKeyCase,
+    Citation,
+    IntakeResult,
+    Report,
+    Span,
+    cfr_section,
+    clip,
+)
 
 
 SIR_CSV = PROJECT_ROOT / "data" / "raw" / "January2015toNovember2025.csv"
@@ -131,3 +140,11 @@ def test_a_small_model_reply_is_read_as_meant():
     assert (result.activity, result.hazard_type, result.event_code) == ("unknown", "other", "6411")
     assert (result.material, result.source_code, result.confidence) == ("", "", 1.0)
     assert result.fatality_potential is False and result.missing_facts == []
+
+
+def test_long_text_is_cut_at_a_word_with_an_ellipsis():
+    text = "The standard covers installations under the exclusive control of electric utilities for power generation."
+    assert clip(text, 200) == text
+    cut = clip(text, 80)
+    assert cut.endswith(" …") and len(cut) <= 82 and text.startswith(cut[:-2])
+    assert not cut[:-2].endswith("f"), "never ends inside a word"

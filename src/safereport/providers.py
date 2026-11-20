@@ -61,7 +61,8 @@ SYSTEM = {
         "You polish a document for an OSHA office. The input holds base_template. Return JSON {template: ...}: "
         "the same document in clear, plain words in the language its code names (en, es, zh, tl, vi or ar), keeping every {{placeholder}} "
         "exactly as written and keeping every CFR citation. Write no digit anywhere outside a placeholder or a "
-        "citation; spell small fixed numbers out in words."
+        "citation; spell small fixed numbers out in words. When the input has fix, it lists what the critic "
+        "found wrong in the last draft; correct exactly those points."
     ),
 }
 STEP_TASKS = {"code": "intake", "retrieve": "standards_terms", "decide": "planner", "write": "writer"}

@@ -294,3 +294,14 @@ def test_demo_pasted_narrative_on_real_indexes(real):
     assert "Standard:** 1910.147" in out["answer"]
     finding = next(f for f in out["findings"].values() if f["kind"] == "single_report")
     assert finding["industry_share"] > 0, "the share uses the code the Intake agent read"
+
+
+@pytest.mark.parametrize(
+    ("typed", "why"), [("-5", "cannot be planned"), ("1,200", "more than an office has")]
+)
+def test_typed_inspector_days_a_person_could_not_mean_are_refused(small_services, typed, why):
+    graph = build_graph(small_services, InMemorySaver())
+    config = run_config()
+    graph.invoke({"request": f"Plan this week's inspections in Texas with {typed} inspector days."}, config)
+    out = graph.invoke(Command(resume={"action": "approve"}), config)
+    assert why in out["answer"] and f"{small_services.capacity:g}" in out["answer"]

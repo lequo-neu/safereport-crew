@@ -91,6 +91,16 @@ def test_emphasis_programs_apply_by_industry_and_trigger():
     assert not amputations.applies_to("fingertip amputated in rollers", "452")
     assert falls.applies_to("He fell 12 feet from a ladder", "236")
     assert not falls.applies_to("She slipped on a doormat and fell", "311")
+    # Report 20251111409: the dirt fell, not the worker.
+    assert not falls.applies_to(
+        "A section of dirt/rock fell from the side of the tunnel wall onto his legs.", "238"
+    )
+    assert falls.applies_to("He was standing on a box when he fell from the scaffold.", "238")
+    for worker_fell in ("An employee installing solar panels fell from the roof to the garage.",
+                        "An employee connecting structural steel fell approximately 17 feet from the beam.",
+                        "An employee hanging dry wall fell from a 6-foot ladder."):  # fmt: skip
+        assert falls.applies_to(worker_fell, "238"), worker_fell
+    assert not falls.applies_to("The worker was below when a beam fell from the third floor.", "238")
     assert metals.applies_to("anything at all", "331110") and not metals.applies_to("anything", "332")
 
 

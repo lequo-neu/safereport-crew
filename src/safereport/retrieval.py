@@ -65,6 +65,26 @@ def tokenize(text: str) -> list[str]:
     return tokens
 
 
+# A thing that fell is not a worker who fell ("a section of dirt/rock fell from the tunnel wall").
+# Only a thing named as the subject counts: an article or "section of" right before it. A worker
+# handling it ("installing solar panels fell from the roof", "connecting structural steel fell")
+# still falls.
+FALLING_THING = re.compile(
+    r"\b(a|an|the|of|some|its|their)\W+((section|piece|pile|stack|load|bundle|sheet|portion|part)\W+of\W+)?"
+    r"(\w+/)?(dirt|rocks?|soil|earth|walls?|beams?|loads?|pipes?|objects?|materials?|box(es)?|pallets?|boards?|"
+    r"planks?|debris|bundles?|blocks?|bricks?|tools?|parts?|sheets?|panels?|trees?|branch(es)?|steel|"
+    r"concrete|truss(es)?|joists?|rebar|coils?|rolls?|stacks?)\W+((had|has|was|suddenly|then)\W+)?$",
+    re.IGNORECASE,
+)
+
+
+def _triggered(pattern: str, text: str) -> bool:
+    for found in re.finditer(pattern, text, flags=re.IGNORECASE):
+        if not FALLING_THING.search(text[max(0, found.start() - 60) : found.start()]):
+            return True
+    return False
+
+
 @dataclass
 class Document:
     doc_id: str
@@ -86,13 +106,13 @@ class Document:
     def applies_to(self, text: str, naics: str) -> bool:
         """For an emphasis program: a trigger that applies anywhere matches, or the report's
         industry is covered and one of the industry triggers matches (or there are none)."""
-        if any(re.search(pattern, text, flags=re.IGNORECASE) for pattern in self.anywhere_triggers):
+        if any(_triggered(pattern, text) for pattern in self.anywhere_triggers):
             return True
         if self.industries and not any(naics.startswith(i) for i in self.industries):
             return False
         if not self.triggers:
             return bool(self.industries)
-        return any(re.search(pattern, text, flags=re.IGNORECASE) for pattern in self.triggers)
+        return any(_triggered(pattern, text) for pattern in self.triggers)
 
     @property
     def search_text(self) -> str:

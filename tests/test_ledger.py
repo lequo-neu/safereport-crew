@@ -2,14 +2,17 @@ from __future__ import annotations
 
 import pytest
 
-from safereport.ledger import FactLedger
+from safereport.ledger import FactLedger, percent
 
 
 def test_facts_fill_placeholders_with_readable_values():
     ledger = FactLedger()
     ledger.add("reports", 8712, "store")
-    ledger.add("change", 0.0446, "store")
+    ledger.add("change", percent(0.0446), "store")
+    ledger.add("days", 1.0, "request")
     assert ledger.render("{{reports}} reports, {{change}} more") == "8,712 reports, 4.5% more"
+    assert ledger.render("{{days}} inspector days") == "1.0 inspector days", "a small number is not a share"
+    assert percent(1.5) == "150.0%"
 
 
 def test_only_hand_written_numbers_are_untraced():

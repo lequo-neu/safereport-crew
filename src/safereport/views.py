@@ -32,12 +32,20 @@ from safereport.data import Filters
 from safereport.domain import check_citation
 from safereport.employers import DecisionStore, normalize_name
 from safereport.evaluation import RESULTS_DIR
-from safereport.graph import Services, build_graph, load_services, run_config, sqlite_checkpointer
+from safereport.graph import (
+    TALK_MIN_REPORTS,
+    Services,
+    build_graph,
+    load_services,
+    run_config,
+    sqlite_checkpointer,
+)
 from safereport.icons import svg
 from safereport.ledger import FactLedger
 from safereport.outputs import pareto_chart, sensitivity_chart, word_document
-from safereport.schemas import CITATION, DIRECTIVE, GENERAL_DUTY, IntakeResult
+from safereport.schemas import CITATION, DIRECTIVE, GENERAL_DUTY, IntakeResult, clip
 from safereport.talk_languages import LANGUAGES, extra_language
+from safereport.triage import MAX_DAYS
 
 
 OUTPUTS = PROJECT_ROOT / "outputs"
@@ -59,7 +67,6 @@ MATCH_COLUMNS = ["This week", "City", "Earlier spelling", "Earlier city", "Last 
 # The order a triage officer works the week in: the musts, the model reviewed, the unclear codes.
 FILTERS = ("All", "Category 1", "Needs review", "Inspection", "RRI letter")
 TRIGGER_COLUMNS = ["Report", "Establishment Name", "Criterion", "Evidence"]
-MAX_DAYS = 500  # more inspector days than any area office has in a week: a typo
 RRI_REPLY_DAYS = 5  # working days the employer has to answer the letter
 INDUSTRY_CHOICES = {"All industries": "", "Manufacturing": "3", "Food manufacturing": "311",
                     "Plastics": "326", "Primary metal": "331", "Fabricated metal": "332",
@@ -114,6 +121,9 @@ class Session:
     week_thread: str = ""
     week_state: str = ""
     week_seconds: float = 0.0
+    # The week list whose Approve was pressed once with employer matches open; a second press on
+    # that same list approves anyway. A new list, from Load week or from Ask, is warned again.
+    approve_warned: str = ""
 
 
 # ---- Small helpers ----
@@ -189,7 +199,13 @@ def trace_html(trace: list[dict[str, Any]], offline_rules: bool = False) -> str:
             f'<li class="sr-step sr-agent-{slug}"><div class="sr-step-head"><strong>{html.escape(agent)}</strong>'
             f' {html.escape(step["summary"])}</div><div class="sr-meta">{"".join(meta)}</div>{reason}</li>'
         )
-    return f'<ol class="sr-trace">{"".join(items)}</ol>'
+    note = (
+        '<div class="sr-offline-note">Offline rules answered every step, so nothing was paid. Each step names '
+        "the model the router would call, and est. is what that call would cost.</div>"
+        if offline_rules
+        else ""
+    )
+    return f'{note}<ol class="sr-trace">{"".join(items)}</ol>'
 
 
 def offline_rules(crew: Crew) -> bool:
@@ -230,8 +246,12 @@ def ask(crew: Crew, message: str, history: list | None, session: Session):
             session,
         )
     history.append({"role": "user", "content": message})
+    answers = answers_for(session.question, message) if session.question else None
+    if session.question and answers is None and len(message.split()) > 6:
+        # A full sentence that does not answer the open question is a new request: drop the question
+        # instead of asking it again forever.
+        session.question = None
     if session.question:
-        answers = answers_for(session.question, message)
         if answers is None:
             history.append(
                 {
@@ -263,8 +283,12 @@ def ask(crew: Crew, message: str, history: list | None, session: Session):
             session.week_thread, session.week_state = session.ask_thread, values["params"].get("state", "")
             rows = waiting["rows"]
             inspections = sum(r["decision"] == "inspection" for r in rows)
+            note = next(
+                (f.get("capacity_note") for f in values["findings"].values() if f["kind"] == "triage"), ""
+            )
             reply = (f"The week's list is ready: {len(rows)} reports, {inspections} proposed for inspection. "
-                     "Open **This week's reports** to change rows and approve it.")  # fmt: skip
+                     "Open **This week's reports** to change rows and approve it."
+                     + (f" Inspector days: {note}" if note else ""))  # fmt: skip
     else:
         reply = out["answer"]
         brief = next((d for k, d in values.get("drafts", {}).items() if k.endswith(":brief")), None)
@@ -424,12 +448,14 @@ def context(crew: Crew, item: dict[str, Any]) -> str:
             similar = []
     if similar:
         lines.append("\n**Similar injuries in the industry**")
-        lines += [f"* {s['event_date']}, {s['state'].title()}: {s['narrative'][:180]}" for s in similar[:3]]
+        lines += [
+            f"* {s['event_date']}, {s['state'].title()}: {clip(s['narrative'], 220)}" for s in similar[:3]
+        ]
     return "\n".join(lines)
 
 
 def _quoted(text: str) -> str:
-    return "\n".join(f"> {line}" for line in text[:900].splitlines() if line.strip()) or "> (no text)"
+    return "\n".join(f"> {line}" for line in clip(text, 900).splitlines() if line.strip()) or "> (no text)"
 
 
 def _pasted(crew: Crew, session: Session) -> dict[str, Any] | None:
@@ -581,7 +607,12 @@ def week_view(crew: Crew, session: Session, note: str = "", show: str = "All"):
     ]  # fmt: skip
     if plan["shortfall"]:
         tiles.append(
-            ("clock", "Inspector days short", f"{plan['shortfall']:g}", "to inspect every Category 1 report")
+            (
+                "clock",
+                "Inspector days short",
+                f"{plan['shortfall']:g}",
+                "to inspect every report that must be inspected",
+            )
         )
     cards = (
         outcome_strip(len(rows), *harm)
@@ -602,6 +633,8 @@ def week_view(crew: Crew, session: Session, note: str = "", show: str = "All"):
         status = f"**Approved** by {approval['by']}. Letters and the list are in Downloads."
     elif "approval" in crew.waiting_for(session.week_thread):
         status = "**Waiting for the Area Director.** Move rows or add a rule, then approve the list."
+        if finding.get("capacity_note"):
+            status = f"**Inspector days:** {finding['capacity_note']}\n\n" + status
     else:
         status = ""
     log = values.get("decision_log", [])
@@ -681,6 +714,18 @@ def move_choices(crew: Crew, session: Session) -> tuple[list[str], list[str]]:
     return letters, inspections
 
 
+def imminent_choices(crew: Crew, session: Session) -> tuple[list[str], list[str]]:
+    """Reports the Director may flag as an imminent danger, and the ones flagged now."""
+    finding = _triage(crew, session)
+    if finding is None:
+        return [], []
+    flagged = set(crew.values(session.week_thread).get("rules", {}).get("imminent_danger", []))
+    labels = {r["report_id"]: f"{r['report_id']}  {r['employer']}" for r in finding["rows"]}
+    choices = [labels[r["report_id"]] for r in finding["rows"]
+               if r["report_id"] in flagged or not r["category_one"]]  # fmt: skip
+    return choices, [labels[i] for i in sorted(flagged) if i in labels]
+
+
 def _decision(label: Any) -> str | None:
     text = re.sub(r"<[^>]+>", "", str(label)).strip().lower()
     if text in ("inspection", "inspect"):
@@ -691,7 +736,8 @@ def _decision(label: Any) -> str | None:
 
 
 def ask_for_changes(crew: Crew, session: Session, table: pd.DataFrame, capacity: float, rule: str, role: str,
-                    to_inspect: list[str] | None = None, to_letter: list[str] | None = None):  # fmt: skip
+                    to_inspect: list[str] | None = None, to_letter: list[str] | None = None,
+                    imminent: list[str] | None = None):  # fmt: skip
     """Send the changed rows, notes and rules back; the run resumes at the Optimizer.
 
     Rows move with `to_inspect` and `to_letter` (report labels picked from a list, so nothing is
@@ -713,8 +759,7 @@ def ask_for_changes(crew: Crew, session: Session, table: pd.DataFrame, capacity:
             return week_view(crew, session, f"Row {report_id} meets Category 1, so it must be inspected.")
         if wanted != planned.get(report_id):
             (force_inspection if wanted == "inspection" else force_letter).append(report_id)
-        if str(row.get("Note") or "").strip():
-            notes[report_id] = str(row["Note"]).strip()
+        notes[report_id] = str(row.get("Note") or "").strip()
     for label in to_inspect or []:
         report_id = label.split()[0]
         if report_id not in force_inspection and planned.get(report_id) != "inspection":
@@ -729,12 +774,20 @@ def ask_for_changes(crew: Crew, session: Session, table: pd.DataFrame, capacity:
     days, problem = inspector_days(capacity)
     if problem:
         return week_view(crew, session, problem)
-    crew.run(session.week_thread, Command(resume={
-        "action": "changes", "by": role, "force_inspection": force_inspection, "force_letter": force_letter,
-        "inspect_employers": employers, "notes": notes, "capacity": days}))  # fmt: skip
+    resume = {"action": "changes", "by": role, "force_inspection": force_inspection, "force_letter": force_letter,
+              "inspect_employers": employers, "notes": notes, "capacity": days}  # fmt: skip
+    flagged_before = set(crew.values(session.week_thread).get("rules", {}).get("imminent_danger", []))
+    if imminent is not None:
+        resume["imminent_danger"] = [label.split()[0] for label in imminent]
+    crew.run(session.week_thread, Command(resume=resume))
     changed = len(force_inspection) + len(force_letter)
+    flagged = set(resume.get("imminent_danger", flagged_before))
     note = (f"Plan updated with {changed} changed rows"
-            + (f" and a rule for {', '.join(employers)}" if employers else "") + ".")  # fmt: skip
+            + (f" and a rule for {', '.join(employers)}" if employers else "") + "."
+            + (f" Now Category 1 as an imminent danger: {', '.join(sorted(flagged - flagged_before))}."
+               if flagged - flagged_before else "")
+            + (f" No longer flagged as an imminent danger: {', '.join(sorted(flagged_before - flagged))}."
+               if flagged_before - flagged else ""))  # fmt: skip
     return week_view(crew, session, note + _moves(planned, _triage(crew, session)))
 
 
@@ -761,6 +814,12 @@ def approve(crew: Crew, session: Session, role: str):
     if "approval" not in crew.waiting_for(session.week_thread):
         return (*week_view(crew, session, "There is no list waiting for approval."), "")
     open_matches = unresolved_matches(crew, session)
+    if open_matches and session.approve_warned != session.week_thread:
+        # A confirmed match can make a report Category 1, so the Director sees this before approving.
+        session.approve_warned = session.week_thread
+        warning = (f"{open_matches} possible employer matches are not answered yet; a confirmed match can make a "
+                   "report Category 1. Answer them in the matches panel, or press Approve again to approve as is.")  # fmt: skip
+        return (*week_view(crew, session, warning), "")
     out = crew.run(session.week_thread, Command(resume={"action": "approve", "by": role}))
     values = crew.values(session.week_thread)
     finding = _triage(crew, session)
@@ -769,7 +828,7 @@ def approve(crew: Crew, session: Session, role: str):
     if letters:
         save(crew, session, "rri_letters.docx", word_document("\n\n".join(letters)))
     save(crew, session, "week_summary.docx", word_document(out.get("answer", "")))
-    reminder = (f"{open_matches} possible employer matches are still unresolved; confirming them can add repeats "
+    reminder = (f"Approved with {open_matches} employer matches unanswered; answering them can add repeats "
                 "and Category 1 reports next week." if open_matches else "")  # fmt: skip
     return (*week_view(crew, session, reminder), out.get("answer", ""))
 
@@ -781,6 +840,7 @@ def week_matches(crew: Crew, session: Session) -> pd.DataFrame:
         return _match_frame([])
     index = crew.services.employers(session.week_state)
     earlier = index.frame.set_index("id")
+    answered = index.decisions  # every yes or no saved so far, in this state and others
     pairs: dict[frozenset[str], list] = {}
     for item in finding["stage1"].values():
         report = item["report"]
@@ -794,7 +854,7 @@ def week_matches(crew: Crew, session: Session) -> pd.DataFrame:
             row = pairs.setdefault(key, [report["employer"], report.get("city", "").title(), match.employer,
                                          match.city.title(), str(match.event_date),
                                          "yes" if naics[:3] == report["naics"][:3] else f"no ({naics[:3]})", 0,
-                                         round(match.score), ""])  # fmt: skip
+                                         round(match.score), _answer(answered.get(key))])  # fmt: skip
             row[4] = max(row[4], str(match.event_date))
             row[6] += 1
     rows = sorted(pairs.values(), key=lambda r: -r[7])
@@ -803,6 +863,10 @@ def week_matches(crew: Crew, session: Session) -> pd.DataFrame:
         if rows
         else _placeholder(MATCH_COLUMNS, "No possible employer matches to resolve.")
     )
+
+
+def _answer(decided: bool | None) -> str:
+    return "" if decided is None else ("yes" if decided else "no")
 
 
 def unresolved_matches(crew: Crew, session: Session) -> int:
@@ -830,8 +894,9 @@ def save_matches(crew: Crew, session: Session, table: pd.DataFrame, role: str):
             saved += 1
     if not saved:
         return week_matches(crew, session), "Write yes or no in the last column, then save."
-    return week_matches(crew, session), (f"Saved {saved} decisions. They apply to every report with those spellings; "
-                                         "load the week again to recount repeats and Category 1.")  # fmt: skip
+    return week_matches(crew, session), (f"Saved {saved} decisions. They apply to every report with those spellings. "
+                                         "Repeats and Category 1 are recounted when the week is loaded again, which "
+                                         "starts a new list without the moves made so far.")  # fmt: skip
 
 
 def week_map(crew: Crew, session: Session):
@@ -1128,7 +1193,9 @@ def _trend_filters(state: str, industry: str, hazard: str, start_year: float) ->
                    event_group_v3=HAZARD_CHOICES[hazard], start=date(int(start_year), 1, 1))  # fmt: skip
 
 
-def safety_talk(crew: Crew, session: Session, topic: str, extra: Any = "es"):
+def safety_talk(
+    crew: Crew, session: Session, topic: str, extra: Any = "es", state_name: str = "", industry_name: str = ""
+):
     """A talk for the next shift in English, and in at most one more language for the floor crew.
 
     `extra` is a code or a label from TALK_LANGUAGE_CHOICES ("Vietnamese (vi)"); True and False are
@@ -1142,14 +1209,28 @@ def safety_talk(crew: Crew, session: Session, topic: str, extra: Any = "es"):
         return problem, []
     thread = uuid.uuid4().hex
     language = f" in English and {LANGUAGES[code]}" if code else ""
-    out = crew.run(thread, {"request": f"Write a {topic} safety talk for the next shift{language}."})
+    # The talk counts injuries in the plants the page is filtered to, so it says "plants like yours".
+    params = {"naics_prefix": INDUSTRY_CHOICES.get(industry_name, "3")}
+    if state_name and state_name != "All states":
+        params["state"] = state_name.upper()
+    request = f"Write a {topic} safety talk for the next shift{language}."
+    out = crew.run(thread, {"request": request, "params": params})
     names = []
+    talk = next(
+        (f for f in crew.values(thread).get("findings", {}).values() if f["kind"] == "safety_talk"), {}
+    )
+    widened = (
+        f"\n\n_The count is for {talk['scope']}: the plants this page is filtered to report fewer than "
+        f"{TALK_MIN_REPORTS} such injuries._"
+        if talk.get("widened")
+        else ""
+    )
     for key, draft in sorted(crew.values(thread).get("drafts", {}).items()):
         if ":talk_" in key:
             language_code = key.rsplit("_", 1)[1]
             names.append(save(crew, session, f"safety_talk_{topic.replace(' ', '_')}_{language_code}.docx",
                               word_document(rendered(draft), language_code)))  # fmt: skip
-    return out.get("answer", ""), names
+    return out.get("answer", "") + widened, names
 
 
 # ---- AI controls and evaluation ----

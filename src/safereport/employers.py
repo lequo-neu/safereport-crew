@@ -41,6 +41,53 @@ LEGAL_WORDS = {
 }
 SAME_NAME = 92  # token sort ratio of a near spelling ("Walmart Inc" and "Wal Mart Inc"); still only possible
 POSSIBLE_NAME = 90  # token set ratio at or above which they may be the same employer
+# A name that is one of these words alone says what a company does, not who it is: "Steel Co Inc"
+# holds every word of "Steel Dynamics", so the token set score alone would call them a match.
+GENERIC_NAMES = frozenset(
+    [
+        "steel",
+        "metal",
+        "metals",
+        "plastics",
+        "manufacturing",
+        "construction",
+        "services",
+        "industries",
+        "products",
+        "foods",
+        "supply",
+        "logistics",
+        "solutions",
+        "systems",
+        "builders",
+        "contractors",
+        "group",
+        "enterprises",
+        "company",
+        "corporation",
+        "holdings",
+        "transport",
+        "trucking",
+        "farms",
+        "roofing",
+        "electric",
+        "plumbing",
+        "concrete",
+        "lumber",
+        "packaging",
+        "fabrication",
+        "machine",
+        "tool",
+        "american",
+        "national",
+        "united",
+        "general",
+        "southern",
+        "northern",
+        "western",
+        "eastern",
+    ]
+)
 
 Level = Literal["site", "company"]
 Status = Literal["same", "possible"]
@@ -148,7 +195,7 @@ class EmployerIndex:
             return "possible", sort_score
         set_score = fuzz.token_set_ratio(query, candidate)
         shorter = min(query, candidate, key=len)
-        if set_score >= POSSIBLE_NAME and len(shorter) >= 4:
+        if set_score >= POSSIBLE_NAME and len(shorter) >= 4 and shorter not in GENERIC_NAMES:
             return "possible", set_score
         if _is_acronym_of(query, candidate) or _is_acronym_of(candidate, query):
             return "possible", 90.0

@@ -21,6 +21,12 @@ NAMED_NUMBERS = re.compile(
 NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
 
 
+def percent(share: float) -> str:
+    """A share as the ledger shows it ("4.5%", "150.0%"). A tool says when a value is a share;
+    the ledger never guesses it from the size of a number, so 1 inspector day stays "1.0"."""
+    return f"{share:.1%}"
+
+
 @dataclass
 class Fact:
     value: object
@@ -31,7 +37,7 @@ class Fact:
 
     def text(self) -> str:
         if isinstance(self.value, float):
-            return f"{self.value:.1%}" if abs(self.value) <= 1 else f"{self.value:,.1f}"
+            return f"{self.value:,.1f}"
         if isinstance(self.value, int):
             return f"{self.value:,}"
         return str(self.value)

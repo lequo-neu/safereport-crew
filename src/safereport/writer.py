@@ -192,7 +192,8 @@ def draft(payload: dict[str, Any]) -> dict[str, Any]:
             "{{reports}} reports. {{category_one}} meet a Category 1 criterion and must be inspected. "
             "The plan sends {{inspections}} to an inspection and {{letters}} to an RRI letter, using "
             "{{days_used}} of {{capacity}} inspector days."
-            + ("\n\n**Not enough inspector days:** the Category 1 reports alone need {{shortfall}} more days."
+            + ("\n\n**Not enough inspector days:** the reports that must be inspected (Category 1, and the rows "
+               "the Area Director set to inspection) need {{shortfall}} more days."
                if payload.get("infeasible") else "")
         )  # fmt: skip
     elif kind == "plant_memo":

@@ -4,7 +4,7 @@
 whether to send an inspector or a letter, and helps a plant learn from injuries like its own.**
 
 Final project for IE5374 Applied Generative AI, by **Seven Team-5374**: Quoc Hung Le (Kevin),
-Hamad Al Sulaimi, Khoa Tran. Phases 0 to 3 of 4 are built; 291 tests pass offline.
+Hamad Al Sulaimi, Khoa Tran. Phases 0 to 3 of 4 are built; 307 tests pass offline.
 
 | If you want to | Go to |
 |---|---|
@@ -110,10 +110,10 @@ Then go to http://localhost:7860. A five minute tour:
 
 | Step | Do this | You should see |
 |---|---|---|
-| 1 | Keep "Triage officer", Texas, 40 inspector days, click **Load week** | 31 reports, 9 Category 1, 20 inspections and 11 RRI letters, with a reason on each row |
+| 1 | Keep "Triage officer", Texas, 40 inspector days, click **Load week** | 31 reports, 8 Category 1, 20 inspections and 11 RRI letters, with a reason on each row |
 | 2 | Click any row | the case inspector: the story with highlighted words, the checks, the employer's history, the letter as it will be sent |
 | 3 | Pick "Area Director" at the top, move a row in the decision bar, click **Ask for changes** | "Plan updated with N changed rows" and what changed |
-| 4 | Click **Approve** | the run resumes from its saved state and the decision is logged |
+| 4 | Click **Approve**, then **Approve** again | the first click warns that employer matches are still unanswered (a confirmed match can make a report Category 1); the second resumes the run from its saved state and logs the decision |
 | 5 | Open **Ask** and try an example | the answer beside a trace of agents, models, reasons, cost and time |
 | 6 | Pick "Plant safety manager", open **Trends and prevention**, write a lockout talk with Vietnamese as the extra language | a yearly chart, a state map, and two Word files (English and Vietnamese) |
 | 7 | Pick "Admin", simulate an outage of Claude, ask again | the router falls back to another model and says why |
@@ -267,7 +267,7 @@ flowchart TD
 
 **Why two stages?** Three model calls per report would be about 85 calls for one Texas week and
 over 500 nationwide. Stage 1 codes every report without a model in seconds; only the reports
-that need it go to the model branches (19 of 31 in the Texas week).
+that need it go to the model branches (20 of 31 in the Texas week).
 
 ### How the router picks a model
 
@@ -309,7 +309,7 @@ outcome figures, record tables) and uses no official government mark.
 
 | Page | Who | What is on it |
 |---|---|---|
-| **This week's reports** | Triage officer, Area Director | totals at the top; the list on the left with filters (All, Category 1, Needs review, Inspection, RRI letter) and a CSV of the selection; a case inspector on the right; the decision bar (move rows, notes, an always inspect rule, Ask for changes, Approve); a map of the week beside the top five events; the inspector day chart; the employer matches panel; a closed routing and audit log |
+| **This week's reports** | Triage officer, Area Director | totals at the top; the list on the left with filters (All, Category 1, Needs review, Inspection, RRI letter) and a CSV of the selection; a case inspector on the right; the decision bar (move rows, flag an imminent danger, notes, an always inspect rule, Ask for changes, Approve); a map of the week beside the top five events; the inspector day chart; the employer matches panel; a closed routing and audit log |
 | **Ask** | everyone | chat beside the trace, an inline chart, the brief as a Word file |
 | **Evidence view** | everyone | the story with the words the Intake agent used, beside the cited rule, its checks and the employer's history |
 | **Trends and prevention** | Plant safety manager | outcome figures, a yearly chart of four outcomes over the same months, a state map that marks State Plan states, the top five events, the safety talk |
@@ -399,7 +399,7 @@ config/            models.toml (models, prices, router), triage.toml (weights, d
 data/labels/       the answer key and the three reviewers' files
 eval/results/      every measured number
 docs/              proposal, labelling guide, related products, open issues, AI use
-tests/             291 tests, offline, no keys
+tests/             307 tests, offline, no keys
 ```
 
 ## For developers

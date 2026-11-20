@@ -28,6 +28,16 @@ HazardType = Literal[
 Confidence = Literal["high", "medium", "low"]
 
 
+def clip(text: str, limit: int) -> str:
+    """`text` cut to at most `limit` characters at a word boundary, with an ellipsis when cut."""
+    text = text or ""
+    if len(text) <= limit:
+        return text
+    cut = text[:limit]
+    cut = cut[: cut.rfind(" ")] if " " in cut[limit // 2 :] else cut
+    return cut.rstrip(" ,;:(") + " …"
+
+
 def cfr_section(citation: str) -> str:
     """The section a citation belongs to: 1910.212(a)(1) is 1910.212."""
     match = re.match(r"^(\d{4}\.\d+)", citation.strip())

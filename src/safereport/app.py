@@ -72,7 +72,7 @@ CSS = """
 .sr-page .sr-crumbs { font-size: 0.9rem; color: var(--sr-muted); margin-bottom: 6px; }
 .sr-page h2 { font-family: var(--sr-serif); font-size: 2rem; font-weight: 700; margin: 0 0 8px; color: var(--sr-ink); }
 .sr-page p { font-size: 1rem; line-height: 1.6; color: var(--sr-ink); max-width: 80ch; margin: 0; }
-.sr-page a, .sr-filters a { color: var(--sr-link); text-decoration: underline; }
+.sr-page a, .sr-filters a { color: var(--sr-link); text-decoration: underline; padding: 0 !important; }
 
 /* Headline figures: serif labels, coloured numbers, a heavy rule above as on the dashboard. */
 .sr-outcomes { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px;
@@ -155,12 +155,38 @@ button.lg, button.md { min-height: 42px; max-height: 48px; align-self: end; font
   display: flex; flex-wrap: wrap; gap: 6px 28px; justify-content: space-between; }
 .dark .sr-footer { background: #2d2e2f; }
 .sr-footer b { font-family: var(--sr-serif); }
+/* One type scale everywhere: Gradio's own labels and the chat use the body face and size, and
+   headings written in Markdown (a brief in the chat, a rule in the Evidence view) use the serif. */
+.gradio-container p { font-family: var(--font); }
+.gradio-container button.lg { font-size: 1.05rem !important; }
+/* Every list comes from the crew; an empty table must not offer to add a blank row. */
+.gradio-container .add-row-button { display: none !important; }
+.sr-chat .message, .sr-chat .message p, .sr-chat .message li { font-size: 1rem !important; line-height: 1.6 !important; }
+.sr-md h1, .sr-md h2, .sr-md h3,
+.sr-chat .message h1, .sr-chat .message h2, .sr-chat .message h3 { font-family: var(--sr-serif) !important;
+  font-weight: 700 !important; color: var(--sr-ink); line-height: 1.3 !important; margin: 6px 0 8px !important; }
+.sr-md h1, .sr-chat .message h1 { font-size: 1.35rem !important; }
+.sr-md h2, .sr-chat .message h2 { font-size: 1.2rem !important; }
+.sr-md h3, .sr-chat .message h3 { font-size: 1.1rem !important; }
+.sr-chat .message blockquote { border-left: 4px solid var(--sr-rule); color: var(--sr-muted); font-size: 0.95rem;
+  margin: 6px 0; padding: 2px 0 2px 12px; }
+.sr-chat .placeholder { color: var(--sr-muted); font-size: 1rem; }
+.sr-offline-note { font-size: 0.9rem; color: var(--sr-muted); border-left: 4px solid var(--sr-rule);
+  padding: 2px 0 2px 10px; margin: 0 0 10px; }
 @media (max-width: 720px) {
+  /* On a phone the brand and the role picker stack instead of overlapping. */
+  .sr-header { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; }
+  .sr-header > * { width: 100% !important; min-width: 0 !important; flex: none !important; }
   .tabs button[role="tab"] { padding: 12px 10px 10px !important; }
   .sr-page h2 { font-size: 1.5rem; }
 }
 """
 
+ASK_EMPTY = (
+    "**Ask the crew in your own words.** Paste an injury narrative for a brief with the standard, or ask "
+    "about a trend, employers that reported more than once, or this week's inspections. The steps each "
+    "agent took appear in the routing and audit log."
+)
 EXAMPLES = [
     "An employee's hand was pulled into the rollers of a laminator while clearing a jam, amputating a fingertip.",
     (
@@ -332,13 +358,16 @@ def build_app(crew: Crew) -> gr.Blocks:
                         # Read in the order a decision needs: what happened, what checks say, the history,
                         # the letter that would go out, then the rule's own words.
                         q_checks = gr.HTML()
-                        q_context = gr.Markdown()
-                        q_draft = gr.Markdown()
-                        q_rule = gr.Markdown()
+                        q_context = gr.Markdown(elem_classes="sr-md")
+                        q_draft = gr.Markdown(elem_classes="sr-md")
+                        q_rule = gr.Markdown(elem_classes="sr-md")
                 section("Decide", "week")
                 with gr.Row(equal_height=True):
                     to_inspect = gr.Dropdown([], multiselect=True, label="Move to inspection")
                     to_letter = gr.Dropdown([], multiselect=True, label="Move to RRI letter")
+                    imminent = gr.Dropdown(
+                        [], multiselect=True, label="Imminent danger (makes the report Category 1)"
+                    )
                 with gr.Row(equal_height=False, elem_classes="sr-actions"):
                     capacity = gr.Number(40, label="Inspector days", minimum=0, precision=1, scale=1)
                     rule = gr.Textbox(label="Always inspect these establishments (case, commas and Inc are ignored)",
@@ -348,7 +377,7 @@ def build_app(crew: Crew) -> gr.Blocks:
                         "Approve the list", variant="primary", visible=False, scale=1, min_width=170
                     )
                 status = gr.Markdown()
-                answer = gr.Markdown()
+                answer = gr.Markdown(elem_classes="sr-md")
                 with gr.Row(equal_height=False):
                     with gr.Column(scale=3):
                         section("Reports by geography", "inspection")
@@ -378,13 +407,18 @@ def build_app(crew: Crew) -> gr.Blocks:
                 page("Ask", INTROS["ask"])
                 with gr.Row():
                     with gr.Column(scale=3):
-                        chat = gr.Chatbot(height=470, label="Conversation")
+                        chat = gr.Chatbot(
+                            height=460, show_label=False, elem_classes="sr-chat", placeholder=ASK_EMPTY
+                        )
                         box = gr.Textbox(placeholder="Paste a narrative, or ask about trends, repeat employers or this "
                                                      "week's inspections", show_label=False, lines=2, submit_btn="Send")  # fmt: skip
-                        brief_file = gr.File(label="Inspection brief (Word)", interactive=False)
-                        gr.Examples(EXAMPLES, inputs=box, label="Try")
+                        gr.Examples(EXAMPLES, inputs=box, label="Try one of these")
+                        # Shown only when the answer has one, so the page never holds empty boxes.
+                        brief_file = gr.File(
+                            label="Inspection brief (Word)", interactive=False, visible=False
+                        )
                     with gr.Column(scale=2):
-                        chart = gr.Image(label="Chart", interactive=False)
+                        chart = gr.Image(label="Chart", interactive=False, visible=False)
                         with gr.Accordion("Routing & audit log", open=False):
                             trace = gr.HTML(views.trace_html([]))
 
@@ -397,12 +431,13 @@ def build_app(crew: Crew) -> gr.Blocks:
                             label="Narrative, with the words read from it", show_legend=True, elem_classes="sr-narrative",
                             color_map={"activity": "#2f629f", "hazard": "#b3261e", "material": "#8a5a00"},
                         )  # fmt: skip
-                        questions = gr.Markdown()
-                        evidence_context = gr.Markdown()
+                        questions = gr.Markdown(elem_classes="sr-md")
+                        evidence_context = gr.Markdown(elem_classes="sr-md")
                     with gr.Column():
                         checks = gr.HTML()
                         rule_text = gr.Markdown(
-                            "Paste a narrative in **Ask** or load a week to see its evidence."
+                            "Paste a narrative in **Ask** or load a week to see its evidence.",
+                            elem_classes="sr-md",
                         )
 
             with gr.Tab("Trends and prevention", id="trends"):
@@ -445,7 +480,7 @@ def build_app(crew: Crew) -> gr.Blocks:
                     talk_language = gr.Dropdown(views.TALK_LANGUAGE_CHOICES, value="Spanish (es)", scale=2,
                                                 label="Additional worker language (optional, max 1)")  # fmt: skip
                     write = gr.Button("Write the talk", scale=1, min_width=150)
-                talk = gr.Markdown()
+                talk = gr.Markdown(elem_classes="sr-md")
                 talk_files = gr.File(label="Word files", file_count="multiple", interactive=False)
                 section("Prevention plan", "critic")
                 gr.Markdown("What to fix first within a yearly budget. Planned for Phase 4; not built yet.",
@@ -507,6 +542,7 @@ def build_app(crew: Crew) -> gr.Blocks:
             """Everything a change to the week touches: the list, its filters line, the map, the events,
             the pick lists, the match count, the audit log, the Evidence choices and the files."""
             letters, inspections = views.move_choices(crew, sess)
+            dangers, flagged = views.imminent_choices(crew, sess)
             loaded = views._triage(crew, sess) is not None
             unresolved = views.unresolved_matches(crew, sess)
             return (chips(views.week_rows(crew, sess, show_label)), views.filters_line(crew, sess, show_label),
@@ -514,11 +550,12 @@ def build_app(crew: Crew) -> gr.Blocks:
                         "No location to show for this week." if loaded else "Load a week to see where its reports happened."),
                     views.week_events(crew, sess) or views.placeholder_figure("No event titles for this week."),
                     gr.Dropdown(choices=letters, value=[]), gr.Dropdown(choices=inspections, value=[]),
+                    gr.Dropdown(choices=dangers, value=flagged),
                     gr.Accordion(label=f"Possible employer matches ({unresolved} to resolve)" if unresolved
                                  else "Possible employer matches (none to resolve)"),
                     views.week_trace(crew, sess), sources(sess), views.files(crew, sess))  # fmt: skip
 
-        refreshed = [table, active, week_map, week_events, to_inspect, to_letter, match_panel, week_trace, source,
+        refreshed = [table, active, week_map, week_events, to_inspect, to_letter, imminent, match_panel, week_trace, source,
                      downloads]  # fmt: skip
 
         def run_week(state_name, inspector_days, sess):
@@ -533,8 +570,8 @@ def build_app(crew: Crew) -> gr.Blocks:
             run_week, [state, days, session], [*week_outputs, capacity, session]).then(
             after_week, [show_rows, session], refreshed)  # fmt: skip
         changes.click(
-            lambda t, c, r, ro, up, down, sess: (*views.ask_for_changes(crew, sess, t, c, r, ro, up, down), sess),
-            [table, capacity, rule, role, to_inspect, to_letter, session], [*week_outputs, session],
+            lambda t, c, r, ro, up, down, danger, sess: (*views.ask_for_changes(crew, sess, t, c, r, ro, up, down, danger), sess),
+            [table, capacity, rule, role, to_inspect, to_letter, imminent, session], [*week_outputs, session],
         ).then(after_week, [show_rows, session], refreshed)  # fmt: skip
         approve.click(lambda ro, sess: (*views.approve(crew, sess, ro), sess), [role, session],
                       [*week_outputs, answer, session]).then(after_week, [show_rows, session], refreshed)  # fmt: skip
@@ -563,8 +600,12 @@ def build_app(crew: Crew) -> gr.Blocks:
 
         table.select(picked, session, [q_letter, q_narrative, q_checks, q_rule, q_context, q_draft])
 
-        box.submit(lambda m, h, sess: views.ask(crew, m, h, sess), [box, chat, session],
-                   [chat, box, trace, chart, brief_file, session]).then(
+        def ask_turn(message, history, sess):
+            chat_value, box_value, trace_value, picture, brief, sess = views.ask(crew, message, history, sess)
+            return (chat_value, box_value, trace_value, gr.Image(value=picture, visible=picture is not None),
+                    gr.File(value=brief, visible=brief is not None), sess)  # fmt: skip
+
+        box.submit(ask_turn, [box, chat, session], [chat, box, trace, chart, brief_file, session]).then(
             lambda sess: (sources(sess), views.files(crew, sess)), session, [source, downloads])  # fmt: skip
         source.change(lambda c, sess: views.evidence(crew, sess, c), [source, session],
                       [narrative, rule_text, checks, questions, evidence_context])  # fmt: skip
@@ -596,7 +637,8 @@ def build_app(crew: Crew) -> gr.Blocks:
             trends, trend_inputs, trend_outputs)  # fmt: skip
         trend_export.click(lambda *a: gr.File(value=views.download_trend(crew, a[-1], *a[:-1]), visible=True),
                            [*trend_inputs, session], trend_file)  # fmt: skip
-        write.click(lambda t, es, sess: views.safety_talk(crew, sess, t, es), [topic, talk_language, session],
+        write.click(lambda t, es, st, ind, sess: views.safety_talk(crew, sess, t, es, st, ind),
+                    [topic, talk_language, trend_state, industry, session],
                     [talk, talk_files]).then(lambda sess: views.files(crew, sess), session, downloads)  # fmt: skip
         apply.click(lambda m, r, off: views.apply_controls(crew, m, r, off), [mode, redact, switched_off],
                     [controls_note, models])  # fmt: skip

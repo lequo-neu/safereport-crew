@@ -37,18 +37,19 @@ from safereport.data import OIICS_3_FROM_YEAR, Filters, ReportStore
 from safereport.domain import check_citation
 from safereport.ecfr import CitationIndex
 from safereport.employers import EmployerIndex, normalize_name, repeat_summary
-from safereport.ledger import FactLedger
+from safereport.ledger import FactLedger, percent
 from safereport.outputs import sensitivity_chart, trend_chart, triage_csv
 from safereport.redaction import redact
 from safereport.retrieval import IndexRegistry
 from safereport.router import Mode, Router, Signals
-from safereport.schemas import CITATION, DIRECTIVE, GENERAL_DUTY, IntakeResult, Report
+from safereport.schemas import CITATION, DIRECTIVE, GENERAL_DUTY, IntakeResult, Report, clip
 from safereport.talk_languages import extra_language
 from safereport.triage import (
     DEFAULT_CAPACITY,
     Case,
     Rules,
     category_one,
+    checked_capacity,
     inspection_days,
     plan_week,
     priority,
@@ -88,6 +89,9 @@ class CrewState(TypedDict, total=False):
     approval: dict[str, Any]
     answer: str
 
+
+# Fewest reports a safety talk quotes for "plants like yours" before it widens the scope.
+TALK_MIN_REPORTS = 10
 
 # The parameters each kind of task needs, which are also the only ones the Planner may ask for.
 TASK_NEEDS: dict[str, tuple[str, ...]] = {
@@ -288,10 +292,10 @@ def build_graph(services: Services, checkpointer=None):
         # paragraph is kept for a person to check. A secondary comes only from a domain rule; the
         # runner up section is a candidate, not a citation.
         best = found.sections[0].best.document
-        opening = services.citations.text(best.section)[:600] or best.text[:600]
+        opening = clip(services.citations.text(best.section), 600) or clip(best.text, 600)
         paragraph = best.citation if best.exact_citation and best.citation != best.section else ""
         return {"primary": best.section, "secondary": "", "quote": opening, "paragraph": paragraph,
-                "paragraph_text": best.text[:600] if paragraph else ""}  # fmt: skip
+                "paragraph_text": clip(best.text, 600) if paragraph else ""}  # fmt: skip
 
     def industry_share(report: Report, code: str = "") -> float:
         """Share of the industry's reports since 2022 in the same estimated OIICS 3 event group.
@@ -440,7 +444,7 @@ def build_graph(services: Services, checkpointer=None):
                 "previous_reports": (int(previous["same_months"]), "ReportStore.yearly_trend", True),
                 "previous_year": (str(int(previous["year"])), "ReportStore.yearly_trend", True),
                 "change": (
-                    float(latest["change"]) if pd.notna(latest["change"]) else "not measurable",
+                    percent(float(latest["change"])) if pd.notna(latest["change"]) else "not measurable",
                     "ReportStore.yearly_trend",
                     True,
                 ),
@@ -467,19 +471,31 @@ def build_graph(services: Services, checkpointer=None):
 
     def safety_talk(state: CrewState) -> dict[str, Any]:
         task = task_of(state, "safety_talk")
-        words = {"lockout": "lock|clean|jam|maint|servic", "forklift": "forklift|fork lift|pallet jack",
-                 "ladder": "ladder", "fall": "fell|fall", "machine guarding": "guard|caught", "slip": "slip|trip"}  # fmt: skip
-        prefix = state["params"].get("naics_prefix", "3")
-        count = services.store.frame(
-            "SELECT count(*) AS n FROM reports WHERE starts_with(naics, ?) AND regexp_matches(lower(narrative), ?)",
-            [prefix, words.get(task["topic"], "lock")],
-        )["n"].iloc[0]  # fmt: skip
+        # Whole words only, so "airlock" or "locker room" is not a lockout injury.
+        words = {"lockout": r"\b(lock(ed|ing)?|lockout|lock out|tagout|clean(ed|ing)?|unjam\w*|jam(med|s)?|maintenance|servic(e|ed|ing))\b",
+                 "forklift": r"\b(forklift|fork lift|pallet jack)s?\b", "ladder": r"\bladders?\b", "fall": r"\b(fell|falls?|falling)\b",
+                 "machine guarding": r"\b(guard(s|ed|ing)?|caught)\b", "slip": r"\b(slip(ped|s)?|trip(ped|s)?)\b"}  # fmt: skip
+        # "Plants like yours": the industry and state the user picked, widened only when they hold too
+        # few reports to quote (to the industry nationwide, then to every industry), never narrower.
+        wanted = (state["params"].get("naics_prefix", "3"), state["params"].get("state", ""))
+        pattern = words.get(task["topic"], words["lockout"])
+        for prefix, place in dict.fromkeys([wanted, (wanted[0], ""), ("", "")]):
+            count = services.store.frame(
+                "SELECT count(*) AS n FROM reports WHERE starts_with(naics, ?) AND regexp_matches(lower(narrative), ?)"
+                " AND (? = '' OR state = ?)", [prefix, pattern, place, place],
+            )["n"].iloc[0]  # fmt: skip
+            if count >= TALK_MIN_REPORTS:
+                break
+        scope = (f"NAICS {prefix}" if prefix else "all industries") + (
+            f" in {place.title()}" if place else " nationwide"
+        )
         # English always, and at most one more language for the floor crew.
         extra, _ = extra_language(task.get("extra_language") or ("es" if task.get("spanish") else ""))
         finding = {"kind": "safety_talk", "topic": task["topic"], "languages": ["en", *([extra] if extra else [])],
+                   "scope": scope, "widened": (prefix, place) != wanted,
                    "facts": {"topic_reports": (int(count), "ReportStore", True), "since": ("2015", "data", True)}}  # fmt: skip
         return {"done": [task["id"]], "findings": {task["id"]: finding},
-                "trace": [_trace("Analyst", f"{count} reports on {task['topic']}", tool="ReportStore")]}  # fmt: skip
+                "trace": [_trace("Analyst", f"{count} reports on {task['topic']}, {scope}", tool="ReportStore")]}  # fmt: skip
 
     def prevention(state: CrewState) -> dict[str, Any]:
         task = task_of(state, "prevention_plan")
@@ -526,7 +542,7 @@ def build_graph(services: Services, checkpointer=None):
                 "category_one": [t.__dict__ for t in category_one(report, emphasis, repeats_found)],
                 "candidates": [s.section for s in found.sections],
                 "pick": {"primary": found.sections[0].section if found.sections else GENERAL_DUTY, "secondary": "",
-                         "quote": found.sections[0].best.document.text[:600] if found.sections else ""},
+                         "quote": clip(found.sections[0].best.document.text, 600) if found.sections else ""},
             }  # fmt: skip
             week.append(row)
         return {"week": [{"id": r["id"]} for r in week], "stage1": stage1,
@@ -538,7 +554,9 @@ def build_graph(services: Services, checkpointer=None):
         if not stage1:
             return "optimizer"
         cases = [_case(item) for item in stage1.values()]
-        plan = plan_week(cases, state["params"].get("capacity", services.capacity))
+        plan = plan_week(
+            cases, checked_capacity(state["params"].get("capacity", services.capacity), services.capacity)[0]
+        )
         chosen = [
             c.priority for c in cases if plan.decisions[c.report_id] == "inspection" and not c.must_inspect
         ]
@@ -563,11 +581,14 @@ def build_graph(services: Services, checkpointer=None):
         trace = result.pop("trace")
         return {"stage2": {report.id: result}, "trace": trace}
 
-    def _case(item: dict[str, Any]) -> Case:
+    def _case(item: dict[str, Any], rules: Rules | None = None) -> Case:
         from safereport.triage import Trigger
 
+        triggers = [Trigger(**t) for t in item["category_one"]]
+        if rules is not None and item["report"]["id"] in rules.imminent_danger:
+            triggers.append(Trigger("imminent danger", "flagged by a person in the office"))
         return Case(item["report"]["id"], item["report"]["employer"], item["days"], item["priority"], item["parts"],
-                    [Trigger(**t) for t in item["category_one"]])  # fmt: skip
+                    triggers)  # fmt: skip
 
     def optimizer(state: CrewState) -> dict[str, Any]:
         p = state["params"]
@@ -593,8 +614,8 @@ def build_graph(services: Services, checkpointer=None):
             if report_id in stage1:
                 stage1[report_id] = {**stage1[report_id], "pick": pick}
         rules = Rules(**{k: set(v) if isinstance(v, list) else v for k, v in state.get("rules", {}).items()})
-        capacity = float(p.get("capacity", services.capacity))
-        cases = [_case(item) for item in stage1.values()]
+        capacity, problem = checked_capacity(p.get("capacity", services.capacity), services.capacity)
+        cases = [_case(item, rules) for item in stage1.values()]
         plan = plan_week(cases, capacity, rules)
         curve = sensitivity(cases, [max(0.0, capacity + d) for d in (-4, -2, 0, 2, 4, 6)], rules)
         rows = [
@@ -614,7 +635,13 @@ def build_graph(services: Services, checkpointer=None):
         }  # fmt: skip
         summary = (f"{len(plan.inspections)} inspections, {len(cases) - len(plan.inspections)} letters, "
                    f"{plan.days_used:g} of {capacity:g} days" + (f", {plan.shortfall_days:g} days short" if plan.shortfall_days else ""))  # fmt: skip
-        update: dict[str, Any] = {"findings": {task["id"]: finding}, "plan": finding["plan"],
+        if problem:
+            summary += f"; {problem}"
+        # Always written, so a note from an earlier plan never outlives it (findings are merged).
+        finding["capacity_note"] = problem
+        findings = {task["id"]: finding,
+                    "capacity_note": {"kind": "note", "text": f"**Inspector days:** {problem}" if problem else ""}}  # fmt: skip
+        update: dict[str, Any] = {"findings": findings, "plan": finding["plan"],
                                   "trace": [_trace("Optimizer", summary, tool="PuLP CBC")]}  # fmt: skip
         if task["id"] not in state.get("done", []):
             update["done"] = [task["id"]]
@@ -623,15 +650,35 @@ def build_graph(services: Services, checkpointer=None):
     # ---- Writer ----
 
     def writer(state: CrewState) -> dict[str, Any]:
-        signals = Signals(critic_rejected=bool(state.get("issues")))
-        drafts, trace = {}, []
+        """Draft every document, or on a retry only the ones the critic flagged or whose input changed.
+
+        A flagged document is sent back with what was wrong. Checks left for a person do not count
+        as a rejection, so they never move the Writer to a dearer model.
+        """
+        issues = state.get("issues", [])
+        flagged: dict[str, list[str]] = {}
+        for issue in issues:
+            if issue["route"] == "writer":
+                flagged.setdefault(issue["doc"], []).append(issue["message"])
+        signals = Signals(critic_rejected=any(i["route"] in ("writer", "standards") for i in issues))
+        before = state.get("drafts", {})
+        drafts, trace, kept = {}, [], 0
         for task_id, finding in state.get("findings", {}).items():
             for doc_id, payload, facts in documents(task_id, finding, state):
+                key = json.dumps([payload, facts], sort_keys=True, default=str)
+                if doc_id in before and doc_id not in flagged and before[doc_id].get("key") == key:
+                    drafts[doc_id] = before[doc_id]
+                    kept += 1
+                    continue
+                if doc_id in flagged:
+                    payload = {**payload, "fix": flagged[doc_id]}
                 reply, record = model(state, "write", "writer", payload, "writer", signals)
                 drafts[doc_id] = {"template": reply.data["template"], "facts": facts, "kind": payload["kind"],
                                   "language": payload.get("language", "en"), "task": task_id,
-                                  "citation": payload.get("citation", "")}  # fmt: skip
+                                  "citation": payload.get("citation", ""), "key": key}  # fmt: skip
                 trace.append(_trace("Writer", f"drafted {doc_id}", record))
+        if kept:
+            trace.append(_trace("Writer", f"kept {kept} drafts that passed and did not change"))
         return {"drafts": drafts, "trace": trace}
 
     def documents(task_id: str, finding: dict[str, Any], state: CrewState):
@@ -838,7 +885,7 @@ def build_graph(services: Services, checkpointer=None):
             )
             findings[issue["task"]] = finding
         update: dict[str, Any] = {"findings": findings, "writer_retries": state.get("writer_retries", 0) + 1,
-                                  "trace": [_trace("Decision critic", f"sent {sum(i['route'] == 'standards' for i in state.get('issues', []))} issues back")]}  # fmt: skip
+                                  "trace": [_trace("Decision critic", f"sent {sum(i['route'] in ('standards', 'writer') for i in state.get('issues', []))} issues back")]}  # fmt: skip
         if overrides:
             update["pick_overrides"] = overrides
         return update
@@ -852,11 +899,11 @@ def build_graph(services: Services, checkpointer=None):
         if issue["rule"] == "energy_control":
             kept = pick["primary"] if _citation_ok(pick["primary"]) and pick["primary"] != "1910.147" else ""
             return {**pick, "primary": "1910.147", "secondary": kept,
-                    "quote": services.citations.text("1910.147")[:600]}  # fmt: skip
+                    "quote": clip(services.citations.text("1910.147"), 600)}  # fmt: skip
         if suggested and _citation_ok(suggested.group(1)):
             cited = suggested.group(1)
             return {**pick, "primary": cited, "secondary": pick["primary"] if issue["rule"] == "mechanical_press_only" else "",
-                    "quote": services.citations.text(cited)[:600] if cited != GENERAL_DUTY else services.registry.general_duty().text}  # fmt: skip
+                    "quote": clip(services.citations.text(cited), 600) if cited != GENERAL_DUTY else services.registry.general_duty().text}  # fmt: skip
         if issue["rule"] == "unknown_citation" and issue.get("citation") == pick.get("secondary"):
             return {**pick, "secondary": ""}
         # The next candidate that eCFR has and that breaks no domain rule; else the General Duty Clause.
@@ -866,7 +913,7 @@ def build_graph(services: Services, checkpointer=None):
                   and not check_citation(facts, c, "", item["report"]["naics"], part_1926)]  # fmt: skip
         primary = others[0] if others else GENERAL_DUTY
         quote = (
-            services.citations.text(primary)[:600]
+            clip(services.citations.text(primary), 600)
             if primary != GENERAL_DUTY
             else services.registry.general_duty().text
         )
@@ -889,20 +936,26 @@ def build_graph(services: Services, checkpointer=None):
                 goto="finish", update={"approval": {"status": "approved", "by": who}, "decision_log": [entry]}
             )
         rules = state.get("rules", {})
+        # The latest move of a row wins: a row moved to a letter leaves the inspection list and back.
+        to_inspect, to_letter = set(answer.get("force_inspection", [])), set(answer.get("force_letter", []))
+        notes = {**rules.get("notes", {}), **answer.get("notes", {})}
         merged = {
-            "force_inspection": sorted(
-                set(rules.get("force_inspection", [])) | set(answer.get("force_inspection", []))
-            ),
-            "force_letter": sorted(set(rules.get("force_letter", [])) | set(answer.get("force_letter", []))),
+            "force_inspection": sorted((set(rules.get("force_inspection", [])) - to_letter) | to_inspect),
+            "force_letter": sorted((set(rules.get("force_letter", [])) - to_inspect) | to_letter),
+            # The rule box holds every rule in force, so a name taken out of it is no longer a rule.
             "inspect_employers": sorted(
-                set(rules.get("inspect_employers", [])) | set(answer.get("inspect_employers", []))
+                set(answer.get("inspect_employers", rules.get("inspect_employers", [])))
             ),
-            "notes": {**rules.get("notes", {}), **answer.get("notes", {})},
+            "notes": {k: v for k, v in notes.items() if str(v).strip()},
+            # The pick list holds every flag in force, so a report taken out of it is no longer flagged.
+            "imminent_danger": sorted(set(answer.get("imminent_danger", rules.get("imminent_danger", [])))),
         }
         params = {**state["params"], **({"capacity": answer["capacity"]} if "capacity" in answer else {})}
         entry = {"at": datetime.now(UTC).isoformat(timespec="seconds"), "by": who, "action": "asked for changes",
                  "changes": {k: v for k, v in answer.items() if k not in ("action", "by")}}  # fmt: skip
+        # A new plan is checked and written from scratch: no answer or retry count is carried over.
         return Command(goto="optimizer", update={"rules": merged, "params": params, "decision_log": [entry],
+                                                  "answer": None, "issues": [], "writer_retries": 0, "optimizer_retries": 0,
                                                   "trace": [_trace("Area Director", "asked for changes; resuming at the Optimizer")]})  # fmt: skip
 
     def finish(state: CrewState) -> dict[str, Any]:
@@ -955,7 +1008,7 @@ def build_graph(services: Services, checkpointer=None):
             parts.append("For a person to check before this goes out:\n"
                          + "\n".join(f"* {w}" for w in warnings))  # fmt: skip
         for finding in state.get("findings", {}).values():
-            if finding["kind"] == "note":
+            if finding["kind"] == "note" and finding["text"]:
                 parts.append(finding["text"])
         return "\n\n".join(parts)
 

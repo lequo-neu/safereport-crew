@@ -92,6 +92,8 @@ def test_the_director_edits_rows_resumes_and_approves(crew):
     refused = views.approve(crew, session, "Triage officer")
     assert "Only the Area Director approves" in refused[5]
     *_, status, answer = views.approve(crew, session, "Area Director")
+    assert "press Approve again" in status and not answer, "open employer matches are shown before approving"
+    *_, status, answer = views.approve(crew, session, "Area Director")
     assert "Approved" in status and "asked for changes" in status and answer
     names = {Path(p).name for p in views.files(crew, session)}
     assert {"inspection_list.csv", "week_summary.docx"} <= names
@@ -361,8 +363,10 @@ def test_unresolved_matches_are_counted_and_recalled_at_approval(crew):
     views.load_week(crew, session, "Texas", 5)
     open_matches = views.unresolved_matches(crew, session)
     assert open_matches > 0
-    *_, status, _ = views.approve(crew, session, "Area Director")
-    assert f"{open_matches} possible employer matches are still unresolved" in status and "Approved" in status
+    *_, status, answer = views.approve(crew, session, "Area Director")
+    assert f"{open_matches} possible employer matches are not answered yet" in status and not answer
+    *_, status, answer = views.approve(crew, session, "Area Director")
+    assert f"Approved with {open_matches} employer matches unanswered" in status and answer
 
 
 def test_empty_tables_say_why_they_are_empty(crew):
@@ -402,3 +406,142 @@ def test_trends_draw_four_outcomes_and_mark_state_plan_states(crew):
 def test_the_routing_page_opens_on_the_starting_mode():
     assert {views.mode_label(mode) for mode in views.MODES.values()} == set(views.MODES)
     assert views.mode_label("private") == "Private (local model only)"
+
+
+def test_a_new_request_replaces_an_unanswered_question(crew):
+    session = Session()
+    views.ask(
+        crew, "Check which employers reported more than once, then plan this week's inspections.", [], session
+    )
+    assert session.question
+    history, *_ = views.ask(crew, JAM, [], session)
+    assert session.question is None and "1910.147" in history[-1]["content"]
+
+
+def test_an_offline_trace_says_nothing_was_paid(crew):
+    _, _, trace, *_ = views.ask(crew, JAM, [], Session())
+    assert "nothing was paid" in trace
+
+
+def test_the_talk_counts_injuries_in_the_plants_the_page_shows(crew, monkeypatch):
+    import safereport.graph
+
+    monkeypatch.setattr(safereport.graph, "TALK_MIN_REPORTS", 0)  # the small file holds few reports
+    views.safety_talk(crew, Session(), "lockout", "None (English only)", "Texas", "Plastics")
+    summaries = [
+        step["summary"]
+        for saved in crew.graph.checkpointer.list(None)
+        for step in saved.checkpoint["channel_values"].get("trace", [])
+    ]
+    assert any("NAICS 326 in Texas" in s for s in summaries)
+
+
+def _letter(table):
+    return str(table.loc[table["Decision"] == "RRI letter", "Report"].iloc[0])
+
+
+def test_a_row_moved_to_inspection_and_back_ends_as_a_letter(crew):
+    session = Session()
+    _, table, *_ = views.load_week(crew, session, "Texas", 5)
+    report = _letter(table)
+    label = next(c for c in views.move_choices(crew, session)[0] if c.startswith(report))
+    views.ask_for_changes(crew, session, table, 5, "", "Area Director", to_inspect=[label])
+    label = next(c for c in views.move_choices(crew, session)[1] if c.startswith(report))
+    _, after, *_ = views.ask_for_changes(crew, session, views.week_rows(crew, session), 5, "", "Area Director",
+                                         to_letter=[label])  # fmt: skip
+    assert after.loc[after["Report"] == report, "Decision"].iloc[0] == "RRI letter"
+
+
+def test_a_cleared_note_and_a_removed_rule_are_gone(crew):
+    session = Session()
+    _, table, *_ = views.load_week(crew, session, "Texas", 5)
+    report = str(table["Report"].iloc[0])
+    noted = table.copy()
+    noted.loc[0, "Note"] = "call employer"
+    views.ask_for_changes(crew, session, noted, 5, "Walmart", "Area Director")
+    cleared = views.week_rows(crew, session)
+    cleared.loc[cleared["Report"] == report, "Note"] = ""
+    _, after, *_ = views.ask_for_changes(crew, session, cleared, 5, "", "Area Director")
+    assert "call employer" not in " ".join(after["Reason"]) and "rule:" not in " ".join(after["Reason"])
+
+
+def test_an_imminent_danger_flag_makes_a_report_category_one_until_it_is_removed(crew):
+    session = Session()
+    _, table, *_ = views.load_week(crew, session, "Texas", 5)
+    report = _letter(table)
+    label = next(c for c in views.imminent_choices(crew, session)[0] if c.startswith(report))
+    _, after, *_ = views.ask_for_changes(crew, session, table, 5, "", "Area Director", imminent=[label])
+    row = after[after["Report"] == report].iloc[0]
+    assert row["Decision"] == "Inspection" and "imminent danger" in row["Category 1"]
+    assert views.imminent_choices(crew, session)[1] == [label]
+    _, after, *_ = views.ask_for_changes(crew, session, after, 5, "", "Area Director", imminent=[])
+    assert "imminent danger" not in after.loc[after["Report"] == report, "Category 1"].iloc[0]
+
+
+def test_an_answered_match_shows_its_answer_and_is_not_open(crew):
+    session = Session()
+    views.load_week(crew, session, "Texas", 5)
+    table = views.week_matches(crew, session)
+    before = views.unresolved_matches(crew, session)
+    table.loc[0, "Same employer?"] = "yes"
+    views.save_matches(crew, session, table, "Triage officer")
+    assert views.unresolved_matches(crew, session) == before - 1
+
+
+def test_the_approved_summary_describes_the_last_plan(crew, monkeypatch):
+    # A Writer that keeps adding a number by hand: the critic writes the answer itself after the retries.
+    for backend in crew.services.router.backends.values():
+        write = backend.handlers["writer"]
+        backend.handlers["writer"] = lambda prompt, write=write: {
+            **write(prompt),
+            "template": write(prompt)["template"] + "\n\nCall 3 people.",
+        }
+    session = Session()
+    _, table, *_ = views.load_week(crew, session, "Texas", 5)
+    views.ask_for_changes(crew, session, table, 0, "", "Area Director")
+    views.approve(crew, session, "Area Director")
+    *_, answer = views.approve(crew, session, "Area Director")
+    assert "0.0 inspector days" in answer and "Not enough inspector days" in answer
+
+
+def test_a_talk_says_when_its_count_is_wider_than_the_page(crew, monkeypatch):
+    import safereport.graph
+
+    monkeypatch.setattr(safereport.graph, "TALK_MIN_REPORTS", 10**9)
+    talk, _ = views.safety_talk(crew, Session(), "lockout", "None (English only)", "Texas", "Plastics")
+    assert "The count is for all industries nationwide" in talk
+
+
+def test_a_new_week_from_ask_is_warned_again_before_approval(crew):
+    session = Session()
+    views.load_week(crew, session, "Texas", 5)
+    assert "press Approve again" in views.approve(crew, session, "Area Director")[5]
+    views.ask(crew, "Plan this week's inspections in Ohio with 5 inspector days.", [], session)
+    if views.unresolved_matches(crew, session):
+        assert "press Approve again" in views.approve(crew, session, "Area Director")[5]
+    assert session.approve_warned in ("", session.week_thread)
+
+
+def test_an_inspector_days_note_is_shown_before_approval_and_dropped_after_a_fix(crew):
+    session = Session()
+    views.ask(crew, "Plan this week's inspections in Texas with 900 inspector days.", [], session)
+    assert "more than an office has" in views.week_view(crew, session)[5]
+    table = views.week_rows(crew, session)
+    views.ask_for_changes(crew, session, table, 5, "", "Area Director")
+    assert "more than an office has" not in views.week_view(crew, session)[5]
+    views.approve(crew, session, "Area Director")
+    *_, answer = views.approve(crew, session, "Area Director")
+    assert answer and "more than an office has" not in answer
+
+
+def test_all_industries_counts_every_industry(crew):
+    talk, _ = views.safety_talk(
+        crew, Session(), "lockout", "None (English only)", "All states", "All industries"
+    )
+    summaries = [
+        step["summary"]
+        for saved in crew.graph.checkpointer.list(None)
+        for step in saved.checkpoint["channel_values"].get("trace", [])
+    ]
+    assert any("all industries nationwide" in s for s in summaries), "not manufacturing only"
+    assert "The count is for" not in talk, "the widest scope has nothing to widen"
