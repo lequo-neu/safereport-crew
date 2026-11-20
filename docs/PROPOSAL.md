@@ -160,7 +160,7 @@ The data and the answer key are ready, and features 1 to 7 need only the SIR fil
 
 ## Tech stack and repository
 
-Python, LangGraph and LangChain; Anthropic, OpenAI and Google APIs; LM Studio; DuckDB and Parquet; BM25, sentence embeddings (bge small) and FAISS; rapidfuzz; scikit-learn; PuLP with CBC; pandas, matplotlib and Plotly; python-docx; Gradio 6; SQLite; ruff, pytest and GitHub Actions (run by hand for now). Public repository [lequo-neu/safereport-crew](https://github.com/lequo-neu/safereport-crew), released as v0.1.0 for phases 0 to 2, with phase 3 merged into `main`; no code, data or features come from our class assignments or the hackathon, only general methods the course taught.
+Python, LangGraph and LangChain; Anthropic, OpenAI and Google APIs; LM Studio; DuckDB and Parquet; BM25, sentence embeddings (bge small) and FAISS; rapidfuzz; scikit-learn; PuLP with CBC; pandas, matplotlib and Plotly; python-docx; Gradio 6; SQLite; ruff, pytest and GitHub Actions on every pull request (free for a public repository). Public repository [lequo-neu/safereport-crew](https://github.com/lequo-neu/safereport-crew), released as v0.1.0 for phases 0 to 2, with phase 3 merged into `main`; no code, data or features come from our class assignments or the hackathon, only general methods the course taught.
 
 ## Limits
 

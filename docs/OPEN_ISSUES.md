@@ -121,6 +121,4 @@ Updated on 19 November 2026, after the team decisions and the second independent
   accuracies on reports outside the key (for example a labelled slice of the 2025 holdout), and
   report the key only as the final score.
 
-* **Version control.** The folder is not a git repository yet; the team still has to agree on
-  the repository and the v0.1 release.
 * **Name of the drafting tool** for the answer key, for `docs/AI_USAGE.md`.

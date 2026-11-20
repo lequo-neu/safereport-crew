@@ -14,6 +14,7 @@ Hamad Al Sulaimi, Khoa Tran. Phases 0 to 3 of 4 are built; 307 tests pass offlin
 | see how the agents work together | [How it works](#how-it-works) |
 | check the measured results | [Results](#results) |
 | read the full plan | [docs/PROPOSAL.md](docs/PROPOSAL.md) |
+| see who does what next, and how we work | [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md), [CONTRIBUTING.md](CONTRIBUTING.md) |
 
 ## The problem in one minute
 
@@ -424,7 +425,7 @@ ruff check . && ruff format --check .
 | `python scripts/merge_labels.py` | rebuilds `data/labels/answer_key.csv` from the three label files |
 
 Tests that need the built data skip when it is missing, so the suite also runs on a fresh clone,
-as in CI (`.github/workflows/ci.yml`, started by hand for now). Triage weights and inspector days
+as in CI (`.github/workflows/ci.yml`: every pull request and push to `main`, Ubuntu, free while the repository is public). Triage weights and inspector days
 per inspection are in [config/triage.toml](config/triage.toml).
 
 ## Limits
