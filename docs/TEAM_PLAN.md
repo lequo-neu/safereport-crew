@@ -2,6 +2,11 @@
 
 Seven Team-5374. Written on 20 November 2026. How we work is in [CONTRIBUTING.md](../CONTRIBUTING.md).
 
+> **This plan is a floor, not a ceiling.** We encourage every member to contribute beyond it
+> whenever you see a way to make the project better: a sharper test, a clearer page, a feature a
+> user would miss. Open an issue or a pull request and tell the team; good ideas are welcome from
+> anyone, at any stage.
+
 | Who | GitHub | Role from now on |
 |---|---|---|
 | Hamad Al Sulaimi | `hmdsulaimi` | builds and measures (triage, evaluation), shares the submission work with Khoa |
