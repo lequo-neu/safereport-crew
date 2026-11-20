@@ -82,7 +82,9 @@ pip install -e ".[dev,embeddings]"
 ```
 
 `embeddings` adds sentence transformers, torch and FAISS. Leave it out for a lighter install;
-retrieval then runs on BM25 alone and the results are weaker.
+retrieval then runs on BM25 alone and the results are weaker. Add `models` (the Anthropic, OpenAI
+and Google clients) only if you will run `--live`, including the free local Gemma through LM Studio:
+`pip install -e ".[dev,embeddings,models]"`.
 
 **2. Download the reports.** OSHA's site blocks scripted downloads, so open
 https://www.osha.gov/severe-injury-reports in a browser, click "Download the full SIR data set"

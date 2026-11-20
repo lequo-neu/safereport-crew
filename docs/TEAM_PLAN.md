@@ -39,7 +39,7 @@ The course deadlines come later (check Canvas), so the days after 28 November ar
 ## Basic stage: 20 to 23 November
 
 Every task ends in a pull request that meets its outputs below and the definition of done in
-CONTRIBUTING.md. Each task has a GitHub issue with the same number.
+CONTRIBUTING.md. Each task has its own GitHub issue, named by its code (issues #2 to #13).
 
 ### Hamad
 
