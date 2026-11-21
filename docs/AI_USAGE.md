@@ -37,6 +37,20 @@ Where AI tools touched this project, what they did, and how the team checked it.
 yes or no, with the labeller named in each note. The "same" rule held for 100 of 100 pairs; 45 of
 the 50 possible pairs were the same employer.
 
+## The Basic stage evaluations
+
+Each task records here which AI tool helped and how the result was checked.
+
+* **B2, inspection priority against OSHA's choices** (Hamad, pull request #15). The code, tests
+  and write up were drafted with Claude Code and checked by Hamad: the AUCs against scikit-learn,
+  DeLong's covariance against a brute force version and a bootstrap, the 1,000 holdout IDs and
+  OSHA's raw inspection field. Kevin reran the command on another machine and got the same JSON
+  and per report CSV. No model is called and nothing was paid.
+* **B4, what the two stage batch saves** (Hamad, pull request #16). Drafted with Claude Code and
+  checked by Hamad: the call counts from the per agent log, the 31 reports of the week, and the
+  one decision field that differs. Kevin reran it on another machine: the same calls, decisions
+  and changed citation, and a cost estimate within one token. Offline, nothing was paid.
+
 ## The safety talk translations
 
 The Spanish, Chinese, Tagalog, Vietnamese and Arabic texts of the four safety talks were drafted
