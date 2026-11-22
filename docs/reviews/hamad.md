@@ -201,7 +201,7 @@ are not grounds to tune the criterion on this week.
   | 12 | Lockout talk, Arabic | PASS | | yearly chart, state map, `safety_talk_lockout_en.docx` and `safety_talk_lockout_ar.docx`. **Defect** in the page preview, below |
   | 13 | Outage of Claude, ask again | PASS | | "3 of 4 models up; calls to Claude Sonnet 5.5 fail and fall back"; the trace shows `gemini_flash`, "fell back from claude", "fallback after claude failed (server_error)" |
   | 14 | Lift the outage | PASS | | "4 of 4 models up"; the same question routes to `claude` again |
-  | 15 | Week CSV from Downloads | FAIL (known) | | the downloaded `inspection_list.csv` holds `\r\r\n` at all 32 line ends: 65 lines for 32 rows. Opened in Excel 16 (by automation): 63 rows, 31 of them blank, one after every row. Excel also shows the 11-digit report IDs as `2.03E+10` |
+  | 15 | Week CSV from Downloads | FAIL, then PASS after #21 | | the downloaded `inspection_list.csv` holds `\r\r\n` at all 32 line ends: 65 lines for 32 rows. Opened in Excel 16 (by automation): 63 rows, 31 of them blank, one after every row. Excel also shows the 11-digit report IDs as `2.03E+10`. Re-run on 22 November on `main` with #21 and this branch: 32 lines, each ending `\r\n`, none `\r\r\n`; Excel shows 32 rows, none blank |
 
   **At phone width:** no page scrolls sideways (document width 390); the role picker sits below
   the site name with no overlap; the week table (1,600 px wide), the triggers and the matches scroll
@@ -234,15 +234,15 @@ are not grounds to tune the criterion on this week.
 
 **Defects (one issue each).**
 
-* **CSV downloads on Windows have a blank line after every row** (#17, opened by Kevin; fix in
-  #21). The text already ends its lines with `\r\n` (`outputs.triage_csv` through the csv module,
+* **CSV downloads on Windows have a blank line after every row** (#17, opened by Kevin; fixed
+  by #21, merged on 22 November). The text already ends its lines with `\r\n` (`outputs.triage_csv` through the csv module,
   `DataFrame.to_csv()` through `os.linesep`), and `views.save` wrote it in text mode, so Windows
   added another `\r`: each line ended in `\r\r\n` and a reader saw 6 rows for 3. Confirmed in the
   browser: the downloaded `inspection_list.csv` has `\r\r\n` at all 32 line ends. It affects
   `inspection_list.csv`, the week table download and the Trends export. Two tests failed on
   Windows only (`test_the_week_states_its_active_filters_and_downloads_what_it_shows`,
   `test_trends_show_the_dashboard_figures_and_export_the_selection`). #21 writes with
-  `newline=""` and adds a test; on Windows it gives 301 passed, 7 skipped.
+  `newline=""` and adds a test; on Windows it gave 301 passed, 7 skipped, and #17 is closed.
 * **The Arabic safety talk shows left to right on the Trends page** (#22). With Arabic
   as the extra language, the Arabic text shows with the bullets on the left, the lines aligned
   left and each sentence's full stop at the start of the line, at laptop and phone width
