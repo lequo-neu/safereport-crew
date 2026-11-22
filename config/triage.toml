@@ -1,22 +1,51 @@
 # Assumptions of the weekly inspection list. They are ours, not OSHA's; the team agrees on them
 # and the Area Director can change them per run. See src/safereport/triage.py.
+#
+# Why each value is what it is (B1, #2). The weights stand for the Category 2 factors of OSHA's
+# memo of 4 March 2016 (section 5), plus the severity of what 29 CFR 1904.39 makes an employer
+# report. The evidence is how often OSHA inspected reports with each factor in 2015 to 2024
+# (97,284 reports, 33.8% inspected; the 2025 holdout that B2 scores is not read), with a 95%
+# Wilson interval and the factor's log-odds in one logistic regression on all the factors. Past
+# practice is a reference, not the truth, so it informs the weights rather than setting them.
+# The values are those B2 (#15) and B4 (#16) were measured with; a change goes in its own pull
+# request with a B2 rerun. Proposed changes are kept in docs/reviews/hamad.md as future work.
 
-# Inspector days of the replayed week when a request names none.
+# Inspector days of the replayed week when a request names none. An assumption: the repository
+# holds no data on an area office's weekly capacity.
 default_capacity = 40.0
 
 # What each Category 2 factor adds to a report's priority.
 [weights]
+# Severity (1904.39). 48.4% inspected (47.8 to 49.0) over 25,790 reports; log-odds 1.22.
 amputation = 3.0
+# Severity (1904.39). Only 31 reports, 48.4% inspected (32.0 to 65.2): too few to support or
+# refute the weight, which rests on severity.
 loss_of_eye = 3.0
+# Severity (1904.39). One person hospitalized: 30.6% inspected (30.3 to 30.9) over 78,134 reports,
+# below the 33.8% average; log-odds 0.41. Two or more is Category 1 anyway. B1 proposed 1.0.
 hospitalized = 2.0              # per person, at most two
+# The memo's "serious hazard such as explosive materials, combustible dust or falls". 46.2%
+# inspected (45.6 to 46.9) over 21,345 reports; log-odds 0.81.
 fatality_potential = 2.0
+# The memo's failure of a safety program (lockout, confined spaces, process safety). 78.5%
+# inspected (75.6 to 81.0) over 882 narratives; log-odds 1.75, the strongest factor.
+# B1 proposed 3.0.
 failed_safeguard = 2.0
+# The memo's "temporary or other vulnerable workers". 51.0% inspected (47.8 to 54.2) over 945
+# narratives; log-odds 0.65.
 temporary_worker = 1.5
+# A specific standard covers the hazard, so an inspection can cite it. Not measured: it needs a
+# retrieval run per report.
 specific_standard = 1.0
+# A hazard common in the industry. Not measured, for the same reason.
 common_in_industry = 1.0        # times the hazard's share of the industry's reports
+# The memo puts emphasis program hazards in Category 1; a program whose scope we have not read
+# only raises the priority. Not measured, for the same reason.
 possible_emphasis_program = 1.0 # a program whose scope we have not read from its directive
 
 # Inspector days one on site inspection takes, by hazard; any other hazard takes `other`.
+# Assumptions, not measured: the repository holds no inspection lengths (they would need OSHA's
+# inspection records), so these are stated as ours and kept as B2 and B4 used them.
 [inspection_days]
 machine = 2.5
 fall_height = 2.0
