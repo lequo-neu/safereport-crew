@@ -1,0 +1,555 @@
+{
+  "task": "B4, issue #5",
+  "question": "What does sending only some reports to the model branches save, and what does it change?",
+  "week": {
+    "state": "Texas",
+    "start": "2025-11-17",
+    "end": "2025-11-23",
+    "request": "Plan this week's inspections in Texas with 40 inspector days."
+  },
+  "two_stages": {
+    "reports": 31,
+    "reports_through_stage2": 20,
+    "measured": {
+      "model_calls": 56,
+      "failed_calls": 0,
+      "calls_by_agent": {
+        "planner": 1,
+        "branch": 40,
+        "writer": 15
+      },
+      "calls_by_step": {
+        "decide": 1,
+        "code": 20,
+        "retrieve": 20,
+        "write": 15
+      },
+      "calls_by_model": {
+        "claude": 27,
+        "gpt_nano": 29
+      },
+      "inspections": 20,
+      "rri_letters": 11
+    },
+    "estimated": {
+      "offline_log": {
+        "input_tokens": 4461,
+        "output_tokens": 6184,
+        "cost_usd": 0.021023,
+        "calls_without_a_price": 0
+      },
+      "with_system_prompts": {
+        "input_tokens": 12677,
+        "output_tokens": 6184,
+        "cost_usd": 0.026588
+      }
+    }
+  },
+  "every_report_through_stage2": {
+    "reports": 31,
+    "reports_through_stage2": 31,
+    "measured": {
+      "model_calls": 78,
+      "failed_calls": 0,
+      "calls_by_agent": {
+        "planner": 1,
+        "branch": 62,
+        "writer": 15
+      },
+      "calls_by_step": {
+        "decide": 1,
+        "code": 31,
+        "retrieve": 31,
+        "write": 15
+      },
+      "calls_by_model": {
+        "claude": 38,
+        "gpt_nano": 40
+      },
+      "inspections": 20,
+      "rri_letters": 11
+    },
+    "estimated": {
+      "offline_log": {
+        "input_tokens": 6404,
+        "output_tokens": 7763,
+        "cost_usd": 0.024897,
+        "calls_without_a_price": 0
+      },
+      "with_system_prompts": {
+        "input_tokens": 18030,
+        "output_tokens": 7763,
+        "cost_usd": 0.032112
+      }
+    }
+  },
+  "saving": {
+    "measured_model_calls": {
+      "two_stages": 56,
+      "every_report": 78,
+      "saved": 22,
+      "saved_share": 0.282
+    },
+    "estimated_cost_usd_offline_log": {
+      "two_stages": 0.021023,
+      "every_report": 0.024897,
+      "saved": 0.003874,
+      "saved_share": 0.156
+    },
+    "estimated_cost_usd_with_system_prompts": {
+      "two_stages": 0.026588,
+      "every_report": 0.032112,
+      "saved": 0.005524,
+      "saved_share": 0.172
+    },
+    "estimated_input_tokens_with_system_prompts": {
+      "two_stages": 12677,
+      "every_report": 18030,
+      "saved": 5353,
+      "saved_share": 0.297
+    },
+    "estimated_output_tokens": {
+      "two_stages": 6184,
+      "every_report": 7763,
+      "saved": 1579,
+      "saved_share": 0.203
+    }
+  },
+  "changes": {
+    "decisions_changed": 0,
+    "category_one_changed": 0,
+    "cited_standard_changed": 1,
+    "priority_changed": 0,
+    "by_report": {
+      "decisions": [],
+      "category_one": [],
+      "cited_standard": [
+        {
+          "report_id": "20251111512",
+          "two_stages": "1910.212",
+          "every_report": "1910.243"
+        }
+      ],
+      "priority": []
+    }
+  },
+  "reports_skipped_by_two_stages": [
+    "20251111406",
+    "20251111433",
+    "20251111445",
+    "20251111454",
+    "20251111462",
+    "20251111502",
+    "20251111512",
+    "20251111522",
+    "20251111604",
+    "20251111619",
+    "20251111620"
+  ],
+  "approved_lists": {
+    "fields": [
+      "decision",
+      "category_one",
+      "priority",
+      "standard"
+    ],
+    "two_stages": {
+      "20251111406": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 4.135,
+        "standard": "1910.253"
+      },
+      "20251111409": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 4.006,
+        "standard": "1910.29"
+      },
+      "20251111432": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 6.168,
+        "standard": "1910.147"
+      },
+      "20251111433": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 6.402,
+        "standard": "1910.213"
+      },
+      "20251111436": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 4.118,
+        "standard": "1910.180"
+      },
+      "20251111437": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 5.015,
+        "standard": "1910.1450"
+      },
+      "20251111439": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 3.257,
+        "standard": "1910.22"
+      },
+      "20251111443": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 5.189,
+        "standard": "1910.28"
+      },
+      "20251111445": {
+        "decision": "inspection",
+        "category_one": "hazard under an emphasis program",
+        "priority": 5.143,
+        "standard": "1910.28"
+      },
+      "20251111449": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 3.17,
+        "standard": "1910.28"
+      },
+      "20251111454": {
+        "decision": "inspection",
+        "category_one": "hazard under an emphasis program",
+        "priority": 4.457,
+        "standard": "1910.212"
+      },
+      "20251111462": {
+        "decision": "inspection",
+        "category_one": "hazard under an emphasis program",
+        "priority": 6.457,
+        "standard": "1910.212(a)(3)(ii)"
+      },
+      "20251111467": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.062,
+        "standard": "1910.178"
+      },
+      "20251111468": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.143,
+        "standard": "1910.265"
+      },
+      "20251111502": {
+        "decision": "inspection",
+        "category_one": "hazard under an emphasis program",
+        "priority": 6.457,
+        "standard": "1910.147"
+      },
+      "20251111510": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 2.07,
+        "standard": "OSH Act 5(a)(1)"
+      },
+      "20251111512": {
+        "decision": "inspection",
+        "category_one": "hazard under an emphasis program",
+        "priority": 6.564,
+        "standard": "1910.212"
+      },
+      "20251111522": {
+        "decision": "inspection",
+        "category_one": "similar report from the employer within 12 months",
+        "priority": 3.57,
+        "standard": "1910.147"
+      },
+      "20251111525": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 3.214,
+        "standard": "1910.29"
+      },
+      "20251111535": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 3.241,
+        "standard": "1910.147"
+      },
+      "20251111554": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 6.557,
+        "standard": "1910.212(a)(3)(ii)"
+      },
+      "20251111578": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.008,
+        "standard": "1910.23"
+      },
+      "20251111583": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.114,
+        "standard": "1910.22"
+      },
+      "20251111604": {
+        "decision": "inspection",
+        "category_one": "similar report from the employer within 12 months",
+        "priority": 3.403,
+        "standard": "1910.22"
+      },
+      "20251111606": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 4.158,
+        "standard": "1910.147"
+      },
+      "20251111612": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.026,
+        "standard": "1910.178"
+      },
+      "20251111613": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.136,
+        "standard": "OSH Act 5(a)(1)"
+      },
+      "20251111619": {
+        "decision": "inspection",
+        "category_one": "similar report from the employer within 12 months; hazard under an emphasis program",
+        "priority": 3.128,
+        "standard": "1910.23"
+      },
+      "20251111620": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 4.017,
+        "standard": "1910.110"
+      },
+      "20251111621": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.28,
+        "standard": "1910.262"
+      },
+      "20251111622": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 5.28,
+        "standard": "1910.212(a)(3)(ii)"
+      }
+    },
+    "every_report_through_stage2": {
+      "20251111406": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 4.135,
+        "standard": "1910.253"
+      },
+      "20251111409": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 4.006,
+        "standard": "1910.29"
+      },
+      "20251111432": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 6.168,
+        "standard": "1910.147"
+      },
+      "20251111433": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 6.402,
+        "standard": "1910.213"
+      },
+      "20251111436": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 4.118,
+        "standard": "1910.180"
+      },
+      "20251111437": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 5.015,
+        "standard": "1910.1450"
+      },
+      "20251111439": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 3.257,
+        "standard": "1910.22"
+      },
+      "20251111443": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 5.189,
+        "standard": "1910.28"
+      },
+      "20251111445": {
+        "decision": "inspection",
+        "category_one": "hazard under an emphasis program",
+        "priority": 5.143,
+        "standard": "1910.28"
+      },
+      "20251111449": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 3.17,
+        "standard": "1910.28"
+      },
+      "20251111454": {
+        "decision": "inspection",
+        "category_one": "hazard under an emphasis program",
+        "priority": 4.457,
+        "standard": "1910.212"
+      },
+      "20251111462": {
+        "decision": "inspection",
+        "category_one": "hazard under an emphasis program",
+        "priority": 6.457,
+        "standard": "1910.212(a)(3)(ii)"
+      },
+      "20251111467": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.062,
+        "standard": "1910.178"
+      },
+      "20251111468": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.143,
+        "standard": "1910.265"
+      },
+      "20251111502": {
+        "decision": "inspection",
+        "category_one": "hazard under an emphasis program",
+        "priority": 6.457,
+        "standard": "1910.147"
+      },
+      "20251111510": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 2.07,
+        "standard": "OSH Act 5(a)(1)"
+      },
+      "20251111512": {
+        "decision": "inspection",
+        "category_one": "hazard under an emphasis program",
+        "priority": 6.564,
+        "standard": "1910.243"
+      },
+      "20251111522": {
+        "decision": "inspection",
+        "category_one": "similar report from the employer within 12 months",
+        "priority": 3.57,
+        "standard": "1910.147"
+      },
+      "20251111525": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 3.214,
+        "standard": "1910.29"
+      },
+      "20251111535": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 3.241,
+        "standard": "1910.147"
+      },
+      "20251111554": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 6.557,
+        "standard": "1910.212(a)(3)(ii)"
+      },
+      "20251111578": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.008,
+        "standard": "1910.23"
+      },
+      "20251111583": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.114,
+        "standard": "1910.22"
+      },
+      "20251111604": {
+        "decision": "inspection",
+        "category_one": "similar report from the employer within 12 months",
+        "priority": 3.403,
+        "standard": "1910.22"
+      },
+      "20251111606": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 4.158,
+        "standard": "1910.147"
+      },
+      "20251111612": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.026,
+        "standard": "1910.178"
+      },
+      "20251111613": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.136,
+        "standard": "OSH Act 5(a)(1)"
+      },
+      "20251111619": {
+        "decision": "inspection",
+        "category_one": "similar report from the employer within 12 months; hazard under an emphasis program",
+        "priority": 3.128,
+        "standard": "1910.23"
+      },
+      "20251111620": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 4.017,
+        "standard": "1910.110"
+      },
+      "20251111621": {
+        "decision": "rri_letter",
+        "category_one": "",
+        "priority": 3.28,
+        "standard": "1910.262"
+      },
+      "20251111622": {
+        "decision": "inspection",
+        "category_one": "",
+        "priority": 5.28,
+        "standard": "1910.212(a)(3)(ii)"
+      }
+    }
+  },
+  "earlier_estimate": {
+    "readme_calls_every_report": 85,
+    "measured_calls_every_report": 78,
+    "note": "The README and proposal estimated about 85 calls for one Texas week with three model calls a report; the measured run with every report through stage 2 made 78, because a branch makes two calls (intake coding and standards terms) and the Writer drafts one document per letter or brief."
+  },
+  "method": {
+    "backend": "offline (deterministic rules); no model called, nothing paid",
+    "mode": "lowest_cost",
+    "measured": "model calls, reports through stage 2 and the approved decisions, from one run of the crew's own graph each way",
+    "estimated": "tokens at about four characters a token, and cost at config/models.toml prices",
+    "counterfactual": "the fan out's thresholds (min_confidence, min_retrieval_margin) set to infinity in a copy of the settings; the router's own settings unchanged",
+    "retrieval": "hybrid"
+  },
+  "limitations": [
+    "Offline: every model answers from the same deterministic rules, so the decisions that change are the ones the offline branch changes. A live model reads the facts differently and can change other decisions.",
+    "The tokens are estimated at about four characters a token on the offline prompts and replies. A live reply is longer, and GPT 5 nano also spends reasoning tokens: in the measured live terms experiment it averaged about 2,300 output tokens a call (eval/results/live_terms_gpt_nano.json), far above the offline estimate.",
+    "The second estimate adds each step's system prompt (providers.SYSTEM) to the input tokens, as a live provider would send it; it still leaves out reasoning tokens and longer replies.",
+    "The dollar cost uses the prices in config/models.toml for the model the router chose in lowest cost mode; a cached live call costs nothing, which the estimate ignores.",
+    "One week in one state (31 reports). The share of reports that take a branch depends on the week, so the saving on other weeks or nationwide is not measured here.",
+    "The time of each run is not compared: offline replies take no time, so it says nothing about the time a live branch takes."
+  ],
+  "command": "python -I scripts/eval_batch_savings.py"
+}
