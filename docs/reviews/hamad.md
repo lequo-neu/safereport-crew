@@ -105,6 +105,9 @@ not the truth. Nothing in the crew is changed. Each case separates what the sour
 * **Recommended: Category 1 under the rule as written. Keep it, and ask Kevin to settle company or
   establishment for the whole crew** (a policy choice, not a fix to this row). This is the
   criterion of #18, where B2 found OSHA inspected 20% of the holdout reports it marks.
+* **Kevin (22 November):** keep the rule as written, so Dollar Tree stays Category 1; B2 and B3
+  are scored on the current rule. The case is added to #18, decided with the B3 labels in the
+  Advance stage.
 
 **20251111619, United States Postal Service, Crystal City, 22 November 2025 (491110).**
 * Evidence: "An employee was using a ladder to hang a display. While coming back down the ladder,
@@ -123,9 +126,10 @@ not the truth. Nothing in the crew is changed. Each case separates what the sour
 * Judgment: that Crystal City is a retail post office and not a processing center (hanging a
   display points that way; the data cannot tell), and that a fall on a delivery route and a fall
   from a ladder indoors are not "similar".
-* **Recommended: Category 2.** Neither trigger should force it. For the crew, a new issue: 491110
-  should only raise the priority (`possible_emphasis_program`), not force Category 1, since the
-  file cannot tell a processing center from a post office.
+* **Recommended: Category 2.** Neither trigger should force it. For the crew: 491110 should only
+  raise the priority (`possible_emphasis_program`), not force Category 1, since the file cannot
+  tell a processing center from a post office. Kevin opened this as #26 for the Advance stage;
+  nothing changes now, and the call on this report is Hamad's.
 
 **20251111445, Axis Power LLC, Edna, 17 November 2025 (237130).**
 * Evidence: "standing on the bed of a crane truck working to pin the jib of the crane to the main
@@ -162,14 +166,14 @@ not the truth. Nothing in the crew is changed. Each case separates what the sour
   event a collapse in a trench or excavation; the crew cannot force it.
 * Judgment: whether a hand-dug tunnel under a slab is an excavation (Subpart P) or underground
   construction (Subpart S).
-* **Recommended: Category 1; the crew misses it.** For the crew, a new issue: read the NEP's scope
-  into `emphasis_programs.toml` (`verified = true`, no industry limit) and let OIICS 632 or source
-  611 trigger it, not only the narrative's words. Under B3's rule 6 it is not re-scored on the
-  same 100.
+* **Recommended: Category 1; the crew misses it.** For the crew: read the NEP's scope into
+  `emphasis_programs.toml` (`verified = true`, no industry limit) and let OIICS 632 or source 611
+  trigger it, not only the narrative's words. Kevin opened this as #27 for the Advance stage;
+  nothing changes now, and under B3's rule 6 it is not re-scored on the same 100.
 
-**In sum:** of the 8 Category 1 reports, 7 stand (Dollar Tree on the memo's wording, pending
-Kevin's call on "employer"), 1 should be Category 2 (USPS), and 1 Category 2 report should be
-Category 1 (20251111409). These are Hamad's calls to make; the two crew changes go in new issues.
+**In sum:** of the 8 Category 1 reports, 7 stand (Dollar Tree on the memo's wording, which Kevin
+keeps for now; #18), 1 should be Category 2 (USPS), and 1 Category 2 report should be Category 1
+(20251111409). These are Hamad's calls to make; the two crew changes are #26 and #27 (Advance).
 Both employer-history cases here (Dollar Tree and USPS) are evidence for #18; under its rules they
 are not grounds to tune the criterion on this week.
 
@@ -218,7 +222,7 @@ are not grounds to tune the criterion on this week.
   | Plant safety manager | Trends: tiles, chart, map, top events | PASS | 190 reports for Texas, Plastics, from 2019; three charts each 316 px wide inside the 390 px screen; nothing scrolls the page sideways |
   | Plant safety manager | filter and **Apply**, then **Download Selected Data** | PASS | All industries: 10,633 reports; `reports_texas_all_industries_all_events_2019.csv` offered |
   | Plant safety manager | lockout talk in Arabic, **Write the talk** | PASS, with the known defect | `safety_talk_lockout_ar.docx` and `safety_talk_lockout_en.docx`; the Arabic preview computes `direction: ltr` here too |
-  | Plant safety manager | the week page is hidden | **FAIL** | the **This week's reports** tab stays in the bar and opens a blank page (defect below) |
+  | Plant safety manager | the week page is hidden | **FAIL**, fixed on main | the **This week's reports** tab stayed in the bar and opened a blank page (#24). On main after 04eb1f0 the tab is gone from the bar and from the phone's "…" menu (checked 22 November at 1440 x 900 and 390 x 844) |
   | Admin | opens on its page | PASS | **AI controls and evaluation** selected, the controls shown |
   | Admin | outage of Claude, **Apply**, ask on **Ask** (through the "…" menu) | PASS | "3 of 4 models up; calls to Claude Sonnet 5.5 fail and fall back"; the trace shows `gemini_flash`, "fell back from claude" |
   | Admin | lift it, **Apply**, ask again | PASS | "4 of 4 models up"; the trace routes to `claude` again |
@@ -248,8 +252,9 @@ are not grounds to tune the criterion on this week.
   left and each sentence's full stop at the start of the line, at laptop and phone width
   (`laptop_s12_arabic_talk_ltr_defect.png`; the page computes `direction: ltr`). The English and
   the Arabic come back as one Markdown string (`views.safety_talk`), and nothing in `app.py` or
-  `views.py` sets a direction. Fix for Kevin: wrap the Arabic part in `<div dir="rtl">`, with a
-  test.
+  `views.py` sets a direction. **Fixed on main (04eb1f0)**: the Arabic talk is in a right to left
+  block; checked on 22 November, the Arabic paragraphs compute `direction: rtl`
+  (`mainb1_laptop_arabic_preview.png`).
 * **The Arabic Word file is aligned to the left in Microsoft Word** (#23). Opened in Word
   16 (`safety_talk_lockout_ar.docx`, exported by the app after the Arabic revision), every
   paragraph reads right to left (Word reports reading order right to left for all 7), but the
@@ -260,18 +265,23 @@ are not grounds to tune the criterion on this week.
   left paragraph Word reads that as the end side, which is the left. The same file with the
   `w:jc` element removed renders correctly, on the right with the bullets aligned
   (`word_arabic_talk_without_jc_right_aligned.png`); putting `w:bidi` before `w:jc` (the schema
-  order) changes nothing. Fix for Kevin: do not set the alignment on right to left paragraphs
-  (`w:bidi` alone starts them on the right), with a test; no test checks the alignment today.
+  order) changes nothing. **Fixed on main (04eb1f0)**: no `w:jc` on the Arabic paragraphs and
+  `w:bidi` in schema order, with a test. Checked on 22 November on the file the app exports from
+  main with this branch's Arabic: Word 16 reads all 7 paragraphs right to left and lays them out
+  from the right margin, with the bullets aligned on the right
+  (`word_arabic_talk_on_main_with_b1.png`).
 * **The Plant safety manager keeps a blank "This week's reports" tab** (#24). Signed in as
   Plant safety manager, the tab is still in the bar at laptop and phone width; opening it shows
   only the footer (`laptop_psm_week_tab_clicked.png`, `phone_psm_week_tab_clicked.png`). The week's
   content stays hidden, so nothing leaks, but the role sees a dead tab. `role_view` returns
   `gr.Tab(visible=False)` for that role and `tests/test_app.py` checks that return value; in
-  Gradio 6.31 the tab's panel is hidden but not its button. Fix for Kevin: check how Gradio 6 hides
-  a tab (or move the role's tabs into one `gr.Tabs` update), and test what renders, not only the
-  returned value.
+  Gradio 6.31 the tab's panel is hidden but not its button. **Fixed on main (04eb1f0)** with
+  `visible="hidden"`; checked on 22 November: no week tab for the Plant safety manager at laptop
+  or phone width (`mainb1_laptop_psm_tabs.png`, `mainb1_phone_psm_tabs.png`).
 
-**For Kevin: a row choice beats a later rule** (a question; nothing changed). After a row was sent
+**For Kevin: a row choice beats a later rule.** *Answered on #25: intended, and the status now
+says so (main, 71d6648), for example "The employer rule leaves 1 row you set to a letter by hand:
+20251111443. Move them to inspection to apply the rule."* The finding as it was: After a row was sent
 back to a letter by hand (step 4, 20251111443 Steel Dynamics), an always-inspect rule for the same
 employer left it a letter, while the status said "Plan updated with 0 changed rows and a rule for
 Steel Dynamics - Southwest - Sinton Division. No row changed." (`laptop_s6_rule.png`). The person's
@@ -287,10 +297,12 @@ says "check: 1910.28 is about falls, but the worker was hurt by crane load", yet
 will be sent says "The hazard appears to fall under 1910.28" (`laptop_s2_case_inspector.png`,
 offline rules). 1910.28 is fall protection, and the worker did not fall. Should the letter drop or
 replace the standard when the check flags it, and is 1910.179 (cranes) or 1910.184 (slings) the
-better citation?
+better citation? *Kevin handed this to Khoa's B5 (#6): when the case inspector's check flags a
+standard, the letter should not state it as the likely one.*
 
-**Recommendation: make the English lockout step as clear as the Arabic** (the shared English is
-not changed). The English talk says "Try to start the machine before you reach in, then return
+**Recommendation: make the English lockout step as clear as the Arabic.** *Done by Kevin on main
+(71d6648) with the wording below; the other translations keep the old line until their native
+speaker review.* The English talk says "Try to start the machine before you reach in, then return
 the control to off". Its place after the lock and tag step implies the try-out, but read alone it
 could mean starting the machine before reaching in. The Arabic now says it in full: after every
 energy source is isolated and locked, stay clear of the hazardous parts, try the normal controls
@@ -306,12 +318,14 @@ again in the note under it.
 
 * **Word files:** all four topics export; every Arabic paragraph is marked right to left
   (`w:bidi`), with Arabic runs (`w:rtl`, Arial for complex script) and no stray Latin text.
-  **Checked in Microsoft Word 16** (by automation, 21 November): the lockout file opens without a
-  repair prompt, as one page, and Word reads all 7 paragraphs right to left, but it lays the lines
-  out from the left margin. That is the Word defect above (`w:jc="right"` on a right to left
-  paragraph). `w:bidi` is also written after `w:jc`, out of schema order, but fixing the order
-  alone does not change the layout. **Still for Hamad:** read the file on screen as a native
-  speaker once the alignment is fixed.
+  **Checked in Microsoft Word 16 by automation.** On 21 November the lockout file opened without
+  a repair prompt, as one page, read right to left, but laid out from the left margin (#23). On
+  22 November, with #23 fixed on main (04eb1f0) and this branch's Arabic merged in for the check,
+  the app's `safety_talk_lockout_ar.docx` has `w:bidi` on all 7 paragraphs and no `w:jc`, holds
+  the revised text, opens in Word as one page, and Word lays every paragraph out from the right
+  margin with the bullets aligned (`word_arabic_talk_on_main_with_b1.png`, from Word's own PDF
+  export). **Still for Hamad:** read the file on screen as a native speaker; nothing here is that
+  reading.
 * **The text: corrected.** Hamad reviewed all 26 lines (the lead and four topics) against the
   English, with an AI assistant's draft and questions, and decided each change. All 26 Arabic
   strings in `src/safereport/talk_languages.py` were revised; the English, the other languages,
@@ -371,7 +385,14 @@ and hospitalization are not on that list: they are what 29 CFR 1904.39 makes an 
 so in the crew they stand for severity, a reasonable addition the memo allows but does not
 weigh. No source gives numbers for any weight, and none gives how long an inspection takes.
 
-**Recommendation for Khoa and Kevin** (nothing changed until both agree):
+**Kevin (22 November): keep the values, so B2 stays valid; write the reason beside each one,
+comments only.** Done in its own pull request (branch `hamad/b1-weight-reasons`): every value in
+`config/triage.toml` has its reason and evidence beside it, the parsed values are identical, and
+B2's command rerun on that branch reproduces every number and the per-report CSV. The proposals
+below stay as future work; a change needs Hamad and Khoa to agree, its own pull request and a B2
+rerun.
+
+**Proposal for Khoa and Kevin (future work):**
 
 | Value | Now | Proposed | Why |
 |---|---|---|---|
@@ -383,8 +404,6 @@ weigh. No source gives numbers for any weight, and none gives how long an inspec
 | `temporary_worker` | 1.5 | 1.5 | named in the memo; supported (51.0%, 0.65) |
 | `specific_standard`, `common_in_industry`, `possible_emphasis_program` | 1.0 each | 1.0 | not measured (each needs a retrieval run per report); keep, and say they are unmeasured |
 | `[inspection_days]` and `default_capacity` | as now | as now | no source and no data in the repository give inspection lengths or an office's week (that needs OSHA's inspection records); keep them as stated assumptions, with that reason written in the file |
-
-Write the reason beside each value in `config/triage.toml`.
 
 **If the weights change:** B2 (`scripts/eval_inspection_auc.py`) must be rerun and say so, and
 the change must not be chosen by looking at B2's AUC on the holdout. B4's decisions may also
