@@ -285,7 +285,7 @@ def role_view(role: str):
     week = role != "Plant safety manager"
     return (
         gr.Tabs(selected=HOME[role]),
-        gr.Tab(visible=week),
+        gr.Tab(visible=True if week else "hidden"),
         gr.Button(visible=role == APPROVER),
         gr.Group(visible=role == "Admin"),
         gr.Button(visible=role in ("Triage officer", APPROVER)),

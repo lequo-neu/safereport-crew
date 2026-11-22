@@ -31,7 +31,9 @@ def test_the_app_builds_and_each_role_opens_on_its_page(crew):
     for role, home in views.HOME.items():
         tabs, week_tab, approve, controls, save_matches = role_view(role)
         assert tabs.selected == home
-        assert week_tab.visible == (role != "Plant safety manager")
+        # #24: "hidden" keeps the tab mounted, so Gradio 6 also takes its button off the tab bar;
+        # an update to False hid the page but left a tab that opened a blank page.
+        assert week_tab.visible == (True if role != "Plant safety manager" else "hidden")
         assert approve.visible == (role == "Area Director")
         assert controls.visible == (role == "Admin")
         assert save_matches.visible == (role in ("Triage officer", "Area Director"))
@@ -331,6 +333,19 @@ def test_a_talk_comes_in_english_and_one_more_language(crew, choice):
         ["safety_talk_forklift_en.docx", f"safety_talk_forklift_{code}.docx"]
     )
     assert "Forklifts and people" in talk and "could not be traced" not in talk
+    # #22: only the Arabic talk sits in a right to left block; the English one stays left to right.
+    assert talk.count('<div dir="rtl" lang="ar">') == (1 if code == "ar" else 0)
+
+
+def test_the_arabic_talk_reads_right_to_left_and_the_english_one_does_not():
+    arabic = "# اقفل الطاقة قبل أن تمد يدك\n\nنص.\n\n* أوقف الآلة"
+    english = "# Lockout before you reach in\n\nText.\n\n* Stop the machine"
+    page = views.right_to_left(f"{arabic}\n\n{english}")
+    block, rest = page.split("</div>")
+    assert block.startswith('<div dir="rtl" lang="ar">\n\n# اقفل') and "* أوقف الآلة" in block
+    assert "Lockout" not in block and rest.strip() == english, "the English talk is left as it was"
+    assert "\n\n# اقفل" in block and block.endswith("الآلة\n\n"), "blank lines keep the Markdown rendered"
+    assert views.right_to_left(english) == english
 
 
 def test_english_only_and_bad_language_choices(crew):

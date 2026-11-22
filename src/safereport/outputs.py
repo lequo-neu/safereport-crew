@@ -114,13 +114,19 @@ def triage_csv(rows: list[dict]) -> str:
 EAST_ASIAN_FONT = "Microsoft YaHei"
 COMPLEX_SCRIPT_FONT = "Arial"
 WORD_LANGUAGE = {"en": "en-US", "es": "es-US", "zh": "zh-CN", "tl": "fil-PH", "vi": "vi-VN", "ar": "ar-SA"}
+# The paragraph properties that come after w:bidi in the schema, so w:bidi goes in its place.
+BIDI_SUCCESSORS = (
+    "w:adjustRightInd", "w:snapToGrid", "w:spacing", "w:ind", "w:contextualSpacing", "w:mirrorIndents",
+    "w:suppressOverlap", "w:jc", "w:textDirection", "w:textAlignment", "w:textboxTightWrap",
+    "w:outlineLvl", "w:divId", "w:cnfStyle", "w:rPr", "w:sectPr", "w:pPrChange",
+)  # fmt: skip
 
 
 def word_document(markdown: str, language: str = "en") -> bytes:
     """A Word file from the Writer's text: "#" lines become headings, "*" lines bullets.
 
     `language` sets the proofing language and the script: Chinese gets an East Asian font, and
-    Arabic runs right to left with right aligned paragraphs, so a talk prints as it should read.
+    Arabic paragraphs are right to left, so they start at the right margin as the talk should read.
     """
     document = WordDocument()
     for line in markdown.splitlines():
@@ -140,14 +146,15 @@ def word_document(markdown: str, language: str = "en") -> bytes:
 
 
 def _script(paragraph, language: str) -> None:
-    from docx.enum.text import WD_ALIGN_PARAGRAPH
     from docx.oxml import OxmlElement
     from docx.oxml.ns import qn
 
     right_to_left = language == "ar"
     if right_to_left:
-        paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-        paragraph._p.get_or_add_pPr().append(OxmlElement("w:bidi"))
+        # w:bidi alone starts the paragraph at the right margin. No w:jc: in a right to left
+        # paragraph Word reads "right" as the end side, so it would push the lines left (#23).
+        properties = paragraph._p.get_or_add_pPr()
+        properties.insert_element_before(OxmlElement("w:bidi"), *BIDI_SUCCESSORS)
     for run in paragraph.runs:
         properties = run._r.get_or_add_rPr()
         fonts = properties.find(qn("w:rFonts"))

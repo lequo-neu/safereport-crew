@@ -1195,6 +1195,25 @@ def _trend_filters(state: str, industry: str, hazard: str, start_year: float) ->
                    event_group_v3=HAZARD_CHOICES[hazard], start=date(int(start_year), 1, 1))  # fmt: skip
 
 
+ARABIC_LETTER = re.compile(r"[؀-ۿ]")
+
+
+def right_to_left(markdown: str) -> str:
+    """Put each talk whose heading is in Arabic in a right to left block, so the page reads it as Arabic.
+
+    The answer holds one talk per language, each starting with a "# " heading. The blank lines
+    around the block keep the Markdown inside it rendered (#22).
+    """
+    parts = re.split(r"(?m)^(?=# )", markdown)
+    out = []
+    for part in parts:
+        heading = part.split("\n", 1)[0]
+        if heading.startswith("# ") and ARABIC_LETTER.search(heading):
+            part = f'<div dir="rtl" lang="ar">\n\n{part.strip()}\n\n</div>\n\n'
+        out.append(part)
+    return "".join(out)
+
+
 def safety_talk(
     crew: Crew, session: Session, topic: str, extra: Any = "es", state_name: str = "", industry_name: str = ""
 ):
@@ -1232,7 +1251,7 @@ def safety_talk(
             language_code = key.rsplit("_", 1)[1]
             names.append(save(crew, session, f"safety_talk_{topic.replace(' ', '_')}_{language_code}.docx",
                               word_document(rendered(draft), language_code)))  # fmt: skip
-    return out.get("answer", "") + widened, names
+    return right_to_left(out.get("answer", "")) + widened, names
 
 
 # ---- AI controls and evaluation ----

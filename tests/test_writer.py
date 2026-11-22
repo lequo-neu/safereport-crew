@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import io
+import re
 import zipfile
 
 import pandas as pd
@@ -121,5 +122,10 @@ def test_word_exports_set_the_script_of_each_language():
     chinese = body("zh", "# 伸手之前先上锁")
     assert "伸手之前先上锁" in chinese and 'w:eastAsia="Microsoft YaHei"' in chinese
     arabic = body("ar", "# اقفل الطاقة قبل أن تمد يدك\n\n* أوقف الآلة")
-    assert "<w:bidi/>" in arabic and "<w:rtl/>" in arabic and 'w:val="right"' in arabic
+    assert "<w:bidi/>" in arabic and "<w:rtl/>" in arabic
+    # #23: w:bidi alone starts a paragraph at the right margin; w:jc="right" would push it left.
+    assert arabic.count("<w:bidi/>") == 2 and "<w:jc " not in arabic
+    for paragraph in re.findall(r"<w:pPr>.*?</w:pPr>", arabic):
+        assert "<w:bidi/>" in paragraph, "every Arabic paragraph is right to left"
+        assert not re.search(r"<w:(spacing|ind|jc|rPr)\b.*<w:bidi/>", paragraph), "w:bidi in schema order"
     assert "<w:bidi/>" not in body("en", "# Lockout")
