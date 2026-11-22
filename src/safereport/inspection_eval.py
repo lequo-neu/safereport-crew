@@ -21,6 +21,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+import tomllib
 from typing import Any
 
 import numpy as np
@@ -198,14 +199,16 @@ def _rate(hits: int, cases: int) -> dict[str, Any]:
     return {"cases": cases, "inspected": hits, "rate": round(rate, 3), "rate_ci95": wilson(rate, cases)}
 
 
-def _weights_file() -> str:
-    """A fingerprint of config/triage.toml, so a change of weights shows in the result file.
+def _weights_file(path: Path = TRIAGE_FILE) -> str:
+    """A fingerprint of the values in config/triage.toml, so a change of weights shows in the result file.
 
-    Line endings are normalized first, so a Windows checkout gives the same fingerprint as Git's copy.
+    Only the values count: a comment, the layout or a Windows line ending leaves it the same, so
+    writing down why a weight is what it is does not read as a change of weights.
     """
-    if not TRIAGE_FILE.exists():
+    if not path.exists():
         return "built in"
-    return hashlib.sha256(TRIAGE_FILE.read_bytes().replace(b"\r\n", b"\n")).hexdigest()[:12]
+    values = tomllib.loads(path.read_text(encoding="utf-8"))
+    return hashlib.sha256(json.dumps(values, sort_keys=True).encode("utf-8")).hexdigest()[:12]
 
 
 def evaluate(services, rows: pd.DataFrame, retrieval: str) -> tuple[dict[str, Any], pd.DataFrame]:
@@ -275,7 +278,7 @@ def summarize(scored: pd.DataFrame, retrieval: str) -> dict[str, Any]:
         "interval": "DeLong's 95% interval for each AUC and for the paired difference; ties count half",
         "retrieval": retrieval,
         "weights": dict(DEFAULT_WEIGHTS),
-        "triage_toml_sha256": _weights_file(),
+        "triage_values_sha256": _weights_file(),
     }
     result["limitations"] = list(LIMITATIONS)
     result["command"] = "python -I scripts/eval_inspection_auc.py" + (

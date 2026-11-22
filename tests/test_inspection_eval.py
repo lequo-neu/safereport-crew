@@ -89,3 +89,19 @@ def test_the_result_file_can_be_rebuilt_from_the_per_report_file(small_services,
     scored.to_csv(tmp_path / "scored.csv", index=False)
     again = pd.read_csv(tmp_path / "scored.csv", dtype={"id": str})
     assert inspection_eval.summarize(again, "bm25") == result
+
+
+def test_the_weights_fingerprint_counts_values_not_comments(tmp_path):
+    """Writing down why a weight is what it is must not read as a change of weights (#28)."""
+    plain = tmp_path / "plain.toml"
+    plain.write_text("default_capacity = 40.0\n[weights]\namputation = 3.0\n", encoding="utf-8")
+    commented = tmp_path / "commented.toml"
+    commented.write_text(
+        "# why\ndefault_capacity = 40.0\r\n\n[weights]\n# severity\namputation = 3.0  # per report\n",
+        encoding="utf-8",
+    )
+    changed = tmp_path / "changed.toml"
+    changed.write_text("default_capacity = 40.0\n[weights]\namputation = 2.0\n", encoding="utf-8")
+    fingerprint = inspection_eval._weights_file
+    assert fingerprint(plain) == fingerprint(commented) != fingerprint(changed)
+    assert fingerprint(tmp_path / "missing.toml") == "built in"

@@ -171,7 +171,7 @@
       "common_in_industry": 1.0,
       "possible_emphasis_program": 1.0
     },
-    "triage_toml_sha256": "8f4deb5ba0b1"
+    "triage_values_sha256": "10c9e1585ab2"
   },
   "limitations": [
     "OSHA's choices reflect its staffing, area office practice and the reports' timing, so the AUC measures agreement with past practice, not whether an inspection was needed.",
