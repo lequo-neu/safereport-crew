@@ -146,7 +146,9 @@ def save(crew: Crew, session: Session, name: str, content: bytes | str) -> str:
     folder.mkdir(parents=True, exist_ok=True)
     path = folder / name
     if isinstance(content, str):
-        path.write_text(content, encoding="utf-8")
+        # Write the text as it is: the csv module and DataFrame.to_csv() already end lines with
+        # \r\n on Windows, and text mode would add another \r to each (#17).
+        path.write_text(content, encoding="utf-8", newline="")
     else:
         path.write_bytes(content)
     return str(path)

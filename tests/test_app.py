@@ -3,14 +3,17 @@
 from __future__ import annotations
 
 from pathlib import Path
+from types import SimpleNamespace
 
 import gradio as gr
 from langgraph.checkpoint.memory import InMemorySaver
+import pandas as pd
 import pytest
 
 from safereport import views
 from safereport.app import build_app, role_view
 from safereport.employers import DecisionStore
+from safereport.outputs import triage_csv
 from safereport.views import Crew, Session
 
 
@@ -545,3 +548,20 @@ def test_all_industries_counts_every_industry(crew):
     ]
     assert any("all industries nationwide" in s for s in summaries), "not manufacturing only"
     assert "The count is for" not in talk, "the widest scope has nothing to widen"
+
+
+def test_a_download_is_written_as_its_text_is_on_any_system(tmp_path: Path):
+    # #17: on Windows, text mode turned the \r\n that the csv module and to_csv() write into
+    # \r\r\n, so every CSV opened with a blank line after each row.
+    folder = SimpleNamespace(folder=tmp_path)
+    rows = [{"report_id": "1", "note": "a"}, {"report_id": "2", "note": "b"}]
+    texts = {
+        "inspection_list.csv": triage_csv(rows),
+        "week.csv": pd.DataFrame(rows).to_csv(index=False),
+        "plain.csv": "report_id,note\n1,a\n2,b\n",
+    }
+    for name, text in texts.items():
+        path = Path(views.save(folder, Session(), name, text))
+        assert path.read_bytes() == text.encode("utf-8"), name
+        assert b"\r\r\n" not in path.read_bytes(), name
+        assert pd.read_csv(path, dtype=str).to_dict("records") == rows, name
