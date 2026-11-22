@@ -790,7 +790,22 @@ def ask_for_changes(crew: Crew, session: Session, table: pd.DataFrame, capacity:
                if flagged - flagged_before else "")
             + (f" No longer flagged as an imminent danger: {', '.join(sorted(flagged_before - flagged))}."
                if flagged_before - flagged else ""))  # fmt: skip
-    return week_view(crew, session, note + _moves(planned, _triage(crew, session)))
+    after = _triage(crew, session)
+    return week_view(crew, session, note + _kept_by_hand(crew, session, after) + _moves(planned, after))
+
+
+def _kept_by_hand(crew: Crew, session: Session, finding: dict[str, Any]) -> str:
+    """Rows a person sent to a letter keep that choice over an employer rule; the status says so."""
+    rules = crew.values(session.week_thread).get("rules", {})
+    wanted = {normalize_name(e) for e in rules.get("inspect_employers", [])}
+    by_hand = set(rules.get("force_letter", []))
+    kept = [r["report_id"] for r in finding["rows"]
+            if r["report_id"] in by_hand and normalize_name(r["employer"]) in wanted]  # fmt: skip
+    if not kept:
+        return ""
+    rows = "row" if len(kept) == 1 else "rows"
+    return (f" The employer rule leaves {len(kept)} {rows} you set to a letter by hand: {', '.join(kept)}."
+            " Move them to inspection to apply the rule.")  # fmt: skip
 
 
 def _moves(before: dict[str, str], finding: dict[str, Any]) -> str:

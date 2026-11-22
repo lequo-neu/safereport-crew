@@ -21,7 +21,7 @@ TALKS: dict[str, dict[str, dict[str, Any]]] = {
             "points": [
                 "Stop the machine and turn off every energy source: electric, air, hydraulic, gravity and stored springs.",
                 "Put your own lock and tag on each isolation point. Your lock, your key.",
-                "Try to start the machine before you reach in, then return the control to off.",
+                "With every lock on, stand clear and try the normal start controls to make sure the machine does not start, then return them to off.",
                 "If a jam keeps coming back, tell your supervisor. Do not clear it with the machine running.",
             ],
             "close": "Ask: what energy could still move this machine? If you are not sure, it is not locked out.",

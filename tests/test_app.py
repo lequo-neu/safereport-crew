@@ -93,6 +93,21 @@ def test_the_director_edits_rows_resumes_and_approves(crew):
     assert walmart["Decision"] == "Inspection" and "rule" in walmart["Reason"], (
         "case, commas and Inc are ignored"
     )
+    assert "set to a letter by hand" not in status, "nothing was kept from the rule"
+
+    # A row the Director sent to a letter keeps that choice when a rule for its employer comes
+    # later, and the status says so instead of reading as if the rule did nothing (B1 review).
+    walmart_id = walmart["Report"]
+    _, after, *_, status = views.ask_for_changes(
+        crew, session, after, 6, "WALMART INC", "Area Director", to_letter=[f"{walmart_id} Walmart"]
+    )
+    assert after[after["Report"] == walmart_id].iloc[0]["Decision"] == "RRI letter"
+    assert f"The employer rule leaves 1 row you set to a letter by hand: {walmart_id}." in status
+    _, after, *_, status = views.ask_for_changes(
+        crew, session, after, 6, "WALMART INC", "Area Director", to_inspect=[f"{walmart_id} Walmart"]
+    )
+    assert after[after["Report"] == walmart_id].iloc[0]["Decision"] == "Inspection"
+    assert "set to a letter by hand" not in status
 
     refused = views.approve(crew, session, "Triage officer")
     assert "Only the Area Director approves" in refused[5]
