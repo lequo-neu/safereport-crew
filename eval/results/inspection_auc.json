@@ -1,0 +1,187 @@
+{
+  "task": "B2, issue #3",
+  "question": "How far does the crew's stage 1 ranking agree with OSHA's own inspection choices?",
+  "reports": 1000,
+  "class_balance": {
+    "cases": 1000,
+    "inspected": 303,
+    "rate": 0.303,
+    "rate_ci95": [
+      0.275,
+      0.332
+    ]
+  },
+  "all_reports": {
+    "crew_score": {
+      "auc": 0.633,
+      "auc_ci95": [
+        0.596,
+        0.671
+      ]
+    },
+    "priority_alone": {
+      "auc": 0.682,
+      "auc_ci95": [
+        0.644,
+        0.72
+      ]
+    },
+    "severity_alone": {
+      "auc": 0.592,
+      "auc_ci95": [
+        0.559,
+        0.625
+      ]
+    },
+    "crew_score_minus_severity_alone": {
+      "auc_difference": 0.041,
+      "ci95": [
+        0.003,
+        0.079
+      ],
+      "p_value": 0.034
+    }
+  },
+  "category_two_only": {
+    "reports": 726,
+    "class_balance": {
+      "cases": 726,
+      "inspected": 205,
+      "rate": 0.282,
+      "rate_ci95": [
+        0.251,
+        0.316
+      ]
+    },
+    "priority": {
+      "auc": 0.656,
+      "auc_ci95": [
+        0.609,
+        0.703
+      ]
+    },
+    "severity_alone": {
+      "auc": 0.565,
+      "auc_ci95": [
+        0.526,
+        0.604
+      ]
+    },
+    "priority_minus_severity_alone": {
+      "auc_difference": 0.091,
+      "ci95": [
+        0.05,
+        0.131
+      ],
+      "p_value": 1.2e-05
+    }
+  },
+  "category_one": {
+    "cases": 274,
+    "inspected": 98,
+    "rate": 0.358,
+    "rate_ci95": [
+      0.303,
+      0.416
+    ],
+    "by_criterion": {
+      "hazard under an emphasis program": {
+        "cases": 192,
+        "inspected": 79,
+        "rate": 0.411,
+        "rate_ci95": [
+          0.344,
+          0.482
+        ]
+      },
+      "similar report from the employer within 12 months": {
+        "cases": 94,
+        "inspected": 19,
+        "rate": 0.202,
+        "rate_ci95": [
+          0.133,
+          0.294
+        ]
+      },
+      "two or more hospitalized": {
+        "cases": 8,
+        "inspected": 8,
+        "rate": 1.0,
+        "rate_ci95": [
+          0.676,
+          1.0
+        ]
+      }
+    }
+  },
+  "inspection_rate_by_quarter": {
+    "Q1": {
+      "cases": 265,
+      "inspected": 84,
+      "rate": 0.317,
+      "rate_ci95": [
+        0.264,
+        0.375
+      ]
+    },
+    "Q2": {
+      "cases": 270,
+      "inspected": 90,
+      "rate": 0.333,
+      "rate_ci95": [
+        0.28,
+        0.392
+      ]
+    },
+    "Q3": {
+      "cases": 303,
+      "inspected": 93,
+      "rate": 0.307,
+      "rate_ci95": [
+        0.258,
+        0.361
+      ]
+    },
+    "Q4": {
+      "cases": 162,
+      "inspected": 36,
+      "rate": 0.222,
+      "rate_ci95": [
+        0.165,
+        0.292
+      ]
+    }
+  },
+  "method": {
+    "data": "the 1,000 reports of the 2025 holdout (data/splits/holdout_2025.csv), which no rule, weight or threshold was tuned on",
+    "label": "inspected = OSHA's Inspection field is filled in; past practice, not ground truth",
+    "crew_score": "stage 1 of the weekly list, offline: Category 1 reports first (+100), then the Category 2 priority",
+    "priority_alone": "the Category 2 priority, ignoring Category 1",
+    "severity_alone": "amputation, loss of an eye and people hospitalized (at most two), with the priority's own weights",
+    "interval": "DeLong's 95% interval for each AUC and for the paired difference; ties count half",
+    "retrieval": "hybrid",
+    "weights": {
+      "amputation": 3.0,
+      "loss_of_eye": 3.0,
+      "hospitalized": 2.0,
+      "fatality_potential": 2.0,
+      "failed_safeguard": 2.0,
+      "temporary_worker": 1.5,
+      "specific_standard": 1.0,
+      "common_in_industry": 1.0,
+      "possible_emphasis_program": 1.0
+    },
+    "triage_toml_sha256": "8f4deb5ba0b1"
+  },
+  "limitations": [
+    "OSHA's choices reflect its staffing, area office practice and the reports' timing, so the AUC measures agreement with past practice, not whether an inspection was needed.",
+    "The score is stage 1 only (offline rules, no model); a stage 2 model branch can change a report's facts and so its priority.",
+    "The crew plans inspections within inspector days by an integer program; the AUC ranks reports by score and ignores the days an inspection takes.",
+    "Imminent danger and repeat offenders (SVEP) are not in the score: a person flags the first, and the data cannot show the second.",
+    "The priority factors were chosen with inspection rates the proposal quotes for all reports from 2015 to 2025, the holdout included; no weight was fitted to them.",
+    "Late 2025 reports may not have their inspection recorded yet; see the rate by quarter.",
+    "Federal OSHA states only; most State Plan states are missing.",
+    "Ranking Category 1 first lowers the AUC below the priority alone, because OSHA inspected many Category 1 reports less often than the rule implies; the employer history criterion (a confirmed similar report within 12 months) is inspected below the overall rate (see category_one.by_criterion). This is a finding about agreement with past practice; the rules were not changed for it."
+  ],
+  "command": "python -I scripts/eval_inspection_auc.py"
+}
