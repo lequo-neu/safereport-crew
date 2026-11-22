@@ -50,6 +50,15 @@ Each task records here which AI tool helped and how the result was checked.
   checked by Hamad: the call counts from the per agent log, the 31 reports of the week, and the
   one decision field that differs. Kevin reran it on another machine: the same calls, decisions
   and changed citation, and a cost estimate within one token. Offline, nothing was paid.
+* **B1, review of the triage logic and the app** (Hamad, the B1 pull request). The Arabic
+  revision: an AI assistant drafted suggestions and questions; Hamad, a native speaker, read all
+  26 lines against the English and decided each change. Claude Code drafted the rest of
+  `docs/reviews/hamad.md` (B1): the Category 1 checks against OSHA's memo and directives (read
+  from osha.gov), the weights evidence from the 2015 to 2024 reports, a scripted browser
+  walkthrough (Playwright, offline) at laptop and phone width, and automated checks of the Arabic
+  Word file in Microsoft Word and the week's CSV in Excel. Hamad decided which findings are defects and which are
+  questions. Not checked by a person yet: the walkthrough screenshots, and the Arabic Word file
+  read on screen. Nothing was paid.
 
 ## The safety talk translations
 
