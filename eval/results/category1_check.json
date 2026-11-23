@@ -76,38 +76,41 @@
   },
   "similar_report_within_12_months": {
    "cases": 100,
-   "label_yes": 0,
-   "label_no": 1,
-   "cannot_tell": 99,
+   "label_yes": 12,
+   "label_no": 84,
+   "cannot_tell": 4,
    "unlabelled": 0,
    "rule_yes": 12,
    "recall": {
-    "k": 0,
-    "n": 0,
-    "rate": null,
-    "ci95": null
+    "k": 12,
+    "n": 12,
+    "rate": 1.0,
+    "ci95": [
+     0.7575,
+     1.0
+    ]
    },
    "false_alarm_rate": {
     "k": 0,
-    "n": 1,
+    "n": 84,
     "rate": 0.0,
     "ci95": [
      0.0,
-     0.7935
+     0.0437
     ]
    },
    "cannot_tell_share": {
-    "k": 99,
+    "k": 4,
     "n": 100,
-    "rate": 0.99,
+    "rate": 0.04,
     "ci95": [
-     0.9455,
-     0.9982
+     0.0157,
+     0.0984
     ]
    },
-   "cannot_tell_rule_yes": 12,
+   "cannot_tell_rule_yes": 0,
    "cannot_tell_reasons": {
-    "no confirmed employer match established in": 99
+    "possible match only by scripts/category1_history_by_guide.py, the": 4
    }
   },
   "emphasis_program_hazard": {
@@ -149,43 +152,46 @@
     "grinder-disc injury, applicability of the manufacturing": 1,
     "toxic chemical exposure, PSM program applicability": 1,
     "hot chemical release, applicability of a": 1,
-    "amputation occurred before the updated manufacturing": 1,
+    "the amputation followed a fall and": 1,
     "machine-related injury, but applicability of the": 1
    }
   }
  },
  "category_one": {
   "cases": 100,
-  "label_yes": 18,
-  "label_no": 0,
-  "cannot_tell": 82,
+  "label_yes": 28,
+  "label_no": 65,
+  "cannot_tell": 7,
   "unlabelled": 0,
   "rule_yes": 28,
   "recall": {
-   "k": 14,
-   "n": 18,
-   "rate": 0.7778,
+   "k": 24,
+   "n": 28,
+   "rate": 0.8571,
    "ci95": [
-    0.5479,
-    0.91
+    0.6851,
+    0.943
    ]
   },
   "false_alarm_rate": {
-   "k": 0,
-   "n": 0,
-   "rate": null,
-   "ci95": null
-  },
-  "cannot_tell_share": {
-   "k": 82,
-   "n": 100,
-   "rate": 0.82,
+   "k": 3,
+   "n": 65,
+   "rate": 0.0462,
    "ci95": [
-    0.7333,
-    0.883
+    0.0158,
+    0.1271
    ]
   },
-  "cannot_tell_rule_yes": 14,
+  "cannot_tell_share": {
+   "k": 7,
+   "n": 100,
+   "rate": 0.07,
+   "ci95": [
+    0.0343,
+    0.1375
+   ]
+  },
+  "cannot_tell_rule_yes": 1,
   "written_differs_from_the_guide_rule": []
  },
  "imminent_danger_apart": {
@@ -193,9 +199,9 @@
  },
  "imminent_danger_yes_cases": [],
  "employer_history_labels": {
-  "yes": 0,
-  "no": 1,
-  "cannot_tell": 99,
+  "yes": 12,
+  "no": 84,
+  "cannot_tell": 4,
   "unlabelled": 0
  },
  "narrative_vs_count": {
@@ -233,7 +239,11 @@
    ]
   },
   "category_one": {
-   "rule_yes_label_no": [],
+   "rule_yes_label_no": [
+    "K031",
+    "K058",
+    "K079"
+   ],
    "rule_no_label_yes": [
     "K009",
     "K055",
@@ -1222,8 +1232,8 @@
   },
   "similar_report_within_12_months": {
    "n": 15,
-   "agreement": 0.0,
-   "kappa": 0.0
+   "agreement": 1.0,
+   "kappa": 1.0
   },
   "emphasis_program_hazard": {
    "n": 15,
@@ -1237,8 +1247,8 @@
   },
   "category_one": {
    "n": 15,
-   "agreement": 0.3333,
-   "kappa": 0.2063
+   "agreement": 0.8,
+   "kappa": 0.6154
   }
  }
 }

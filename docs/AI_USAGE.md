@@ -109,6 +109,19 @@ Each task records here which AI tool helped and how the result was checked.
   22 November, 23:49. A spreadsheet of Hamad's that matched it on 84 of those 85 cases was not
   used: Claude Code flagged the overlap on 23 November, and Hamad then labelled the 100 again in
   the note described above, having seen that pass before. It is not scored or committed.
+  **Kevin's ruling on #20 (23 November, evening).** On Kevin's instruction the employer history
+  column (`similar_report_within_12_months`) is no longer Hamad's hand label: Claude Code ran
+  `scripts/category1_history_by_guide.py` (the guide's written rule over OSHA's file, no crew
+  code, no model call) and copied its answers into the label file: 12 yes, 84 no, and its 4
+  possible-only matches left `cannot_tell`. Each row's `notes` names the script and keeps Hamad's
+  earlier hand label; each yes carries the earlier report's ID and date in `evidence`, marked
+  "(scripted)". Claude Code then recomputed `category_one` by the guide's rule and applied
+  Kevin's two other rulings mechanically: the amputation program read from CPL 03-00-027 for all
+  of 2025 (a note on the six reports before 27 June; CPL 03-00-022's list was not read), and
+  K083's citation (CPL 03-00-025 II.A) and low confidence. Hamad decided K069 on its merits
+  himself (`cannot_tell`, with his reason); Claude Code wrote no narrative label. It re-scored
+  with `--source human` and redrafted the results in `docs/reviews/hamad.md` and the README from
+  `eval/results/category1_check.json`. Khoa's 15 are unchanged. Nothing was paid.
 
 ## The safety talk translations
 
