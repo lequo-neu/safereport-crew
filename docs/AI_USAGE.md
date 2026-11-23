@@ -57,8 +57,8 @@ Each task records here which AI tool helped and how the result was checked.
   from osha.gov), the weights evidence from the 2015 to 2024 reports, a scripted browser
   walkthrough (Playwright, offline) at laptop and phone width, and automated checks of the Arabic
   Word file in Microsoft Word and the week's CSV in Excel. Hamad decided which findings are defects and which are
-  questions. Not checked by a person yet: the walkthrough screenshots, and the Arabic Word file
-  read on screen. Nothing was paid.
+  questions. Hamad read the Arabic lockout Word file on screen in Microsoft Word and confirmed it
+  (22 November). Not checked by a person yet: the walkthrough screenshots. Nothing was paid.
 
 ## The safety talk translations
 

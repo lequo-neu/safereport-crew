@@ -270,7 +270,8 @@ are not grounds to tune the criterion on this week.
   under the Trends icon (`phone_psm_week_tab_clicked.png`). No console errors in either pass.
 * **Limits of the walkthrough.** Driven by a script in Chromium, not by hand in Chrome; the phone
   run is Chromium's iPhone 12 Pro emulation, not a phone. The CSV and one Arabic Word file were
-  opened in Excel 16 and Word 16 by automation (below), not read on screen by a person. All of it
+  opened in Excel 16 and Word 16 by automation (below); of these, only the Arabic lockout Word
+  file was then read on screen by a person (Hamad, below). All of it
   offline: the models' answers are the offline rules', and
   the routing is what the router would call.
 
@@ -362,8 +363,10 @@ again in the note under it.
   the app's `safety_talk_lockout_ar.docx` has `w:bidi` on all 7 paragraphs and no `w:jc`, holds
   the revised text, opens in Word as one page, and Word lays every paragraph out from the right
   margin with the bullets aligned (`word_arabic_talk_on_main_with_b1.png`, from Word's own PDF
-  export). **Still for Hamad:** read the file on screen as a native speaker; nothing here is that
-  reading.
+  export). **Read on screen by Hamad (22 November).** Hamad opened `safety_talk_lockout_ar.docx`
+  in Microsoft Word and reviewed it as a native speaker: the Arabic reads correctly, the text
+  starts from the right, and the bullets are correctly positioned. That reading covers the
+  lockout file; the other three topics' files were checked by automation only.
 * **The text: corrected.** Hamad reviewed all 26 lines (the lead and four topics) against the
   English, with an AI assistant's draft and questions, and decided each change. All 26 Arabic
   strings in `src/safereport/talk_languages.py` were revised; the English, the other languages,
