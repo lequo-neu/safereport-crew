@@ -1,8 +1,8 @@
 # Labeling guide: does a report meet OSHA's Category 1 criteria?
 
 > **Task B3, issue #4.** The labeling rules below are settled: Kevin locked them in on issue #4
-> on 21 November 2026 (the six rules are quoted in "The settled rules"). Each criterion says
-> where its rule comes from: **OSHA memo** (the memo's own words) or **Settled** (one of the six
+> on 21 November 2026 (the seven rules are quoted in "The settled rules"). Each criterion says
+> where its rule comes from: **OSHA memo** (the memo's own words) or **Settled** (one of the seven
 > rules). `docs/LABELING_GUIDE.md` covers the standards labels; this file covers the Category 1
 > hand check only.
 
@@ -33,6 +33,14 @@ From Kevin's comment on issue #4, 21 November 2026:
 6. **No tuning on the sample**: the rules are scored as they are on `main` today (commit
    `fd15b06`). If the 100 cases show a rule should change, that goes in a new issue, and a
    changed rule is not re-scored on the same 100.
+
+From Kevin's later comment on issue #4, 21 November 2026:
+
+7. **The hospitalized count**: go by the `hospitalized` field, the one the rules and the app
+   read, so the hand check scores the same input the crew sees. When the narrative disagrees,
+   write it in `notes` (for example "narrative: 2 hospitalized, count says 1"). The number of such
+   cases goes in `docs/reviews/hamad.md` as a data quality note, with the ID of any that would
+   change Category 1.
 
 ## The files
 
@@ -76,7 +84,7 @@ never loses labels.
 | `emphasis_program` | yours, when `emphasis_program_hazard` is `yes` | the program's citation, for example `CPL 03-00-027` |
 | `evidence` | yours, when any criterion is `yes` | the words or the field that show it; for employer history, the earlier report's ID and date |
 | `confidence` | **yours** | `high`, `medium` or `low`, as in `docs/LABELING_GUIDE.md` |
-| `notes` | yours; required for every `cannot_tell` | the reason for each `cannot_tell`; "fatality" if the narrative says the worker died; a possible local or regional program |
+| `notes` | yours; required for every `cannot_tell` | the reason for each `cannot_tell`; "fatality" if the narrative says the worker died; a narrative that disagrees with the `hospitalized` count (rule 7); a possible local or regional program |
 
 `category_one` leaves out imminent danger and repeat offenders: the rules do not decide them
 (settled rules 2 and 5), so they are reported apart and do not change `category_one`.
@@ -87,11 +95,10 @@ The memo says an inspection is conducted "if any one of the conditions below is 
 lists six. The file has a column for five of them; the fourth cannot be judged from a report.
 
 **1. Fatalities and two or more hospitalized.** *OSHA memo:* "All fatalities and reports of 2 or
-more in-patient hospitalizations". Write `yes` when the `hospitalized` count is 2 or more, or the
-narrative says two or more workers were admitted as in-patients. A death is not a column: write
-"fatality" in `notes`. When the count and the narrative disagree, go by the count and write the
-disagreement in `notes` (the one point the six rules do not cover; raise it on #4 if you
-disagree).
+more in-patient hospitalizations". *Settled (rule 7):* write `yes` when the `hospitalized`
+count is 2 or more, and `no` when it is 0 or 1, whatever the narrative says. When the narrative
+disagrees with the count, write it in `notes`, for example "narrative: 2 hospitalized, count
+says 1". A death is not a column: write "fatality" in `notes`.
 
 **2. A worker under 18.** *OSHA memo:* "Any injury involving a worker under 18." Write `yes` only
 when the narrative gives the injured worker's age as under 18, or calls the worker a minor. A
