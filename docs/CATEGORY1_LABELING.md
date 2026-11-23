@@ -173,4 +173,6 @@ Save the file under the same name (CSV, UTF-8) and send it back. Khoa returns hi
 23 November at noon. The scoring command, `scripts/score_category1_check.py`, compares the rules as they are on
 `main` with these labels: recall and false alarms with 95% Wilson intervals, per criterion and
 overall, on the cases that are not `cannot_tell`; the `cannot_tell` share with its reasons;
-imminent danger apart; and the agreement on the 15 shared cases.
+imminent danger apart; the employer history counts (for #18); the narratives that disagree
+with the `hospitalized` count (rule 7); and the agreement on the 15 shared cases. It writes to
+`eval/results/` only a file in which every row is labelled and none is marked as AI-assisted.

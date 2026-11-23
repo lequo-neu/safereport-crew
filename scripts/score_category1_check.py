@@ -7,7 +7,20 @@ The crew's rules run as they are (offline, nothing paid): for each case, the sam
 weekly triage gives `triage.category_one` (the employer history, the verified emphasis programs).
 Each criterion is then compared with the labels on the cases they decide: recall (rule yes among
 label yes) and false alarms (rule yes among label no), with Wilson 95% intervals, plus the
-cannot_tell share and its reasons. Imminent danger is reported apart (settled rule 5).
+cannot_tell share and its reasons. Imminent danger is reported apart (settled rule 5). Also
+reported: the employer history labels for #18, and the notes that say the narrative gives another
+hospitalized number than the count (rule 7).
+
+Only complete hand labels go in `eval/results/`: the command refuses a file with an unlabelled row,
+a `category_one` that does not follow the four criteria, or a row marked as AI-assisted.
+
+    python scripts/score_category1_check.py --labels data/labels/category1_check.csv \
+        --source human --out eval/results/category1_check.json \
+        --second data/labels/category1_check_Khoa.csv \
+        --ai-pass <the AI first pass> --ai-out eval/provisional/category1_ai_vs_human.json
+
+`--ai-out` holds only how often the AI first pass agrees with the hand labels (no per-case answer),
+and never goes in `eval/results/`.
 
 `--source` must say who wrote the labels. A file from a model (`ai-provisional`) is scored the
 same way, but its numbers measure agreement with that model, not the rules' accuracy, and the
@@ -22,6 +35,7 @@ import csv
 import json
 import math
 from pathlib import Path
+import re
 from typing import Any
 
 
@@ -31,6 +45,9 @@ CRITERIA = {
     "similar_report_within_12_months": "similar report from the employer within 12 months",
     "emphasis_program_hazard": "hazard under an emphasis program",
 }
+LABELLED = [*CRITERIA, "imminent_danger", "category_one", "confidence"]
+# Rows approved from an AI-assisted file carry this in notes; they are not hand labels.
+AI_ASSISTED_MARK = "[AI-assisted"
 SOURCES = {
     "human": "labels written by a person, by hand",
     "ai-provisional": "provisional labels from an AI model and scripts; agreement with them is not accuracy",
@@ -81,9 +98,62 @@ def reason(notes: str, column: str) -> str:
     return ""
 
 
+def read(path: Path) -> list[dict[str, str]]:
+    with path.open(encoding="utf-8-sig", newline="") as f:
+        return list(csv.DictReader(f))
+
+
 def category_one_label(row: dict[str, str]) -> str:
     four = [row[c] for c in CRITERIA]
     return "yes" if "yes" in four else ("no" if all(v == "no" for v in four) else "cannot_tell")
+
+
+def narrative_vs_count(rows: list[dict[str, str]]) -> dict[str, Any]:
+    """Rule 7: notes saying the narrative gives another hospitalized number than the count.
+
+    The label goes by the count. A case "could change Category 1" when reading the narrative's
+    number instead would flip the two-or-more criterion and no other criterion is yes.
+    """
+    cases, could_change = [], []
+    for r in rows:
+        found = re.search(r"narrative:\s*(\d+)\s*hospitali[sz]ed", r.get("notes", ""), re.IGNORECASE)
+        if not found:
+            continue
+        cases.append(r["case"])
+        said, count = int(found.group(1)), int(r.get("hospitalized") or 0)
+        others = any(r.get(c) == "yes" for c in CRITERIA if c != "two_or_more_hospitalized")
+        if (said >= 2) != (count >= 2) and not others:
+            could_change.append(r["case"])
+    return {"count": len(cases), "cases": cases, "could_change_category_one": could_change}
+
+
+def label_problems(rows: list[dict[str, str]]) -> list[str]:
+    """Why a file cannot be scored as hand labels into eval/results (empty when it can)."""
+    out = []
+    for r in rows:
+        blank = [c for c in LABELLED if not (r.get(c) or "").strip()]
+        if blank:
+            out.append(f"{r['case']}: unlabelled {', '.join(blank)}")
+        elif r["category_one"] != category_one_label(r):
+            out.append(f"{r['case']}: category_one does not follow the four criteria")
+        if AI_ASSISTED_MARK in (r.get("notes") or ""):
+            out.append(f"{r['case']}: marked as AI-assisted, not a hand label")
+    return out
+
+
+def check_outputs(source: str, out: Path, rows: list[dict[str, str]], ai_out: Path | None) -> None:
+    """Refuse to write anything but complete hand labels' scores into eval/results."""
+    if ai_out is not None and "eval/results" in ai_out.as_posix():
+        raise SystemExit("The AI pass comparison does not go in eval/results; use eval/provisional.")
+    if "eval/results" not in out.as_posix():
+        return
+    if source != "human":
+        raise SystemExit("AI-provisional scores do not go in eval/results; write them elsewhere.")
+    found = label_problems(rows)
+    if found:
+        raise SystemExit(
+            "Not complete hand labels, so not written to eval/results:\n  " + "\n  ".join(found[:20])
+        )
 
 
 def score(rows: list[dict[str, str]], crew: dict[str, dict[str, bool]], source: str) -> dict[str, Any]:
@@ -103,6 +173,10 @@ def score(rows: list[dict[str, str]], crew: dict[str, dict[str, bool]], source: 
     ]
     imminent = Counter(r["imminent_danger"] or "unlabelled" for r in rows)
     result["imminent_danger_apart"] = dict(imminent)
+    result["imminent_danger_yes_cases"] = [r["case"] for r in rows if r["imminent_danger"] == "yes"]
+    history = Counter(r["similar_report_within_12_months"] or "unlabelled" for r in rows)
+    result["employer_history_labels"] = {v: history[v] for v in ["yes", "no", "cannot_tell", "unlabelled"]}
+    result["narrative_vs_count"] = narrative_vs_count(rows)
     result["disagreements"] = {
         column: {
             "rule_yes_label_no": [r["case"] for r in rows if r[column] == "no" and crew[r["case"]][trigger]],
@@ -136,6 +210,14 @@ def agreement(a: list[dict[str, str]], b: list[dict[str, str]], columns: list[st
     return out
 
 
+def shared_cases(a: list[dict[str, str]], b: list[dict[str, str]]) -> dict[str, Any]:
+    """Which cases both files hold, and which of them the second file leaves unlabelled."""
+    mine = {r["case"] for r in a}
+    shared = [r for r in b if r["case"] in mine]
+    missing = [r["case"] for r in shared if any(not (r.get(c) or "").strip() for c in LABELLED)]
+    return {"shared": len(shared), "unlabelled_in_second": missing, "complete": bool(shared) and not missing}
+
+
 def crew_flags(services: Any, rows: list[dict[str, str]]) -> dict[str, dict[str, Any]]:
     """What the crew's rules decide for each case, with the inputs the weekly triage gives them."""
     from safereport.graph import _report_from_row
@@ -166,23 +248,44 @@ def main() -> None:
     parser.add_argument("--source", choices=sorted(SOURCES), required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--second", type=Path, help="a second person's labels on shared cases, for agreement")
+    parser.add_argument(
+        "--ai-pass", type=Path, help="the AI first pass, compared with these labels afterwards"
+    )
+    parser.add_argument("--ai-out", type=Path, help="where that comparison goes (not eval/results)")
     args = parser.parse_args()
-    if args.source != "human" and "eval/results" in args.out.as_posix():
-        raise SystemExit("AI-provisional scores do not go in eval/results; write them elsewhere.")
+    if bool(args.ai_pass) != bool(args.ai_out):
+        raise SystemExit("--ai-pass and --ai-out go together.")
+    rows = read(args.labels)
+    check_outputs(args.source, args.out, rows, args.ai_out)
 
     from safereport.graph import load_services
 
-    rows = list(csv.DictReader(args.labels.open(encoding="utf-8")))
     crew = crew_flags(load_services(), rows)
     result = score(rows, crew, args.source)
     result["rules"] = "triage.category_one on the checked-out code, offline"
     result["crew"] = crew
     if args.second:
-        second = list(csv.DictReader(args.second.open(encoding="utf-8")))
-        result["agreement"] = agreement(rows, second, [*CRITERIA, "category_one"])
+        second = read(args.second)
+        if any(AI_ASSISTED_MARK in (r.get("notes") or "") for r in second):
+            raise SystemExit(f"{args.second} has rows marked as AI-assisted; agreement needs hand labels.")
+        result["agreement_cases"] = shared_cases(rows, second)
+        if result["agreement_cases"]["complete"]:
+            result["agreement"] = agreement(rows, second, [*CRITERIA, "imminent_danger", "category_one"])
+        else:
+            result["agreement"] = "pending: the second file does not label every shared case"
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, indent=1), encoding="utf-8")
     print(f"wrote {args.out}")
+    if args.ai_pass:
+        ai = read(args.ai_pass)
+        compared = {
+            "what": "the AI first pass against these labels: agreement with a person, not accuracy",
+            "labels": SOURCES[args.source], "cases": shared_cases(rows, ai)["shared"],
+            "agreement": agreement(rows, ai, [*CRITERIA, "category_one"]),
+        }  # fmt: skip
+        args.ai_out.parent.mkdir(parents=True, exist_ok=True)
+        args.ai_out.write_text(json.dumps(compared, indent=1), encoding="utf-8")
+        print(f"wrote {args.ai_out}")
 
 
 if __name__ == "__main__":

@@ -101,3 +101,78 @@ def test_the_crew_flags_come_from_the_rules(small_services):
     flags = score_mod.crew_flags(small_services, [{"case": "K1", "sir_id": str(first["id"])}])
     assert set(flags["K1"]) >= {*score_mod.CRITERIA.values(), "category_one"}
     assert flags["K1"]["category_one"] == any(flags["K1"][n] for n in score_mod.CRITERIA.values())
+
+
+def test_narrative_disagreements_are_counted_and_the_ones_that_matter_listed():
+    rows = [
+        {**row("K1", notes="narrative: 2 hospitalized, count says 1"), "hospitalized": "1"},
+        {
+            **row("K2", notes="narrative: 3 hospitalized, count says 1", worker_under_18="yes"),
+            "hospitalized": "1",
+        },
+        {**row("K3", notes="fatality"), "hospitalized": "0"},
+        {
+            **row("K4", notes="narrative: 1 hospitalized, count says 2", two_or_more_hospitalized="yes"),
+            "hospitalized": "2",
+        },
+    ]
+    found = score_mod.narrative_vs_count(rows)
+    assert found["count"] == 3 and found["cases"] == ["K1", "K2", "K4"]
+    # K2 stays Category 1 through another criterion, so only K1 and K4 could change.
+    assert found["could_change_category_one"] == ["K1", "K4"]
+
+
+def test_score_reports_employer_history_and_imminent_danger_apart():
+    rows = [
+        row("K1", similar_report_within_12_months="yes"),
+        row(
+            "K2",
+            similar_report_within_12_months="cannot_tell",
+            notes="similar_report_within_12_months: possible",
+        ),
+        row("K3", imminent_danger="yes"),
+        row("K4"),
+    ]
+    result = score_mod.score(rows, crew(), "human")
+    assert result["employer_history_labels"] == {"yes": 1, "no": 2, "cannot_tell": 1, "unlabelled": 0}
+    assert result["imminent_danger_yes_cases"] == ["K3"]
+    assert result["imminent_danger_apart"] == {"cannot_tell": 3, "yes": 1}
+    assert result["narrative_vs_count"]["count"] == 0
+
+
+def full(case: str, **labels: str) -> dict[str, str]:
+    return {**row(case, **labels), "confidence": "high"}
+
+
+def test_only_complete_untagged_hand_labels_go_to_eval_results():
+    good = [full("K1"), full("K2", worker_under_18="yes")]
+    out = Path("eval/results/category1_check.json")
+    score_mod.check_outputs("human", out, good, None)  # complete hand labels: allowed
+
+    with pytest.raises(SystemExit, match="unlabelled"):
+        score_mod.check_outputs("human", out, [*good, {**full("K3"), "confidence": ""}], None)
+    with pytest.raises(SystemExit, match="AI-assisted"):
+        tagged = {**full("K3"), "notes": "[AI-assisted, user-approved label from CSV export; not blind]"}
+        score_mod.check_outputs("human", out, [*good, tagged], None)
+    with pytest.raises(SystemExit, match="follow the four criteria"):
+        score_mod.check_outputs("human", out, [*good, {**full("K3"), "category_one": "yes"}], None)
+    with pytest.raises(SystemExit, match="eval/results"):
+        score_mod.check_outputs("ai-provisional", out, good, None)
+    with pytest.raises(SystemExit, match="eval/provisional"):
+        score_mod.check_outputs("human", out, good, Path("eval/results/ai_vs_human.json"))
+    # Outside eval/results anything may be scored (it is labelled by its source).
+    score_mod.check_outputs(
+        "ai-provisional", Path("elsewhere/x.json"), [{**full("K3"), "confidence": ""}], None
+    )
+
+
+def test_shared_cases_say_when_the_second_file_is_not_complete():
+    mine = [full("K1"), full("K2"), full("K3")]
+    second = [full("K2"), {**full("K3"), "category_one": ""}, full("K9")]
+    assert score_mod.shared_cases(mine, second) == {
+        "shared": 2,
+        "unlabelled_in_second": ["K3"],
+        "complete": False,
+    }
+    assert score_mod.shared_cases(mine, [full("K1")])["complete"] is True
+    assert score_mod.shared_cases(mine, [full("K7")])["complete"] is False

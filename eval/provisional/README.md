@@ -44,16 +44,17 @@ words miss; and amputations from a hand tool or a dropped roll, which the crew c
 
 ## Still needs people
 
-1. **Labels on all 100, by hand and blind to this pass** (Hamad's labels are AI-assisted and do
-   not meet this; see `docs/AI_USAGE.md`) (Kevin on #4, 22 November: a
+1. **Labels on all 100, by hand and blind to this pass** (Hamad's earlier labels are AI-assisted
+   and do not meet this; see `docs/AI_USAGE.md`) (Kevin on #4, 22 November: a
    partial review would leave the other cases with the AI's labels, so recall and false alarms
-   would measure agreement with the AI, not a hand check). Scored with `--source human` into
-   `eval/results/`.
+   would measure agreement with the AI, not a hand check). Hamad's fresh round from a blank copy
+   (Kevin on #4, 23 November) is scored with `--source human` into `eval/results/`.
 2. Khoa's 15 and Hamad's same 15, labelled blind, for agreement (`--second`).
 3. The 4 possible employer matches are part of those labels.
 
 Once the human labels are in, the AI pass is compared with them as a separate line (how often the
-two agree, `agreement()` in the scorer), outside `eval/results/`.
+two agree, per criterion, with Cohen's kappa), in `eval/provisional/category1_ai_vs_human.json`:
+`--ai-pass` and `--ai-out` in the scorer, which refuses to write that comparison to `eval/results/`.
 
 The flagged cases are listed with the held per-case file, not here, so the list cannot hint at
 where the AI was unsure before the hand labels are done.

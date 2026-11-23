@@ -38,11 +38,26 @@ open points on issue #4 on 21 November 2026.
   only in the same state.
 
 **Results.** The blind hand check Kevin set on #4 (all 100 by hand, blind to the AI pass) is
-**not done**, so there is no validated result yet. What exists, on Hamad's machine and not on
-GitHub, is a labelling of all 100 that is AI-assisted and approved by Hamad case by case (see
-`docs/AI_USAGE.md`). It was scored only as `--source ai-provisional`, outside `eval/results/`;
-its numbers measure the rules against those labels, not the rules' accuracy, and are not
-reported here as a validation. Khoa's 15 are not labelled yet, so there is no agreement figure.
+**not done yet**, so there is no validated result yet.
+
+* **The earlier review (21 and 22 November), AI-assisted.** Hamad personally reviewed all 100
+  cases in Excel, corrected the classifications he disagreed with, and finalized all 100 labels.
+  The file he reviewed was built from the AI first pass, so those labels are AI-assisted, not
+  blind (see `docs/AI_USAGE.md`). They stay on his machine, were scored only as
+  `--source ai-provisional` outside `eval/results/`, and are not reported as a validation.
+* **The fresh round (23 November), as Kevin set on #4 on 23 November.** All 100 labelled again by
+  hand from a blank copy, with the AI-assisted file closed, from the narrative, the coded fields
+  and the guide only, with new notes. Its results go here, from `eval/results/category1_check.json`
+  (`scripts/score_category1_check.py --source human`): recall and false alarms with 95% Wilson
+  intervals, the `cannot_tell` share and reasons, imminent danger apart, the employer history
+  counts for #18, and the narratives that disagree with the `hospitalized` count (rule 7).
+  *Limitation:* the round is blind to the AI-assisted file, not to an earlier reading: Hamad had
+  seen the AI first pass and the AI-assisted file before it.
+* **Khoa's 15** (K010, K021, K022, K032, K035, K049, K060, K069, K078, K082, K083, K088, K089,
+  K090, K094) are labelled by Khoa without seeing Hamad's labels or the AI pass. The agreement on
+  them is computed once both sets are in.
+* The AI first pass is compared with the fresh labels afterwards, as agreement only, in
+  `eval/provisional/`, not `eval/results/`.
 
 ## B1. Review of the triage logic and the app (issue #2)
 

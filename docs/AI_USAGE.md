@@ -74,15 +74,27 @@ Each task records here which AI tool helped and how the result was checked.
   (the report, OSHA's codes, the same-state reports in the history window and the guide's
   rules; never the crew's output or OSHA's inspection field), and a bulk-save script that writes
   only rows passing the guide's checks, with a backup and a row-by-row check afterwards.
-  **Hamad's 100 labels are AI-assisted, not blind hand labels.** They come from an AI-assisted
-  review file that Hamad read and approved case by case; 76 of the 100 notes begin with the same
-  text as the AI first pass, so they are not independent of it. Every row's notes say so.
+  **Hamad's earlier 100 labels are AI-assisted, not blind hand labels.** Hamad personally
+  reviewed all 100 cases in Excel, corrected the classifications he disagreed with, and finalized
+  all 100 labels; the file he reviewed was built from the AI first pass, and 76 of the 100 notes
+  begin with the same text as that pass, so they are not independent of it. Every row's notes say so.
   Claude Code made formatting-only changes to fit the guide: the reason for each `cannot_tell`
   in the guide's `column: reason` form; imminent danger `cannot_tell` (rule 5) where the file
   said "no" (65 cases); and, where the file's overall answer contradicted its own criteria
   (25 cases), the overall answer that follows the criteria, on Hamad's decision. They are not the
   blind check Kevin set on #4: scored only as `--source ai-provisional`, kept out of
   `eval/results/`. Khoa's 15 have not been labelled yet.
+  **The fresh round (Kevin on #4, 23 November):** Hamad labels all 100 again by hand from a blank
+  copy, with the AI-assisted file closed and new notes. That round is blind to the file but not to
+  an earlier reading: before it, Hamad had seen the AI first pass (made on 21 November) and the
+  AI-assisted file built from it. For it Claude Code set up the blank copy, made the review page
+  refuse any file or note carrying the AI-assisted mark, and added keyboard and voice commands
+  (the browser's speech recognition turns the reviewer's own spoken answers into the same clicks;
+  nothing is filled in), and extended the scoring command: the employer history counts, the
+  narrative against the `hospitalized` count, imminent danger cases apart, and a check that only
+  complete hand labels with no AI-assisted mark are written to `eval/results/`. The AI first pass
+  is then compared with the fresh labels as agreement only, in `eval/provisional/`. No model call
+  went through the app for any of this; nothing was paid.
 
 ## The safety talk translations
 
