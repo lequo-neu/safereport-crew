@@ -59,6 +59,69 @@ Each task records here which AI tool helped and how the result was checked.
   Word file in Microsoft Word and the week's CSV in Excel. Hamad decided which findings are defects and which are
   questions. Hamad read the Arabic lockout Word file on screen in Microsoft Word and confirmed it
   (22 November). Not checked by a person yet: the walkthrough screenshots. Nothing was paid.
+* **B3, hand check of the Category 1 rules** (Hamad, pull request #20). Claude Code wrote the
+  sampling script and its test, drafted the labelling guide from the rules Kevin settled on #4,
+  and wrote the scoring command, a guide-based employer history check and their tests. It also
+  made an AI-assisted first pass over the 100 cases (`eval/provisional/`): the hospitalized count
+  as rule 7 says, employer history from the guide's written procedure, and Claude's own reading of
+  each narrative for the under-18 and emphasis program criteria. That pass is not a human label:
+  it is kept out of `eval/results/` and out of `data/labels/`, and its per-case answers stay off
+  GitHub until the hand labels are done; it is then compared with them as a separate line.
+  Cost: the pass was made in a Claude Code session, not through the crew's model keys. No model
+  call went through the app (the crew's spend ledger, `outputs/model_cache.sqlite`, has no
+  record), so nothing counts toward the $1.50.
+  On 22 November Claude Code also built a local review page for labelling one case at a time
+  (the report, OSHA's codes, the same-state reports in the history window and the guide's
+  rules; never the crew's output or OSHA's inspection field), and a bulk-save script that writes
+  only rows passing the guide's checks, with a backup and a row-by-row check afterwards.
+  **Hamad's earlier 100 labels are AI-assisted, not blind hand labels.** Hamad personally
+  reviewed all 100 cases in Excel, corrected the classifications he disagreed with, and finalized
+  all 100 labels; the file he reviewed was built from the AI first pass, and 76 of the 100 notes
+  begin with the same text as that pass, so they are not independent of it. Every row's notes say so.
+  Claude Code made formatting-only changes to fit the guide: the reason for each `cannot_tell`
+  in the guide's `column: reason` form; imminent danger `cannot_tell` (rule 5) where the file
+  said "no" (65 cases); and, where the file's overall answer contradicted its own criteria
+  (25 cases), the overall answer that follows the criteria, on Hamad's decision. They are not the
+  blind check Kevin set on #4: scored only as `--source ai-provisional`, kept out of
+  `eval/results/`. (Khoa's 15 were labelled separately, by Khoa.)
+  **The fresh round (Kevin on #4, 23 November):** Hamad labelled all 100 again by hand, in a
+  note, and pasted the answers to Claude Code, which copied them into the label file unchanged
+  (on his instruction it deleted the citation on K023 and K058, labelled "no"), scored them and
+  drafted the results in `docs/reviews/hamad.md` from the scoring output. It wrote no label or
+  evidence. Hamad then gave the reasons for his `cannot_tell` answers; Claude Code checked them
+  against the reports and the program list, wrote them into `notes` in the guide's form, and put
+  the facts it checked (dates, NAICS codes) in `docs/reviews/hamad.md`, not in his notes. It also
+  extracted the `evidence` for his yes answers from the reports (the narrative's words and
+  OSHA's fields), which Hamad approved, and checked the four missing citations against the
+  directives' scope (CPL 03-00-027 Appendix B; CPL 03-00-025 section II, read from the PDF).
+  On those findings Hamad changed K046 and K087 from yes to no and added the citation on K059;
+  Claude Code applied his decisions, recorded the earlier values, and re-scored. The round is not blind to an earlier reading: Hamad had seen the AI first
+  pass (21 November) and the AI-assisted file built from it. Before the round Claude Code set up
+  a blank copy and a review page with keyboard and voice commands (not used in the end), and
+  extended the scoring command: the employer history counts, the narrative against the
+  `hospitalized` count, imminent danger cases apart, and a check that only complete hand labels
+  with no AI-assisted mark are written to `eval/results/`. The AI first pass is compared with the
+  hand labels as agreement only, in `eval/provisional/`. No model call went through the app;
+  nothing was paid.
+  **A second, separate Claude pass (22 November).** Besides the first pass above, a separate
+  Claude pass labelled 85 of the 100 cases (all but Khoa's 15) in a simplified sheet (the four
+  criteria, imminent danger, Category 1, citation and confidence; no notes or evidence), dated
+  22 November, 23:49. A spreadsheet of Hamad's that matched it on 84 of those 85 cases was not
+  used: Claude Code flagged the overlap on 23 November, and Hamad then labelled the 100 again in
+  the note described above, having seen that pass before. It is not scored or committed.
+  **Kevin's ruling on #20 (23 November, evening).** On Kevin's instruction the employer history
+  column (`similar_report_within_12_months`) is no longer Hamad's hand label: Claude Code ran
+  `scripts/category1_history_by_guide.py` (the guide's written rule over OSHA's file, no crew
+  code, no model call) and copied its answers into the label file: 12 yes, 84 no, and its 4
+  possible-only matches left `cannot_tell`. Each row's `notes` names the script and keeps Hamad's
+  earlier hand label; each yes carries the earlier report's ID and date in `evidence`, marked
+  "(scripted)". Claude Code then recomputed `category_one` by the guide's rule and applied
+  Kevin's two other rulings mechanically: the amputation program read from CPL 03-00-027 for all
+  of 2025 (a note on the six reports before 27 June; CPL 03-00-022's list was not read), and
+  K083's citation (CPL 03-00-025 II.A) and low confidence. Hamad decided K069 on its merits
+  himself (`cannot_tell`, with his reason); Claude Code wrote no narrative label. It re-scored
+  with `--source human` and redrafted the results in `docs/reviews/hamad.md` and the README from
+  `eval/results/category1_check.json`. Khoa's 15 are unchanged. Nothing was paid.
 
 ## The safety talk translations
 

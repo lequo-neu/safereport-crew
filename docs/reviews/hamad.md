@@ -4,7 +4,7 @@
 
 **What is checked.** 100 reports from the 2025 holdout (`data/labels/category1_check.csv`,
 seed 42), to be labelled by hand against OSHA's Category 1 criteria; Khoa labels 15 of them on
-his own to measure agreement. The blind hand labelling is not done yet (see Results). The
+his own to measure agreement. Both sets are in (see Results). The
 labeling rules are in `docs/CATEGORY1_LABELING.md`; Kevin settled the
 open points on issue #4 on 21 November 2026.
 
@@ -16,6 +16,7 @@ open points on issue #4 on 21 November 2026.
 3. Emphasis programs: labelled against the national programs only; local and regional programs
    are a gap.
 4. Employer history: the app's matching rule; a "possible" match is `cannot_tell`, not yes.
+   On Kevin's ruling on #20 (23 November) this column is filled by the guide's script (see Results).
 5. Imminent danger: `cannot_tell` unless the text says the hazard is still there; reported apart
    from recall.
 6. The rules are scored as they are on `main` at `fd15b06`, with no tuning on the 100. A rule
@@ -37,12 +38,152 @@ open points on issue #4 on 21 November 2026.
 * **Employer history across states.** The app, and so the hand check, looks for earlier reports
   only in the same state.
 
-**Results.** The blind hand check Kevin set on #4 (all 100 by hand, blind to the AI pass) is
-**not done**, so there is no validated result yet. What exists, on Hamad's machine and not on
-GitHub, is a labelling of all 100 that is AI-assisted and approved by Hamad case by case (see
-`docs/AI_USAGE.md`). It was scored only as `--source ai-provisional`, outside `eval/results/`;
-its numbers measure the rules against those labels, not the rules' accuracy, and are not
-reported here as a validation. Khoa's 15 are not labelled yet, so there is no agreement figure.
+**Results.** Hamad labelled all 100 by hand on 23 November, as Kevin set on #4. Then, following
+Kevin's ruling on #20 (23 November, evening), the employer history column was filled by a script,
+the amputation program was read as covering all of 2025, and K083 got its citation (see "Kevin's
+ruling of 23 November" below). Scored by `scripts/score_category1_check.py --source human`
+against the rules on `main` (no tuning, rule 6); the numbers are in
+`eval/results/category1_check.json`. Recall and false alarms are counted only on the cases the
+labels decide; the brackets are 95% Wilson intervals.
+
+| Criterion | Labels (yes / no / cannot_tell) | Recall | False alarms | cannot_tell share |
+|---|---|---|---|---|
+| Two or more hospitalized | 1 / 99 / 0 | 1 of 1 (21% to 100%) | 0 of 99 (0% to 4%) | 0% |
+| Worker under 18 | 0 / 100 / 0 | no yes label, not measurable | 0 of 100 (0% to 4%) | 0% |
+| Employer history (scripted, see below) | 12 / 84 / 4 | 12 of 12 (76% to 100%) | 0 of 84 (0% to 4%) | 4% (2% to 10%) |
+| Emphasis program | 18 / 77 / 5 | 12 of 18, 67% (44% to 84%) | 4 of 77, 5% (2% to 13%) | 5% (2% to 11%) |
+| **Category 1** | 28 / 65 / 7 | **24 of 28, 86% (69% to 94%)** | **3 of 65, 5% (2% to 13%)** | **7% (3% to 14%)** |
+
+Before Kevin's ruling (commit `d3eb596`, employer history by hand: 0 yes, 1 no, 99
+`cannot_tell`), Category 1 was 18 yes, 0 no and 82 `cannot_tell`: recall 14 of 18 (78%, 55% to
+91%), false alarms not measurable. The hand labels of that commit are kept in git and in each
+row's `notes`.
+
+* **What the numbers can and cannot say.** The employer history row compares two
+  implementations of the same written rule (the guide's script and the crew's `employers.py`),
+  so its 12 of 12 and 0 of 84 show that the code does what the rule says. They do not show that
+  the rule finds the employers OSHA would. 10 of the 28 Category 1 yes labels (K019, K025, K034,
+  K040, K061, K067, K071, K080, K090, K100) rest on the scripted history alone, and the rules
+  agree with all 10 by construction. Of the other 18, decided by the hand labels, the rules
+  catch 14.
+* **Misses.** The rules miss four of the 28 Category 1 labels: K009, K055, K059 and K083, all on
+  the emphasis program criterion. K009 and K084 are trenching (CPL 02-00-161), a program the crew
+  takes from its title only, so it raises the priority but forces nothing (B1, "Category 1 rules
+  against OSHA's memo"); K084 is still Category 1 through its hospitalized count. K059 and K083
+  are falls under CPL 03-00-025 II.A with a non-construction NAICS (the crew reads NAICS 23; #30).
+* **False alarms.** The rules call K031, K058 and K079 Category 1, labelled no, all through the
+  emphasis program. Emphasis program disagreements: rules yes, label no on K031, K058, K067 and
+  K079 (K067 is still Category 1 through its employer history); rules no, label yes on K009,
+  K055, K059, K082, K083 and K084.
+* **`cannot_tell`, 7 Category 1 cases** (K001, K024, K026, K039, K045, K054, K069); the rules
+  call one of them, K069, Category 1. Reasons, in `notes`:
+  * Employer history (4: K003, K026, K045, K054): only possible matches in OSHA's file, by the
+    guide's script; the two names are in `notes`, left for a person (rule 4). K003 is Category 1
+    through its emphasis program.
+  * Imminent danger (100): past event; the narrative does not establish that a serious hazard
+    remained present.
+  * Emphasis program (5), given by Hamad and checked against the reports and the program list
+    (`data/reference/emphasis_programs.toml`):
+    * K001: a 4-inch grinder disc shattered and cut the forearm; NAICS 332999 is in the amputation
+      program's industries, but the injury is a laceration from a disc, not an amputation hazard
+      from machinery, so applicability is unclear.
+    * K024: exposure to a nerve agent during synthesis in a fume hood (U.S. Army, NAICS 928110);
+      whether the site is a PSM-covered facility (CPL 03-00-021) is not in the report.
+    * K039: a gasket failed and a 150 °F chemical cleaning solution burned the worker (NAICS 325199);
+      no national program clearly applies from the report.
+    * K069: a fall on a wire re-spool production line, with a partial finger amputation (NAICS
+      332618, in Appendix B). Hamad decided it on its merits after Kevin's ruling: the amputation
+      followed a fall and the report names no machine, so whether it is a machinery amputation
+      hazard is unclear. The earlier reason (the date) is withdrawn.
+    * K080: struck by a bucket elevator, fractured ankle (NAICS 311513, in the amputation
+      program's industries); the injury is not an amputation. (K080 is Category 1 through its
+      employer history.)
+* **Imminent danger, apart (rule 5):** `cannot_tell` on all 100; no report labelled yes.
+* **Employer history counts for #18:** 12 yes, 84 no, 4 `cannot_tell` (possible matches only),
+  from the guide's script. The crew finds a confirmed earlier report on the same 12.
+* **Rule 7, the narrative against the `hospitalized` count:** none recorded. Hamad's notes give
+  no such case, and whether each narrative was compared with the count is not recorded, so this
+  is not a finding that there are none.
+* **Agreement with Khoa on the 15 shared cases** (K010, K021, K022, K032, K035, K049, K060,
+  K069, K078, K082, K083, K088, K089, K090, K094; Khoa labelled them on his own and returned them on
+  23 November, with reasons and evidence; `data/labels/category1_check_Khoa.csv`, unchanged):
+
+  | Criterion | Agree | Cohen's kappa |
+  |---|---|---|
+  | Two or more hospitalized | 15 of 15 | not defined (one value) |
+  | Worker under 18 | 15 of 15 | not defined (one value) |
+  | Employer history | 15 of 15 | 1.0 |
+  | Emphasis program | 11 of 15 | 0.43 |
+  | Imminent danger | 15 of 15 | not defined (one value) |
+  | **Category 1** | **12 of 15** | **0.62** |
+
+  Employer history: Khoa decided all 15 by hand from OSHA's file (yes on K082 and K090, no on
+  the other 13), and the script gives the same 15 answers. Before the ruling, Hamad's hand labels
+  were `cannot_tell` on all 15 (agreement 0 of 15; Category 1 5 of 15, kappa 0.21). The
+  disagreements are kept as each person labelled them, not resolved. Emphasis program: K069
+  (Hamad `cannot_tell`, Khoa no), K082 (Hamad yes, Khoa `cannot_tell`), K089 and K094 (Hamad
+  no, Khoa `cannot_tell`). Category 1 differs on K069, K089 and K094, through the emphasis
+  program. Khoa's K069 note says NAICS 332618 is not in Appendix B; it is (Kevin, verified from
+  the directive). Khoa's label is unchanged.
+* **The AI first pass against these labels** (`eval/provisional/category1_ai_vs_human.json`,
+  agreement with a person, not accuracy): two or more hospitalized 100% (kappa 1.0); emphasis
+  program 90% (kappa 0.74); employer history 100% (both come from the same written rule, so they
+  are not independent); Category 1 91% (kappa 0.82).
+
+**Kevin's ruling of 23 November (#20), and how it was applied.**
+
+* **Employer history, from the guide's script.** `similar_report_within_12_months` was filled
+  for all 100 from `scripts/category1_history_by_guide.py`: the guide's written rule over OSHA's
+  file `data/raw/January2015toNovember2025.csv` (SHA-256 `406ffe7bc0758a44…0a97f13cd`), without
+  importing the crew's code. Result: 12 yes, 84 no, and 4 possible-only matches left
+  `cannot_tell`. Each row's `notes` names the script and keeps Hamad's hand label (`cannot_tell`
+  on 99; `no` on K001, which the script confirms). Each yes has the earlier report's ID and date
+  in `evidence`, marked "(scripted)". It is a script's reading of the rule: not a person's label,
+  and not an AI's. `category_one` was then recomputed by the guide's rule from the four
+  criteria. The script changed no other column; the narrative criteria are Hamad's hand labels.
+* **The amputation program, all of 2025.** An amputation NEP was in force all year: CPL
+  03-00-022 (2019) until CPL 03-00-027 replaced it on 27 June 2025. Every 2025 report is
+  labelled against 027's Appendix B, the list the team has. **022's own industry list was not
+  read**, so a report before 27 June in an industry that 022 covers and 027 does not (or the
+  reverse) may be labelled wrongly. The six earlier yes labels (K003, K005, K017, K055, K075,
+  K082) stand, each with a note; Hamad decided K069 on its merits (`cannot_tell`, above).
+* **K083: yes, low confidence, CPL 03-00-025 II.A.** A piping install at height reads as
+  construction work, and the employer is named Home Plus Construction. The NAICS is 561320
+  (temporary help services) and the report does not say construction work, so the call is
+  uncertain. It stays a miss for the crew. The Falls rule keyed on NAICS 23 is #30 (Advance) and
+  does not change this evaluation.
+
+**How the labels were made, and the limits.**
+
+* Hamad wrote the answers in a note and pasted them to Claude Code, which copied them into
+  `data/labels/category1_check.csv` without changing them, with one exception on his instruction:
+  K023 and K058 are labelled "no" for the emphasis program but carried a citation, which he
+  told Claude Code to delete. Not done in the local review page, so there is no save log.
+* The `cannot_tell` reasons were written after the labels, from his explanations, in the
+  guide's `column: reason` form.
+* **Evidence** for the hand yes answers (18 emphasis program, and K084's hospitalized count):
+  extracted by Claude Code from each report's narrative and OSHA's fields, checked against the
+  report, and approved by Hamad. He did not write it. The employer history evidence is the
+  script's.
+* **Corrections after checking the citations** (Hamad's decisions, 23 November; the earlier values
+  are kept in the label file's `notes` and in a local log). Four emphasis program yes answers had
+  no citation; each was checked against the directive's scope:
+  * K046 (punch press, fingertip amputation, NAICS 333112) and K087 (arm pulled between rewinder
+    rollers, burn and dislocated shoulder, NAICS 323110): neither NAICS is among the amputation
+    program's 91 industries (CPL 03-00-027, Appendix B), and no other national program fits.
+    **Changed from yes to no.** Their evidence was removed with the yes.
+  * K059 (construction of a bridge, fell through a gap about 9 feet; NAICS 561210): CPL 03-00-025,
+    section II.A, covers "all construction inspections related to falls", by the work, not the
+    employer's NAICS. **Yes kept, citation CPL 03-00-025 added.**
+  * K083: see Kevin's ruling above.
+* **Employer history is not a hand label.** Hamad's own history labels were not a case-by-case
+  search of OSHA's file; the column now scored is the script's. Its agreement with the crew is
+  agreement between two implementations of one rule.
+* **The amputation program before 27 June 2025** is read from CPL 03-00-027, not CPL 03-00-022
+  (above).
+* **The round is not blind to the AI pass.** Before it, Hamad had seen the AI first pass
+  (21 November) and reviewed a file built from it (the earlier, AI-assisted labels of 21 and
+  22 November). Those earlier labels stay on his machine and are not scored here.
 
 ## B1. Review of the triage logic and the app (issue #2)
 

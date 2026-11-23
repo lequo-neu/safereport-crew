@@ -366,6 +366,15 @@ only when the confidence is at least 0.7 covers 51% of reports, 80% of them righ
 **Employer matching:** of 150 hand checked name pairs, the "same" rule held for 100 of 100 and
 45 of 50 "possible" pairs were one employer, so possible matches wait for a person.
 
+**OSHA's Category 1 rules, checked on 100 hand labelled 2025 reports** (B3; the rules as they
+are, no tuning): Category 1 recall 86% (24 of 28; 95% interval 69 to 94), false alarms 5% (3 of
+65; 2 to 13), `cannot_tell` 7%. The misses (K009, K055, K059, K083) and false alarms (K031,
+K058, K079) all come from the emphasis program criterion (recall 12 of 18). Employer history
+comes from the labeling guide's own script over OSHA's file, not by hand, so 10 of the 28 yes
+cases agree with the rules by construction. Agreement with a second labeller on 15 cases:
+Category 1 12 of 15 (kappa 0.62). Details and limits in
+[docs/reviews/hamad.md](docs/reviews/hamad.md#b3-hand-check-of-the-category-1-rules-issue-4).
+
 All numbers are in [eval/results](eval/results). Reproduce them without any paid call:
 
 ```bash
