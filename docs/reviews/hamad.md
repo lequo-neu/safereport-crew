@@ -3,8 +3,9 @@
 ## B3. Hand check of the Category 1 rules (issue #4)
 
 **What is checked.** 100 reports from the 2025 holdout (`data/labels/category1_check.csv`,
-seed 42), labelled by hand against OSHA's Category 1 criteria; Khoa labels 15 of them on his own
-to measure agreement. The labeling rules are in `docs/CATEGORY1_LABELING.md`; Kevin settled the
+seed 42), to be labelled by hand against OSHA's Category 1 criteria; Khoa labels 15 of them on
+his own to measure agreement. The blind hand labelling is not done yet (see Results). The
+labeling rules are in `docs/CATEGORY1_LABELING.md`; Kevin settled the
 open points on issue #4 on 21 November 2026.
 
 **Rules for the labels**, as settled on #4:
@@ -36,7 +37,12 @@ open points on issue #4 on 21 November 2026.
 * **Employer history across states.** The app, and so the hand check, looks for earlier reports
   only in the same state.
 
-**Results.** To come once both label files are back (23 November).
+**Results.** The blind hand check Kevin set on #4 (all 100 by hand, blind to the AI pass) is
+**not done**, so there is no validated result yet. What exists, on Hamad's machine and not on
+GitHub, is a labelling of all 100 that is AI-assisted and approved by Hamad case by case (see
+`docs/AI_USAGE.md`). It was scored only as `--source ai-provisional`, outside `eval/results/`;
+its numbers measure the rules against those labels, not the rules' accuracy, and are not
+reported here as a validation. Khoa's 15 are not labelled yet, so there is no agreement figure.
 
 ## B1. Review of the triage logic and the app (issue #2)
 
@@ -67,17 +73,18 @@ The memo of 4 March 2016 (section 5, Category 1) lists six conditions. How the c
 | 20251111502, Proler Tubing, Dayton (332996) | amputations NEP | Roller machine amputation. **Correct.** |
 | 20251111454, Velocity Sheet Metal, Selma (332322) | amputations NEP | Shear amputation. **Correct.** |
 | 20251111522, NC Works, San Antonio (314110) | employer history (20241110998) | Same site, same roller-clog hazard, 358 days earlier. **Correct.** |
-| 20251111604, Dollar Tree, Abilene (452112) | employer history (2025010815) | Earlier report in Princeton (452319): another store, matched as the same company because the first three NAICS digits agree. Both are trips over a box. **To confirm:** does the memo's "employer" mean the company or the establishment? See below. |
-| 20251111619, USPS, Crystal City (491110) | employer history (20241211946) and warehousing NEP | History: the earlier report is a carrier falling into a ditch in Mexia; this one is a ladder fall hanging a display. Both event codes are in group 41 (fall to a lower level); the place, the work and the source differ. Warehousing NEP: the directive covers processing and distribution centers only, and 491110 also holds retail post offices, which a display suggests. **To confirm:** both triggers look weak. See below. |
+| 20251111604, Dollar Tree, Abilene (452112) | employer history (2025010815) | Earlier report in Princeton (452319): another store, matched as the same company because the first three NAICS digits agree. Both are trips over a box. Does the memo's "employer" mean the company or the establishment? **Kevin (22 November): keep the rule as written, so it stays Category 1; decided on #18 in the Advance stage.** See below. |
+| 20251111619, USPS, Crystal City (491110) | employer history (20241211946) and warehousing NEP | History: the earlier report is a carrier falling into a ditch in Mexia; this one is a ladder fall hanging a display. Both event codes are in group 41 (fall to a lower level); the place, the work and the source differ. Warehousing NEP: the directive covers processing and distribution centers only, and 491110 also holds retail post offices, which a display suggests. **Hamad's call: Category 2** (medium confidence; the crew's rules are not changed). See below. |
 | 20251111445, Axis Power, Edna (237130) | falls NEP | A 5 foot fall from a crane truck bed in construction. The crew reads the Falls NEP as every construction fall from height. **To confirm:** whether a fall from a vehicle bed under 6 feet is in the program's scope. See below. |
 
 **20251111409** (Everflow Plumbing, Arlington, 238220), Category 2 now: dirt and rock fell from
 the wall of an underground tunnel under a building onto a worker's legs (event: collapse in an
 open trench or excavation). The trenching and excavation NEP (CPL 02-00-161) is found, but its
 scope was never read from the directive, so it only adds to the priority (4.006; the plan still
-inspects it, and OSHA did). **To confirm:** if the program covers this work, the memo makes it
-Category 1 and the crew misses it; reading the directive's scope into
-`data/reference/emphasis_programs.toml` would fix it for every report.
+inspects it, and OSHA did). **Hamad's call: Category 1** (medium confidence): the trenching
+program covers the work, so the memo makes it Category 1 and the crew misses it. Reading the
+directive's scope into `data/reference/emphasis_programs.toml` would fix it for every report;
+that is #27, for the Advance stage. The crew's rules are not changed here. See below.
 
 #### The four open cases, against the directives (read 21 November 2026)
 
@@ -130,6 +137,20 @@ not the truth. Nothing in the crew is changed. Each case separates what the sour
   raise the priority (`possible_emphasis_program`), not force Category 1, since the file cannot
   tell a processing center from a post office. Kevin opened this as #26 for the Advance stage;
   nothing changes now, and the call on this report is Hamad's.
+* **Hamad's call (22 November): Category 2, medium confidence.** This is a reading of the memo
+  and the directive for this one report. It is not a change to the crew: on `main` the report
+  stays Category 1, and B2 and B3 are scored on the rules as they are.
+  * *Why medium, not high.* (1) Whether the Crystal City site is a processing and distribution
+    center is inferred, not known: the SIR file gives no facility type, and USPS's facility list
+    was not checked. Hanging a display, and a small town, point to a retail post office. If the
+    site is a processing and distribution center, the warehousing NEP applies and the report is
+    Category 1. (2) "Same or similar hazards" is not defined in the part of the memo read. A ladder
+    fall indoors and a fall into a ditch on a delivery route share only the OIICS division (falls),
+    and a reader who takes any fall as similar would keep it Category 1 by history.
+  * *Supporting, not deciding.* OSHA did not inspect either USPS report. OSHA's choice is a
+    reference, not the truth.
+  * *What would change the call:* evidence that the site is a processing and distribution center,
+    or a decision on #18 that "similar" means any fall.
 
 **20251111445, Axis Power LLC, Edna, 17 November 2025 (237130).**
 * Evidence: "standing on the bed of a crane truck working to pin the jib of the crane to the main
@@ -170,10 +191,27 @@ not the truth. Nothing in the crew is changed. Each case separates what the sour
   `emphasis_programs.toml` (`verified = true`, no industry limit) and let OIICS 632 or source 611
   trigger it, not only the narrative's words. Kevin opened this as #27 for the Advance stage;
   nothing changes now, and under B3's rule 6 it is not re-scored on the same 100.
+* **Hamad's call (22 November): Category 1, medium confidence.** This is a reading of the memo
+  and the directive for this one report. It is not a change to the crew: on `main` the report
+  stays Category 2 (the plan still inspects it), and the trenching NEP's scope is not read in
+  until #27.
+  * *Why medium, not high.* The call depends on the work being an excavation (Subpart P, which
+    the NEP covers) and not underground construction (Subpart S, which the NEP does not name). The
+    narrative says "tunnel", which points to Subpart S. Breaking out old sewer pipe from under a
+    building is usually done by digging under the slab, which is a cut in the earth (an
+    excavation under 1926.650(b)). OSHA's own coders gave a trench or excavation collapse (OIICS
+    632, source 611). Nobody here has seen the site.
+  * *Supporting, not deciding.* OSHA inspected it (inspection 1859803). An inspection can follow
+    from Category 2 too, so this does not show that OSHA treated it as Category 1.
+  * *Not checked:* whether OSHA's inspection record lists the trenching NEP. OSHA's site refused
+    an automated request on 22 November (HTTP 405). If the record shows the NEP, confidence
+    rises. If it shows violations under 1926.800 (tunnels) and no NEP, the report is Category 2.
 
 **In sum:** of the 8 Category 1 reports, 7 stand (Dollar Tree on the memo's wording, which Kevin
 keeps for now; #18), 1 should be Category 2 (USPS), and 1 Category 2 report should be Category 1
-(20251111409). These are Hamad's calls to make; the two crew changes are #26 and #27 (Advance).
+(20251111409). Hamad made both calls on 22 November, each with medium confidence and the
+uncertainty stated above. The crew's rules are not changed; the two crew changes are #26 and #27
+(Advance).
 Both employer-history cases here (Dollar Tree and USPS) are evidence for #18; under its rules they
 are not grounds to tune the criterion on this week.
 
@@ -386,9 +424,11 @@ so in the crew they stand for severity, a reasonable addition the memo allows bu
 weigh. No source gives numbers for any weight, and none gives how long an inspection takes.
 
 **Kevin (22 November): keep the values, so B2 stays valid; write the reason beside each one,
-comments only.** Done in its own pull request (branch `hamad/b1-weight-reasons`): every value in
-`config/triage.toml` has its reason and evidence beside it, the parsed values are identical, and
-B2's command rerun on that branch reproduces every number and the per-report CSV. The proposals
+comments only.** Done in #28, merged on 22 November: every value in `config/triage.toml` has its
+reason and evidence beside it, the parsed values are identical, and B2's command rerun on that
+branch reproduces every number and the per-report CSV. The comments changed B2's file
+fingerprint, so Kevin made B2 fingerprint the triage values instead (`triage_values_sha256`,
+64b74a2): the file before and after #28 gives the same value, and no B2 rerun is needed. The proposals
 below stay as future work; a change needs Hamad and Khoa to agree, its own pull request and a B2
 rerun.
 
