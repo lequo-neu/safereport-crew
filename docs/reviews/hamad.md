@@ -3,9 +3,8 @@
 ## B3. Hand check of the Category 1 rules (issue #4)
 
 **What is checked.** 100 reports from the 2025 holdout (`data/labels/category1_check.csv`,
-seed 42), to be labelled by hand against OSHA's Category 1 criteria; Khoa labels 15 of them on
-his own to measure agreement. The blind hand labelling is not done yet (see Results). The
-labeling rules are in `docs/CATEGORY1_LABELING.md`; Kevin settled the
+seed 42), labelled by hand against OSHA's Category 1 criteria; Khoa labels 15 of them on his own
+to measure agreement. The labeling rules are in `docs/CATEGORY1_LABELING.md`; Kevin settled the
 open points on issue #4 on 21 November 2026.
 
 **Rules for the labels**, as settled on #4:
@@ -37,12 +36,7 @@ open points on issue #4 on 21 November 2026.
 * **Employer history across states.** The app, and so the hand check, looks for earlier reports
   only in the same state.
 
-**Results.** The blind hand check Kevin set on #4 (all 100 by hand, blind to the AI pass) is
-**not done**, so there is no validated result yet. What exists, on Hamad's machine and not on
-GitHub, is a labelling of all 100 that is AI-assisted and approved by Hamad case by case (see
-`docs/AI_USAGE.md`). It was scored only as `--source ai-provisional`, outside `eval/results/`;
-its numbers measure the rules against those labels, not the rules' accuracy, and are not
-reported here as a validation. Khoa's 15 are not labelled yet, so there is no agreement figure.
+**Results.** To come once both label files are back (23 November).
 
 ## B1. Review of the triage logic and the app (issue #2)
 
