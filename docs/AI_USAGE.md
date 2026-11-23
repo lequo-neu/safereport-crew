@@ -83,18 +83,32 @@ Each task records here which AI tool helped and how the result was checked.
   said "no" (65 cases); and, where the file's overall answer contradicted its own criteria
   (25 cases), the overall answer that follows the criteria, on Hamad's decision. They are not the
   blind check Kevin set on #4: scored only as `--source ai-provisional`, kept out of
-  `eval/results/`. Khoa's 15 have not been labelled yet.
-  **The fresh round (Kevin on #4, 23 November):** Hamad labels all 100 again by hand from a blank
-  copy, with the AI-assisted file closed and new notes. That round is blind to the file but not to
-  an earlier reading: before it, Hamad had seen the AI first pass (made on 21 November) and the
-  AI-assisted file built from it. For it Claude Code set up the blank copy, made the review page
-  refuse any file or note carrying the AI-assisted mark, and added keyboard and voice commands
-  (the browser's speech recognition turns the reviewer's own spoken answers into the same clicks;
-  nothing is filled in), and extended the scoring command: the employer history counts, the
-  narrative against the `hospitalized` count, imminent danger cases apart, and a check that only
-  complete hand labels with no AI-assisted mark are written to `eval/results/`. The AI first pass
-  is then compared with the fresh labels as agreement only, in `eval/provisional/`. No model call
-  went through the app for any of this; nothing was paid.
+  `eval/results/`. (Khoa's 15 were labelled separately, by Khoa.)
+  **The fresh round (Kevin on #4, 23 November):** Hamad labelled all 100 again by hand, in a
+  note, and pasted the answers to Claude Code, which copied them into the label file unchanged
+  (on his instruction it deleted the citation on K023 and K058, labelled "no"), scored them and
+  drafted the results in `docs/reviews/hamad.md` from the scoring output. It wrote no label or
+  evidence. Hamad then gave the reasons for his `cannot_tell` answers; Claude Code checked them
+  against the reports and the program list, wrote them into `notes` in the guide's form, and put
+  the facts it checked (dates, NAICS codes) in `docs/reviews/hamad.md`, not in his notes. It also
+  extracted the `evidence` for his yes answers from the reports (the narrative's words and
+  OSHA's fields), which Hamad approved, and checked the four missing citations against the
+  directives' scope (CPL 03-00-027 Appendix B; CPL 03-00-025 section II, read from the PDF).
+  On those findings Hamad changed K046 and K087 from yes to no and added the citation on K059;
+  Claude Code applied his decisions, recorded the earlier values, and re-scored. The round is not blind to an earlier reading: Hamad had seen the AI first
+  pass (21 November) and the AI-assisted file built from it. Before the round Claude Code set up
+  a blank copy and a review page with keyboard and voice commands (not used in the end), and
+  extended the scoring command: the employer history counts, the narrative against the
+  `hospitalized` count, imminent danger cases apart, and a check that only complete hand labels
+  with no AI-assisted mark are written to `eval/results/`. The AI first pass is compared with the
+  hand labels as agreement only, in `eval/provisional/`. No model call went through the app;
+  nothing was paid.
+  **A second, separate Claude pass (22 November).** Besides the first pass above, a separate
+  Claude pass labelled 85 of the 100 cases (all but Khoa's 15) in a simplified sheet (the four
+  criteria, imminent danger, Category 1, citation and confidence; no notes or evidence), dated
+  22 November, 23:49. A spreadsheet of Hamad's that matched it on 84 of those 85 cases was not
+  used: Claude Code flagged the overlap on 23 November, and Hamad then labelled the 100 again in
+  the note described above, having seen that pass before. It is not scored or committed.
 
 ## The safety talk translations
 

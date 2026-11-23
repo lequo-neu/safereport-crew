@@ -1,0 +1,32 @@
+{
+ "what": "the AI first pass against these labels: agreement with a person, not accuracy",
+ "labels": "labels written by a person, by hand",
+ "cases": 100,
+ "agreement": {
+  "two_or_more_hospitalized": {
+   "n": 100,
+   "agreement": 1.0,
+   "kappa": 1.0
+  },
+  "worker_under_18": {
+   "n": 100,
+   "agreement": 1.0,
+   "kappa": null
+  },
+  "similar_report_within_12_months": {
+   "n": 100,
+   "agreement": 0.05,
+   "kappa": 0.0021
+  },
+  "emphasis_program_hazard": {
+   "n": 100,
+   "agreement": 0.9,
+   "kappa": 0.7422
+  },
+  "category_one": {
+   "n": 100,
+   "agreement": 0.23,
+   "kappa": 0.1226
+  }
+ }
+}

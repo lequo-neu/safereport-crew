@@ -1,0 +1,1244 @@
+{
+ "labels": "labels written by a person, by hand",
+ "source": "human",
+ "cases": 100,
+ "criteria": {
+  "two_or_more_hospitalized": {
+   "cases": 100,
+   "label_yes": 1,
+   "label_no": 99,
+   "cannot_tell": 0,
+   "unlabelled": 0,
+   "rule_yes": 1,
+   "recall": {
+    "k": 1,
+    "n": 1,
+    "rate": 1.0,
+    "ci95": [
+     0.2065,
+     1.0
+    ]
+   },
+   "false_alarm_rate": {
+    "k": 0,
+    "n": 99,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.0374
+    ]
+   },
+   "cannot_tell_share": {
+    "k": 0,
+    "n": 100,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.037
+    ]
+   },
+   "cannot_tell_rule_yes": 0,
+   "cannot_tell_reasons": {}
+  },
+  "worker_under_18": {
+   "cases": 100,
+   "label_yes": 0,
+   "label_no": 100,
+   "cannot_tell": 0,
+   "unlabelled": 0,
+   "rule_yes": 0,
+   "recall": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "ci95": null
+   },
+   "false_alarm_rate": {
+    "k": 0,
+    "n": 100,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.037
+    ]
+   },
+   "cannot_tell_share": {
+    "k": 0,
+    "n": 100,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.037
+    ]
+   },
+   "cannot_tell_rule_yes": 0,
+   "cannot_tell_reasons": {}
+  },
+  "similar_report_within_12_months": {
+   "cases": 100,
+   "label_yes": 0,
+   "label_no": 1,
+   "cannot_tell": 99,
+   "unlabelled": 0,
+   "rule_yes": 12,
+   "recall": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "ci95": null
+   },
+   "false_alarm_rate": {
+    "k": 0,
+    "n": 1,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.7935
+    ]
+   },
+   "cannot_tell_share": {
+    "k": 99,
+    "n": 100,
+    "rate": 0.99,
+    "ci95": [
+     0.9455,
+     0.9982
+    ]
+   },
+   "cannot_tell_rule_yes": 12,
+   "cannot_tell_reasons": {
+    "no confirmed employer match established in": 99
+   }
+  },
+  "emphasis_program_hazard": {
+   "cases": 100,
+   "label_yes": 18,
+   "label_no": 77,
+   "cannot_tell": 5,
+   "unlabelled": 0,
+   "rule_yes": 17,
+   "recall": {
+    "k": 12,
+    "n": 18,
+    "rate": 0.6667,
+    "ci95": [
+     0.4375,
+     0.8372
+    ]
+   },
+   "false_alarm_rate": {
+    "k": 4,
+    "n": 77,
+    "rate": 0.0519,
+    "ci95": [
+     0.0204,
+     0.1261
+    ]
+   },
+   "cannot_tell_share": {
+    "k": 5,
+    "n": 100,
+    "rate": 0.05,
+    "ci95": [
+     0.0215,
+     0.1118
+    ]
+   },
+   "cannot_tell_rule_yes": 1,
+   "cannot_tell_reasons": {
+    "grinder-disc injury, applicability of the manufacturing": 1,
+    "toxic chemical exposure, PSM program applicability": 1,
+    "hot chemical release, applicability of a": 1,
+    "amputation occurred before the updated manufacturing": 1,
+    "machine-related injury, but applicability of the": 1
+   }
+  }
+ },
+ "category_one": {
+  "cases": 100,
+  "label_yes": 18,
+  "label_no": 0,
+  "cannot_tell": 82,
+  "unlabelled": 0,
+  "rule_yes": 28,
+  "recall": {
+   "k": 14,
+   "n": 18,
+   "rate": 0.7778,
+   "ci95": [
+    0.5479,
+    0.91
+   ]
+  },
+  "false_alarm_rate": {
+   "k": 0,
+   "n": 0,
+   "rate": null,
+   "ci95": null
+  },
+  "cannot_tell_share": {
+   "k": 82,
+   "n": 100,
+   "rate": 0.82,
+   "ci95": [
+    0.7333,
+    0.883
+   ]
+  },
+  "cannot_tell_rule_yes": 14,
+  "written_differs_from_the_guide_rule": []
+ },
+ "imminent_danger_apart": {
+  "cannot_tell": 100
+ },
+ "imminent_danger_yes_cases": [],
+ "employer_history_labels": {
+  "yes": 0,
+  "no": 1,
+  "cannot_tell": 99,
+  "unlabelled": 0
+ },
+ "narrative_vs_count": {
+  "count": 0,
+  "cases": [],
+  "could_change_category_one": []
+ },
+ "disagreements": {
+  "two_or_more_hospitalized": {
+   "rule_yes_label_no": [],
+   "rule_no_label_yes": []
+  },
+  "worker_under_18": {
+   "rule_yes_label_no": [],
+   "rule_no_label_yes": []
+  },
+  "similar_report_within_12_months": {
+   "rule_yes_label_no": [],
+   "rule_no_label_yes": []
+  },
+  "emphasis_program_hazard": {
+   "rule_yes_label_no": [
+    "K031",
+    "K058",
+    "K067",
+    "K079"
+   ],
+   "rule_no_label_yes": [
+    "K009",
+    "K055",
+    "K059",
+    "K082",
+    "K083",
+    "K084"
+   ]
+  },
+  "category_one": {
+   "rule_yes_label_no": [],
+   "rule_no_label_yes": [
+    "K009",
+    "K055",
+    "K059",
+    "K083"
+   ]
+  }
+ },
+ "rules": "triage.category_one on the checked-out code, offline",
+ "crew": {
+  "K001": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K002": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K003": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-027"
+   ],
+   "repeats": []
+  },
+  "K004": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K005": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-027"
+   ],
+   "repeats": []
+  },
+  "K006": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K007": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K008": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K009": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K010": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K011": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-024"
+   ],
+   "repeats": []
+  },
+  "K012": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K013": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K014": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K015": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K016": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-024"
+   ],
+   "repeats": []
+  },
+  "K017": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-027"
+   ],
+   "repeats": []
+  },
+  "K018": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K019": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": true,
+   "hazard under an emphasis program": false,
+   "category_one": true,
+   "emphasis": [],
+   "repeats": [
+    "2024054565"
+   ]
+  },
+  "K020": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K021": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K022": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K023": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K024": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K025": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": true,
+   "hazard under an emphasis program": false,
+   "category_one": true,
+   "emphasis": [],
+   "repeats": [
+    "2024032246"
+   ]
+  },
+  "K026": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K027": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K028": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K029": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K030": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K031": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-027"
+   ],
+   "repeats": []
+  },
+  "K032": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K033": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K034": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": true,
+   "hazard under an emphasis program": false,
+   "category_one": true,
+   "emphasis": [],
+   "repeats": [
+    "2024109797",
+    "2024099145"
+   ]
+  },
+  "K035": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K036": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K037": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K038": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K039": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K040": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": true,
+   "hazard under an emphasis program": false,
+   "category_one": true,
+   "emphasis": [],
+   "repeats": [
+    "2025065458"
+   ]
+  },
+  "K041": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K042": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K043": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-025"
+   ],
+   "repeats": []
+  },
+  "K044": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K045": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K046": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K047": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-025"
+   ],
+   "repeats": []
+  },
+  "K048": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K049": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K050": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K051": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K052": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K053": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K054": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K055": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K056": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K057": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K058": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-027"
+   ],
+   "repeats": []
+  },
+  "K059": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K060": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K061": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": true,
+   "hazard under an emphasis program": false,
+   "category_one": true,
+   "emphasis": [],
+   "repeats": [
+    "2024086981"
+   ]
+  },
+  "K062": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-026"
+   ],
+   "repeats": []
+  },
+  "K063": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K064": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K065": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K066": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K067": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": true,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-026"
+   ],
+   "repeats": [
+    "20241211827"
+   ]
+  },
+  "K068": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K069": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-027"
+   ],
+   "repeats": []
+  },
+  "K070": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K071": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": true,
+   "hazard under an emphasis program": false,
+   "category_one": true,
+   "emphasis": [],
+   "repeats": [
+    "2024099061"
+   ]
+  },
+  "K072": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-024"
+   ],
+   "repeats": []
+  },
+  "K073": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K074": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K075": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-027"
+   ],
+   "repeats": []
+  },
+  "K076": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K077": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K078": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-027"
+   ],
+   "repeats": []
+  },
+  "K079": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-027"
+   ],
+   "repeats": []
+  },
+  "K080": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": true,
+   "hazard under an emphasis program": false,
+   "category_one": true,
+   "emphasis": [],
+   "repeats": [
+    "2024032008"
+   ]
+  },
+  "K081": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K082": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": true,
+   "hazard under an emphasis program": false,
+   "category_one": true,
+   "emphasis": [],
+   "repeats": [
+    "2024065435"
+   ]
+  },
+  "K083": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K084": {
+   "two or more hospitalized": true,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": true,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K085": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K086": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K087": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K088": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K089": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K090": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": true,
+   "hazard under an emphasis program": false,
+   "category_one": true,
+   "emphasis": [],
+   "repeats": [
+    "20251010430"
+   ]
+  },
+  "K091": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K092": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K093": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": true,
+   "hazard under an emphasis program": true,
+   "category_one": true,
+   "emphasis": [
+    "CPL 03-00-027"
+   ],
+   "repeats": [
+    "2025077225"
+   ]
+  },
+  "K094": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K095": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K096": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K097": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K098": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K099": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": false,
+   "hazard under an emphasis program": false,
+   "category_one": false,
+   "emphasis": [],
+   "repeats": []
+  },
+  "K100": {
+   "two or more hospitalized": false,
+   "worker under 18": false,
+   "similar report from the employer within 12 months": true,
+   "hazard under an emphasis program": false,
+   "category_one": true,
+   "emphasis": [],
+   "repeats": [
+    "20241211834"
+   ]
+  }
+ },
+ "agreement_cases": {
+  "shared": 15,
+  "unlabelled_in_second": [],
+  "complete": true
+ },
+ "agreement": {
+  "two_or_more_hospitalized": {
+   "n": 15,
+   "agreement": 1.0,
+   "kappa": null
+  },
+  "worker_under_18": {
+   "n": 15,
+   "agreement": 1.0,
+   "kappa": null
+  },
+  "similar_report_within_12_months": {
+   "n": 15,
+   "agreement": 0.0,
+   "kappa": 0.0
+  },
+  "emphasis_program_hazard": {
+   "n": 15,
+   "agreement": 0.7333,
+   "kappa": 0.434
+  },
+  "imminent_danger": {
+   "n": 15,
+   "agreement": 1.0,
+   "kappa": null
+  },
+  "category_one": {
+   "n": 15,
+   "agreement": 0.3333,
+   "kappa": 0.2063
+  }
+ }
+}
