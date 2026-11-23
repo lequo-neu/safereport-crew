@@ -44,6 +44,18 @@ The offline BM25 run covered **31 reports** (17–23 November 2025). I found **1
 
 **Another workflow discrepancy:** `20251111445` had `1910.180` in the selective run and `1910.179` when every report entered Stage 2. The worker reportedly fell from a truck-mounted crane. Neither difference proves an OSHA violation or establishes the correct fall rule. Equipment type, activity and the relevant Part 1910/1926 scope still need checking.
 
+### Team configuration and B4 regression reconciliation
+
+Kevin reproduced the Texas week with the team's hybrid retrieval configuration and confirmed 12 corrected reports and 4 human-review cases. My earlier BM25-only reconstruction identified 11 changed reports and 4 human-review cases. The difference comes from retrieval configuration rather than an unexplained counting error. BM25-only and hybrid runs do not select exactly the same reports: 20251111432 and 20251111436 appeared only in the BM25 review, while 20251111554, 20251111445 and 20251111512 appeared only in the hybrid comparison. All case-level conclusions remain conditional on the actual injury mechanism and applicable OSHA standard.
+
+For the construction filter, my earlier review reconstructed 32 exclusions, while the later full 2015–2025 construction replay found 33. The older count should remain labeled as a different reconstruction, not presented as the current team result. The four potential worker-fall exclusions still warrant regression tests and are tracked in GitHub issue #29 for the Advance stage.
+
+I reran `python -I scripts/eval_batch_savings.py` after the B5 critic change. For report 20251111462, involving die setup on a 45-ton punch press, both evaluation paths now select 1910.147 rather than 1910.212(a)(3)(ii). This is consistent with investigating hazardous-energy control during servicing; it is not a determination of an OSHA violation.
+
+The rerun retained 56 versus 78 model calls, a saving of 22 calls (28.2%). No inspection decisions, Category 1 classifications or priority scores changed. The one remaining between-path citation difference is report 20251111512 (1910.212 versus 1910.243). The regenerated `eval/results/batch_savings.json` includes the updated result and minor token-estimation differences.
+
+An unresolved critic limitation remains: `mechanical_press_only` can receive only the generic machine description "press" from Intake and incorrectly reject 1910.217 even for a genuine punch press. This requires a separate issue and regression test; the current B5 correction does not fully resolve it.
+
 ## Construction `FALLING_THING` filter — 20 excluded narratives
 
 I read 20 excluded construction reports against the precise intended exclusion: **an object falls onto a worker**, not merely a sentence containing the word “fell.” The reviewed CSV records both whether an object struck the worker and whether the worker fell.
