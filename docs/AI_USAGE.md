@@ -51,6 +51,8 @@ Each task records here which AI tool helped and how the result was checked.
   one decision field that differs. Kevin reran it on another machine: the same calls, decisions
   and changed citation, and a cost estimate within one token. Offline, nothing was paid.
 
+* **B5, standards and Vietnamese talks** (Khoa). ChatGPT assisted with the review write-up, case-table preparation, and small code/test edits. Khoa compared the injury narratives with the labelling guide, checked OSHA's published standards and RRI procedure, and ran the offline test suite. Unresolved citation applicability and configuration differences are noted in `docs/reviews/khoa.md`, not treated as verified facts.
+
 ## The safety talk translations
 
 The Spanish, Chinese, Tagalog, Vietnamese and Arabic texts of the four safety talks were drafted

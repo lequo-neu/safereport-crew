@@ -178,6 +178,32 @@ def test_an_invented_standard_in_the_weekly_list_is_corrected_without_a_crash(sm
     assert any("issues back" in t["summary"] for t in state["trace"])
 
 
+# ---- B5: unsupported secondary citation regression ----
+
+
+def test_unsupported_secondary_press_citation_is_removed(small_services):
+    """Drop the unsupported press citation without replacing a valid primary."""
+    small_services.seeded_pick = {"primary": "1910.212(a)(1)", "secondary": "1910.217"}
+    assert small_services.citations.exists("1910.212(a)(1)")
+    assert not small_services.citations.exists("1910.217")
+
+    graph = build_graph(small_services, InMemorySaver())
+    request = (
+        "An employee was operating a pallet wrapping machine when "
+        "his finger was caught in a moving chain and sprocket."
+    )
+    out = graph.invoke({"request": request}, run_config())
+    pick = out["findings"]["report"]["pick"]
+
+    assert pick["primary"] == "1910.212(a)(1)"
+    assert not pick.get("secondary")
+    assert "1910.212(a)(1)" in out["answer"]
+    assert "1910.217" not in out["answer"]
+    assert any(
+        event["agent"] == "Decision critic" and "issues back" in event["summary"] for event in out["trace"]
+    )
+
+
 def test_a_pasted_name_and_phone_never_reach_the_planner(small_services):
     seen = []
     for backend in small_services.router.backends.values():
