@@ -59,6 +59,18 @@ Each task records here which AI tool helped and how the result was checked.
   Word file in Microsoft Word and the week's CSV in Excel. Hamad decided which findings are defects and which are
   questions. Hamad read the Arabic lockout Word file on screen in Microsoft Word and confirmed it
   (22 November). Not checked by a person yet: the walkthrough screenshots. Nothing was paid.
+* **B3, hand check of the Category 1 rules** (Hamad, pull request #20). Claude Code wrote the
+  sampling script and its test, drafted the labelling guide from the rules Kevin settled on #4,
+  and wrote the scoring command, a guide-based employer history check and their tests. It also
+  made an AI-assisted first pass over the 100 cases (`eval/provisional/`): the hospitalized count
+  as rule 7 says, employer history from the guide's written procedure, and Claude's own reading of
+  each narrative for the under-18 and emphasis program criteria. That pass is not a human label:
+  it is kept out of `eval/results/` and out of `data/labels/`, and its per-case answers stay off
+  GitHub until the hand labels are done; it is then compared with them as a separate line.
+  Cost: the pass was made in a Claude Code session, not through the crew's model keys. No model
+  call went through the app (the crew's spend ledger, `outputs/model_cache.sqlite`, has no
+  record), so nothing counts toward the $1.50. The labels in `data/labels/` are Hamad's and
+  Khoa's own, by hand.
 
 ## The safety talk translations
 

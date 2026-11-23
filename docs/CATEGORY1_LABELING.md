@@ -61,6 +61,8 @@ never loses labels.
 * **Do not look at what the crew or OSHA decided.** The file leaves out the rule output and
   whether OSHA inspected. Do not open a report in the app's case inspector or week list before
   you label it: both show the Category 1 result.
+* **Do not open `eval/provisional/` until your labels are done.** It describes an AI-assisted
+  first pass; it is compared with the hand labels afterwards, not used to make them.
 * **Judge the report as the area office would on the day it arrived**, from the narrative and
   OSHA's fields, not from what happened later.
 * **When the file cannot tell you, write `cannot_tell`, and give the reason in `notes`**, as

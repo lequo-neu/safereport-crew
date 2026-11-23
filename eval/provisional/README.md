@@ -18,13 +18,13 @@ reading was written down before the crew's output was computed.
 | `worker_under_18`, `emphasis_program_hazard` | Claude (an AI model) reading each narrative against the guide and the program scopes: Appendix B of CPL 03-00-027, the heat NEP's tables, CPL 03-00-025 (Falls), CPL 03-00-026 (Warehousing, 2026) and CPL 02-00-161 (Trenching) | Yes |
 | `imminent_danger` | Rule 5 as written: `cannot_tell` (past event) for all 100 | Not a judgment |
 
-Every row carries its evidence, a confidence and the source of each column. 36 rows are flagged
-for a person.
+Every row carries its evidence, a confidence and the source of each column; 36 rows are flagged
+as uncertain.
 
 **The per-case file is not committed yet.** 7 of the 36 flagged cases are among the 15 Khoa labels
-blind, and a person reviewing a case should not see the AI's answer first. The per-case labels,
-the history matches and the scores are kept off GitHub until both 15-case sets are returned
-(23 November, noon) and the targeted human review below is done.
+blind, and nobody labelling a case should see the AI's answer first. The per-case labels,
+the history matches and the scores are kept off GitHub until the 100 human labels and both
+15-case sets are done.
 
 ## What can be said from it
 
@@ -44,20 +44,18 @@ words miss; and amputations from a hand tool or a dropped roll, which the crew c
 
 ## Still needs people
 
-1. Human labels: all 100 by hand, or (if Kevin agrees on #4) a blind, targeted review of the 36
-   flagged cases plus a random spot-check of the others, scored with `--source human`.
+1. **Hamad's labels on all 100, by hand and blind to this pass** (Kevin on #4, 22 November: a
+   partial review would leave the other cases with the AI's labels, so recall and false alarms
+   would measure agreement with the AI, not a hand check). Scored with `--source human` into
+   `eval/results/`.
 2. Khoa's 15 and Hamad's same 15, labelled blind, for agreement (`--second`).
-3. The 4 possible employer matches.
+3. The 4 possible employer matches are part of those labels.
 
-## The 36 flagged cases (criterion only, no answer)
+Once the human labels are in, the AI pass is compared with them as a separate line (how often the
+two agree, `agreement()` in the scorer), outside `eval/results/`.
 
-29 outside the shared 15; the other 7 are listed after the exchange.
-
-| Criterion to review | Cases |
-|---|---|
-| Employer history | K019, K025, K026, K034, K040, K045, K054, K061, K071, K093, K100 |
-| Emphasis program | K018, K023, K024, K031, K046, K050, K055, K058, K059, K062, K066, K070, K079, K087, K091 |
-| Both | K003, K067, K080 |
+The flagged cases are listed with the held per-case file, not here, so the list cannot hint at
+where the AI was unsure before the hand labels are done.
 
 ## Reproduce
 
