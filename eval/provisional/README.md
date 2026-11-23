@@ -44,7 +44,8 @@ words miss; and amputations from a hand tool or a dropped roll, which the crew c
 
 ## Still needs people
 
-1. **Hamad's labels on all 100, by hand and blind to this pass** (Kevin on #4, 22 November: a
+1. **Labels on all 100, by hand and blind to this pass** (Hamad's labels are AI-assisted and do
+   not meet this; see `docs/AI_USAGE.md`) (Kevin on #4, 22 November: a
    partial review would leave the other cases with the AI's labels, so recall and false alarms
    would measure agreement with the AI, not a hand check). Scored with `--source human` into
    `eval/results/`.

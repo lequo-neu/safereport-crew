@@ -69,8 +69,20 @@ Each task records here which AI tool helped and how the result was checked.
   GitHub until the hand labels are done; it is then compared with them as a separate line.
   Cost: the pass was made in a Claude Code session, not through the crew's model keys. No model
   call went through the app (the crew's spend ledger, `outputs/model_cache.sqlite`, has no
-  record), so nothing counts toward the $1.50. The labels in `data/labels/` are Hamad's and
-  Khoa's own, by hand.
+  record), so nothing counts toward the $1.50.
+  On 22 November Claude Code also built a local review page for labelling one case at a time
+  (the report, OSHA's codes, the same-state reports in the history window and the guide's
+  rules; never the crew's output or OSHA's inspection field), and a bulk-save script that writes
+  only rows passing the guide's checks, with a backup and a row-by-row check afterwards.
+  **Hamad's 100 labels are AI-assisted, not blind hand labels.** They come from an AI-assisted
+  review file that Hamad read and approved case by case; 76 of the 100 notes begin with the same
+  text as the AI first pass, so they are not independent of it. Every row's notes say so.
+  Claude Code made formatting-only changes to fit the guide: the reason for each `cannot_tell`
+  in the guide's `column: reason` form; imminent danger `cannot_tell` (rule 5) where the file
+  said "no" (65 cases); and, where the file's overall answer contradicted its own criteria
+  (25 cases), the overall answer that follows the criteria, on Hamad's decision. They are not the
+  blind check Kevin set on #4: scored only as `--source ai-provisional`, kept out of
+  `eval/results/`. Khoa's 15 have not been labelled yet.
 
 ## The safety talk translations
 

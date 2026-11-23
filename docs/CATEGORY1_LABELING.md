@@ -170,7 +170,7 @@ quote the words in `evidence`. It is reported apart from the rules' recall.
 ## When you finish
 
 Save the file under the same name (CSV, UTF-8) and send it back. Khoa returns his 15 by
-23 November at noon. The scoring command (still to write) compares the rules as they are on
+23 November at noon. The scoring command, `scripts/score_category1_check.py`, compares the rules as they are on
 `main` with these labels: recall and false alarms with 95% Wilson intervals, per criterion and
 overall, on the cases that are not `cannot_tell`; the `cannot_tell` share with its reasons;
 imminent danger apart; and the agreement on the 15 shared cases.
