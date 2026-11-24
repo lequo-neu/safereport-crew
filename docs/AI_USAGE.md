@@ -174,6 +174,18 @@ the feature.
 * Paid experiments are capped at the team's budget of $1.50 and every reply is cached
   (`outputs/model_cache.sqlite`, not committed); `safereport eval-live` records what was spent.
 
+## B6: Seeded citation error evaluation
+
+ChatGPT assisted with seed preparation, scoring implementation,
+regression tests and interpretation of the results.
+
+The 24 seeded errors were committed before evaluation.
+All results were generated using existing offline domain
+checks and eCFR citation verification.
+
+The original answer key and domain rules remained unchanged.
+No paid model calls were made.
+
 ### B7: independent router evaluation (#8)
 
 ChatGPT assisted Khoa with the sampling and validation scripts,

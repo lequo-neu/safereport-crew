@@ -1,0 +1,25 @@
+case,sir_id,true_primary,seeded_primary,seeded_secondary,expected_rule,why
+C01,2022021032,1910.147,1910.212(a)(1),,energy_control,Cleaning a laminator requires consideration of hazardous energy.
+C21,2025010991,1910.147,1910.212(a)(1),,energy_control,Equipment setup exposed the worker to unexpected pneumatic energy.
+C43,2015064000,1910.147,1910.212(a)(1),,energy_control,Removing a bolt from a flour mill is a maintenance activity.
+C53,2017088401,1910.147,1910.212(a)(1),,energy_control,Cleaning a rotary airlock without lockout exposes hazardous energy.
+C06,2023054125,1910.212(a)(1),1910.217,,mechanical_press_only,A steel winding machine is not established as a mechanical power press.
+C12,2015050190,1910.212(a)(1),1910.217,,mechanical_press_only,A conveyor system is not a mechanical power press.
+C27,2016076862,1910.212(a)(1),1910.217,,mechanical_press_only,A pipe threading machine does not establish mechanical press coverage.
+C31,20241110373,1910.212(a)(1),1910.217,,mechanical_press_only,Printing machinery is outside the mechanical power press category.
+C03,2024065125,,1910.178,,powered_truck_only,The incident involves a front-end loader rather than an established industrial truck.
+C33,2017043125,,1910.178,,powered_truck_only,A road freight truck is not a powered industrial truck.
+C44,20171111103,1910.176(b),1910.178,,powered_truck_only,"The report concerns rolling pipe on a flatbed trailer, not forklift operation."
+C51,2017065646,,1910.178,,powered_truck_only,A delivery vehicle liftgate does not establish industrial truck coverage.
+C15,2023054246,1910.212(a)(1),1910.213,,woodworking_only,The wheel cutter processes steel rebar rather than wood.
+C47,20190911393,1910.212(a)(1),1910.213,,woodworking_only,The bandsaw cuts frozen fish rather than wood.
+C54,2016087805,1910.147,1910.213,,woodworking_only,The vertical lathe setup does not establish woodworking applicability.
+C08,2016065612,1910.132,1926.95,,wrong_part,"Forging incident in a manufacturing reference case, not construction."
+C17,2016098345,1910.333,1926.416,,wrong_part,Electrical troubleshooting in the manufacturing reference set.
+C26,2023076637,1910.101(b),1926.350,,wrong_part,Compressed-gas storage incident in the manufacturing reference set.
+C13,2019055327,1910.28(b)(1),1910.23,,fall_family,Fall from an elevated work platform rather than a ladder.
+C23,2022032299,1910.23,1910.22,,fall_family,The worker fell from a fiberglass stepladder.
+C09,2024087686,1910.22(a),1910.28,,fall_family,The worker fell on the same level after losing balance on pavement.
+C10,2018088059,1910.179(n),1910.999(z),,unknown_citation,Deliberately invented citation for a crane-related incident.
+C38,20201110485,1910.1200,1910.999(z),,unknown_citation,Deliberately invented citation for a chemical exposure incident.
+C59,20171211784,1910.213(h),1910.999(z),,unknown_citation,Deliberately invented citation for a woodworking incident.
