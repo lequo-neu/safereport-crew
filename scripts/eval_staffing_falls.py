@@ -9,7 +9,8 @@ holdout: once as it was in the Basic stage, once with the work route for staffin
 The reports are split by year: 2015 to 2019 were read while the construction words were written
 (development), and 2020 onward were run once after the rule was fixed (test). Nothing is labelled
 here: an added report is one the new rule flags, not one known to be right. OSHA's own choice to
-inspect is shown beside each group as past practice, not as the truth.
+inspect is shown beside each group as past practice, not as the truth. The hand labels of the
+added reports (issue #37) are added by scripts/score_staffing_falls_labels.py; run it after this.
 
 Needs data/processed/reports.parquet (`safereport build-data`). Offline, no model is called.
 """

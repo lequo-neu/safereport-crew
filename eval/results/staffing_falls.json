@@ -28,7 +28,7 @@
       "\\b(fell|falling|dropped) (\\w+ ){0,8}?(on|onto|upon) (him|them|her[.,;]|the (employee|worker|laborer)s?\\b|an? (employee|worker|laborer)\\b)"
     ]
   },
-  "caveat": "No report here is labelled. 'added' counts what the rule flags, not what is right; OSHA's inspection rate is past practice, and an SIR inspection depends on more than the Falls program.",
+  "caveat": "'added' counts what the rule flags; whether each added report is construction work and a fall to a lower level is in 'hand_labels' (issue #37). OSHA's inspection rate is past practice, and an SIR inspection depends on more than the Falls program.",
   "all": {
     "reports": 104996,
     "flagged_by_falls": {
@@ -221,6 +221,91 @@
     "not_adopted_employer_name_route": {
       "would_add": 0,
       "examples": []
+    }
+  },
+  "hand_labels": {
+    "issue": "#37",
+    "labeller": "Hamad, by hand (not an AI tool); data/labels/staffing_falls_added_Hamad.csv",
+    "question": "construction work and a fall to a lower level (yes, no or cannot_tell)",
+    "headline": "precision_strict on the test slice: cannot_tell is counted as not confirmed",
+    "rule_changed_after_labelling": false,
+    "development": {
+      "labelled": 13,
+      "answers": {
+        "yes": 12,
+        "no": 1,
+        "cannot_tell": 0
+      },
+      "precision_strict": {
+        "k": 12,
+        "n": 13,
+        "rate": 0.923,
+        "wilson_95": [
+          0.667,
+          0.986
+        ]
+      },
+      "precision_decided": {
+        "k": 12,
+        "n": 13,
+        "rate": 0.923,
+        "wilson_95": [
+          0.667,
+          0.986
+        ]
+      },
+      "precision_lenient": {
+        "k": 12,
+        "n": 13,
+        "rate": 0.923,
+        "wilson_95": [
+          0.667,
+          0.986
+        ]
+      },
+      "not_yes": {
+        "2015107889": "no (medium): Worker fell 4 feet while sweeping a floor (cleaning, not construction)."
+      }
+    },
+    "test": {
+      "labelled": 7,
+      "answers": {
+        "yes": 4,
+        "no": 1,
+        "cannot_tell": 2
+      },
+      "precision_strict": {
+        "k": 4,
+        "n": 7,
+        "rate": 0.571,
+        "wilson_95": [
+          0.25,
+          0.842
+        ]
+      },
+      "precision_decided": {
+        "k": 4,
+        "n": 5,
+        "rate": 0.8,
+        "wilson_95": [
+          0.376,
+          0.964
+        ]
+      },
+      "precision_lenient": {
+        "k": 6,
+        "n": 7,
+        "rate": 0.857,
+        "wilson_95": [
+          0.487,
+          0.974
+        ]
+      },
+      "not_yes": {
+        "2022109105": "cannot_tell (low): Worker fell 3 feet off a scaffold, but the narrative doesn't say what work he was doing.",
+        "2024032445": "no (medium): Worker fell from scaffolding onto an anvil during torch metal work (shop work, not construction).",
+        "20241211812": "cannot_tell (low): Scaffold collapsed and workers fell 14-15 feet, but the narrative doesn't state their task."
+      }
     }
   }
 }
