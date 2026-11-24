@@ -1090,7 +1090,761 @@
         }
       ],
       "cumulative_evaluation_cost": 0.004768,
-      "accuracy_measured": false
+      "accuracy_measured": false,
+      "personal_key_diagnostic": {
+        "evaluated_at": "2026-11-24T17:25:27.369658+00:00",
+        "model_id": "gemini-3.5-flash",
+        "case": "B7-017",
+        "credentials": "personal_ai_studio_key",
+        "generation_attempts": 1,
+        "status": "unavailable",
+        "http_error_code": 503,
+        "provider_status": "UNAVAILABLE",
+        "accuracy_measured": false,
+        "usage_reported": false,
+        "additional_cost": null,
+        "retry_allowed": false,
+        "reason": "Single-case diagnostic returned HTTP 503 using a personal Gemini API key. Further retries stopped per team guidance."
+      }
+    },
+    "claude": {
+      "model": "claude",
+      "model_id": "claude-sonnet-5-5",
+      "status": "complete",
+      "previous_team_spend": 0.14,
+      "local_budget_cap": 1.2599999999999998,
+      "total_reports": 50,
+      "eligible_reports": 35,
+      "excluded_no_standard": 15,
+      "strict_at_3_hits": 22,
+      "strict_at_3": 0.6285714285714286,
+      "strict_at_3_ci95": [
+        0.463,
+        0.768
+      ],
+      "scores": {
+        "cases": 35,
+        "strict_at_1": 0.429,
+        "strict_at_1_ci95": [
+          0.28,
+          0.591
+        ],
+        "strict_at_3": 0.629,
+        "strict_at_3_ci95": [
+          0.463,
+          0.768
+        ],
+        "lenient_at_1": 0.429,
+        "lenient_at_1_ci95": [
+          0.28,
+          0.591
+        ],
+        "lenient_at_3": 0.629,
+        "lenient_at_3_ci95": [
+          0.463,
+          0.768
+        ]
+      },
+      "per_case": [
+        {
+          "case": "B7-001",
+          "primary": "1910.178",
+          "found": "1910.178;1910.268;1910.266",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-002",
+          "primary": "1910.212",
+          "found": "1910.217;1910.147;1910.218",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-004",
+          "primary": "1910.178",
+          "found": "1910.136;1910.28;1910.29",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-009",
+          "primary": "1910.28",
+          "found": "1910.28;1910.29;1910.212",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-010",
+          "primary": "1910.147",
+          "found": "1910.147;1910.269;1910.134",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-011",
+          "primary": "1910.22",
+          "found": "1910.28;1910.29;1910.66",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-012",
+          "primary": "1910.212",
+          "found": "1910.217;1910.212;1910.255",
+          "strict_at_1": false,
+          "strict_at_3": true,
+          "lenient_at_1": false,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-013",
+          "primary": "1910.212",
+          "found": "1910.272;1910.264;1910.263",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-014",
+          "primary": "1910.22",
+          "found": "1910.28;1910.29;1910.1001",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-016",
+          "primary": "1910.179",
+          "found": "1910.179;1910.261;1910.110",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-017",
+          "primary": "1910.147",
+          "found": "1910.216;1910.29;1910.217",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-018",
+          "primary": "1910.212",
+          "found": "1910.217;1910.243;1910.212",
+          "strict_at_1": false,
+          "strict_at_3": true,
+          "lenient_at_1": false,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-019",
+          "primary": "1910.265",
+          "found": "1910.265;1910.213;1910.266",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-021",
+          "primary": "1910.212",
+          "found": "1910.243;1910.217;1910.262",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-022",
+          "primary": "1910.212",
+          "found": "1910.217;1910.212;1910.243",
+          "strict_at_1": false,
+          "strict_at_3": true,
+          "lenient_at_1": false,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-023",
+          "primary": "1910.147",
+          "found": "1910.219;1910.217;1910.262",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-024",
+          "primary": "1910.179",
+          "found": "1910.179;1910.184;1910.183",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-026",
+          "primary": "1910.212",
+          "found": "1910.217;1910.266;1910.68",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-027",
+          "primary": "1910.178",
+          "found": "1910.68;1910.28;1910.29",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-028",
+          "primary": "1910.212",
+          "found": "1910.212;1910.147;1910.264",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-029",
+          "primary": "1910.147",
+          "found": "1910.263;1910.147;1910.212",
+          "strict_at_1": false,
+          "strict_at_3": true,
+          "lenient_at_1": false,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-033",
+          "primary": "1910.147",
+          "found": "1910.243;1910.263;1910.147",
+          "strict_at_1": false,
+          "strict_at_3": true,
+          "lenient_at_1": false,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-034",
+          "primary": "1910.212",
+          "found": "1910.217;1910.218;1910.263",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-035",
+          "primary": "1910.212",
+          "found": "1910.212;1910.217;1910.147",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-037",
+          "primary": "1910.132",
+          "found": "1910.124;1910.119;1910.161",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-039",
+          "primary": "1910.212",
+          "found": "1910.217;1910.212;1910.213",
+          "strict_at_1": false,
+          "strict_at_3": true,
+          "lenient_at_1": false,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-040",
+          "primary": "1910.219",
+          "found": "1910.219;1910.243;1910.212",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-041",
+          "primary": "1910.28",
+          "found": "1910.28;1910.68;1910.29",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-042",
+          "primary": "1910.178",
+          "found": "1910.178;1910.243;1910.16",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-043",
+          "primary": "1910.147",
+          "found": "1910.147;1910.217;1910.269",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-044",
+          "primary": "1910.179",
+          "found": "1910.179;1910.217;1910.243",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-045",
+          "primary": "1910.147",
+          "found": "1910.147;1910.269;1910.219",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-046",
+          "primary": "1910.147",
+          "found": "1910.147;1910.262;1910.269",
+          "strict_at_1": true,
+          "strict_at_3": true,
+          "lenient_at_1": true,
+          "lenient_at_3": true
+        },
+        {
+          "case": "B7-047",
+          "primary": "1910.147",
+          "found": "1910.217;1910.262;1910.264",
+          "strict_at_1": false,
+          "strict_at_3": false,
+          "lenient_at_1": false,
+          "lenient_at_3": false
+        },
+        {
+          "case": "B7-048",
+          "primary": "1910.213",
+          "found": "1910.212;1910.213;1910.262",
+          "strict_at_1": false,
+          "strict_at_3": true,
+          "lenient_at_1": false,
+          "lenient_at_3": true
+        }
+      ],
+      "terms": {
+        "B7-001": [
+          "powered industrial truck",
+          "forklift",
+          "pedestrian struck by powered industrial truck",
+          "operator must slow down and sound horn at cross aisles and obstructed view locations",
+          "traffic lanes and pedestrian aisles",
+          "walking-working surfaces",
+          "designated pedestrian walkways",
+          "operator training and evaluation"
+        ],
+        "B7-002": [
+          "machine guarding",
+          "point of operation",
+          "mechanical power transmission",
+          "hazardous energy",
+          "control of hazardous energy",
+          "servicing and maintenance",
+          "lockout/tagout",
+          "unexpected movement of machine parts"
+        ],
+        "B7-004": [
+          "powered industrial truck",
+          "forklift",
+          "pedestrian traffic",
+          "struck by",
+          "walking-working surfaces",
+          "slips and falls",
+          "foot protection",
+          "protective footwear"
+        ],
+        "B7-009": [
+          "walking-working surfaces",
+          "fall to a lower level",
+          "unprotected sides and edges",
+          "fall protection",
+          "guarding floor and wall openings and holes",
+          "elevated work platform",
+          "machine maintenance and servicing",
+          "portable and fixed ladders"
+        ],
+        "B7-010": [
+          "hazardous energy",
+          "control of hazardous energy",
+          "lockout/tagout",
+          "servicing and maintenance",
+          "energy isolation device",
+          "stored energy",
+          "release of stored energy",
+          "pressure vessel"
+        ],
+        "B7-011": [
+          "walking-working surfaces",
+          "fall from elevation",
+          "elevated work platform",
+          "platform stability",
+          "slips, trips, and falls",
+          "machine guarding",
+          "point of operation",
+          "servicing and maintenance"
+        ],
+        "B7-012": [
+          "mechanical power presses",
+          "point of operation",
+          "machine guarding",
+          "foot pedal",
+          "foot control guarding against accidental operation",
+          "point of operation guarding device",
+          "presence sensing device",
+          "amputation hazard"
+        ],
+        "B7-013": [
+          "walking-working surfaces",
+          "struck by",
+          "bucket elevator",
+          "conveyors",
+          "machine guarding",
+          "mechanical power transmission",
+          "powered industrial truck",
+          "aisles and passageways"
+        ],
+        "B7-014": [
+          "walking-working surfaces",
+          "slippery floor",
+          "wet floor",
+          "floors kept clean and dry",
+          "slips and falls",
+          "drainage",
+          "housekeeping",
+          "manual material handling"
+        ],
+        "B7-016": [
+          "overhead and gantry cranes",
+          "overhead crane",
+          "materials handling and storage",
+          "rigging and load handling",
+          "suspended load",
+          "swinging load",
+          "caught between objects",
+          "struck by"
+        ],
+        "B7-017": [
+          "servicing and maintenance",
+          "hazardous energy",
+          "caught between",
+          "struck by falling object",
+          "machine guarding",
+          "mechanical power transmission",
+          "material handling",
+          "lifting and supporting heavy components"
+        ],
+        "B7-018": [
+          "machine guarding",
+          "point of operation",
+          "rotating parts",
+          "mechanical power transmission",
+          "chuck",
+          "lathe",
+          "amputation",
+          "caught in or between"
+        ],
+        "B7-019": [
+          "machine guarding",
+          "point of operation",
+          "woodworking machinery",
+          "sawmill",
+          "saws",
+          "moving machine parts",
+          "amputation",
+          "control of hazardous energy"
+        ],
+        "B7-021": [
+          "machine guarding",
+          "guarding of moving parts",
+          "point of operation",
+          "in-running nip points",
+          "rotating belt",
+          "mechanical power transmission apparatus",
+          "amputation",
+          "walking-working surfaces"
+        ],
+        "B7-022": [
+          "machine guarding",
+          "point of operation",
+          "pinch point",
+          "in-running nip points",
+          "rotating parts",
+          "foot pedal",
+          "accidental actuation",
+          "unintentional starting of machine"
+        ],
+        "B7-023": [
+          "conveyor",
+          "machine guarding",
+          "point of operation",
+          "mechanical power transmission apparatus",
+          "gears",
+          "in-running nip points",
+          "caught in or between",
+          "servicing and maintenance"
+        ],
+        "B7-024": [
+          "overhead crane",
+          "materials handling",
+          "rigging slings",
+          "hooks",
+          "suspended load",
+          "falling object",
+          "struck by",
+          "caught between"
+        ],
+        "B7-026": [
+          "pinch point",
+          "machine guarding",
+          "point of operation",
+          "mechanical power transmission",
+          "amputation",
+          "caught in or between",
+          "materials handling",
+          "conveyor"
+        ],
+        "B7-027": [
+          "powered industrial truck",
+          "forklift operator training",
+          "stand-up rider truck",
+          "operator restraint system",
+          "caught between",
+          "struck by",
+          "storage racks",
+          "aisle clearance"
+        ],
+        "B7-028": [
+          "machine guarding",
+          "point of operation",
+          "mechanical power transmission",
+          "hazardous energy",
+          "lockout/tagout",
+          "servicing and maintenance",
+          "guarding of machines",
+          "anchoring fixed machinery"
+        ],
+        "B7-029": [
+          "machine guarding",
+          "point of operation",
+          "slicer",
+          "food slicing machine",
+          "hazardous energy",
+          "servicing and maintenance",
+          "cleaning machinery while in motion",
+          "lockout/tagout"
+        ],
+        "B7-033": [
+          "machine guarding",
+          "point of operation",
+          "hazardous energy",
+          "lockout/tagout",
+          "servicing and maintenance",
+          "unexpected startup",
+          "clearing a jam",
+          "amputation"
+        ],
+        "B7-034": [
+          "mechanical power presses",
+          "machine guarding",
+          "point of operation",
+          "press brake",
+          "machines",
+          "general requirements for all machines",
+          "struck by falling or ejected object",
+          "die breakage"
+        ],
+        "B7-035": [
+          "machine guarding",
+          "point of operation",
+          "amputation",
+          "mechanical power transmission",
+          "in-running nip points",
+          "general requirements for all machines",
+          "servicing and maintenance",
+          "hazardous energy control"
+        ],
+        "B7-037": [
+          "hazardous chemicals",
+          "skin contact with corrosive chemical",
+          "chemical burns",
+          "thermal burns",
+          "hot cleaning solution",
+          "piping systems",
+          "pressurized pipe release",
+          "gasket failure"
+        ],
+        "B7-039": [
+          "machine guarding",
+          "point of operation",
+          "mechanical power presses",
+          "foot pedal",
+          "inadvertent actuation",
+          "foot control guarding",
+          "amputation",
+          "machines requiring one or more methods of machine guarding"
+        ],
+        "B7-040": [
+          "mechanical power-transmission apparatus",
+          "belt and pulley",
+          "machine guarding",
+          "guard failure",
+          "pulley",
+          "power transmission belts",
+          "machine guarding of moving parts",
+          "servicing and maintenance"
+        ],
+        "B7-041": [
+          "fall to a lower level",
+          "walking-working surfaces",
+          "protection from falling",
+          "unprotected side or edge",
+          "guardrail systems",
+          "mezzanine",
+          "gate opening",
+          "floor opening"
+        ],
+        "B7-042": [
+          "powered industrial truck",
+          "walk-behind powered industrial truck",
+          "pedestrian-operated industrial truck",
+          "operator training",
+          "materials handling",
+          "caught between",
+          "struck by",
+          "crushing injury"
+        ],
+        "B7-043": [
+          "machine guarding",
+          "point of operation",
+          "mechanical power presses",
+          "control of hazardous energy",
+          "servicing and maintenance",
+          "lockout/tagout",
+          "die changing",
+          "amputation"
+        ],
+        "B7-044": [
+          "overhead crane",
+          "materials handling",
+          "rigging and load handling",
+          "caught in or between",
+          "pinch point",
+          "amputation",
+          "machine guarding",
+          "point of operation"
+        ],
+        "B7-045": [
+          "servicing and maintenance",
+          "hazardous energy",
+          "control of hazardous energy (lockout/tagout)",
+          "lockout or tagout device",
+          "energy isolating device",
+          "unexpected energization or start up",
+          "machine guarding",
+          "mechanical power transmission apparatus"
+        ],
+        "B7-046": [
+          "machine guarding",
+          "mechanical power transmission apparatus",
+          "chains and sprockets",
+          "point of operation",
+          "in-running nip points",
+          "servicing and maintenance",
+          "control of hazardous energy",
+          "lockout/tagout"
+        ],
+        "B7-047": [
+          "pinch point",
+          "caught in or between",
+          "machine guarding",
+          "point of operation",
+          "mechanical power transmission",
+          "crushing hazard",
+          "amputation",
+          "hazardous energy"
+        ],
+        "B7-048": [
+          "machine guarding",
+          "point of operation",
+          "woodworking machinery",
+          "mechanical power transmission apparatus",
+          "amputation",
+          "moving machine parts",
+          "hazardous energy",
+          "servicing and maintenance"
+        ]
+      },
+      "recorded_cost": 0.061832,
+      "spend_ledger": [
+        {
+          "model": "claude",
+          "calls": 35,
+          "input_tokens": 6976,
+          "output_tokens": 4788,
+          "cost": 0.0618,
+          "priced": true
+        },
+        {
+          "model": "gemini_flash",
+          "calls": 13,
+          "input_tokens": 1543,
+          "output_tokens": 1705,
+          "cost": 0.0201,
+          "priced": false
+        },
+        {
+          "model": "gpt_nano",
+          "calls": 38,
+          "input_tokens": 5046,
+          "output_tokens": 88845,
+          "cost": 0.0358,
+          "priced": true
+        }
+      ],
+      "local_spent_total": 0.1177583,
+      "estimated_team_spent": 0.2577583,
+      "price_confirmed": true,
+      "evaluated_at": "2026-11-24T17:13:42.915330+00:00"
     }
   },
   "archived_models": {
@@ -1273,7 +2027,22 @@
     "previous_team_spend": 0.14,
     "estimated_team_spent": 0.1959263,
     "estimated_remaining": 1.3040737,
-    "future_action": "Separate follow-up issue for API quota, request pacing and model replacement."
+    "future_action": "No further B7 Gemini retries. Provider reliability follow-up remains separate.",
+    "latest_diagnostic": {
+      "evaluated_at": "2026-11-24T17:25:27.369658+00:00",
+      "model_id": "gemini-3.5-flash",
+      "case": "B7-017",
+      "credentials": "personal_ai_studio_key",
+      "generation_attempts": 1,
+      "status": "unavailable",
+      "http_error_code": 503,
+      "provider_status": "UNAVAILABLE",
+      "accuracy_measured": false,
+      "usage_reported": false,
+      "additional_cost": null,
+      "retry_allowed": false,
+      "reason": "Single-case diagnostic returned HTTP 503 using a personal Gemini API key. Further retries stopped per team guidance."
+    }
   },
   "paired_comparisons": {
     "gpt_nano_vs_offline": {
@@ -1327,6 +2096,121 @@
       "absolute_improvement_pp": 14.285714285714286,
       "relative_improvement": 0.4166666666666667,
       "mcnemar_exact_p": 0.0625
+    },
+    "claude_vs_offline": {
+      "baseline": "offline",
+      "candidate": "claude",
+      "metric": "strict_at_3",
+      "paired_cases": 35,
+      "gained": [
+        "B7-010",
+        "B7-012",
+        "B7-022",
+        "B7-029",
+        "B7-033",
+        "B7-039",
+        "B7-040",
+        "B7-043",
+        "B7-045",
+        "B7-046"
+      ],
+      "lost": [],
+      "both_correct": [
+        "B7-001",
+        "B7-009",
+        "B7-016",
+        "B7-018",
+        "B7-019",
+        "B7-024",
+        "B7-028",
+        "B7-035",
+        "B7-041",
+        "B7-042",
+        "B7-044",
+        "B7-048"
+      ],
+      "both_wrong": [
+        "B7-002",
+        "B7-004",
+        "B7-011",
+        "B7-013",
+        "B7-014",
+        "B7-017",
+        "B7-021",
+        "B7-023",
+        "B7-026",
+        "B7-027",
+        "B7-034",
+        "B7-037",
+        "B7-047"
+      ],
+      "net_improvement": 10,
+      "absolute_improvement_pp": 28.57142857142857,
+      "relative_improvement": 0.8333333333333334,
+      "mcnemar_exact_p": 0.001953125
+    },
+    "claude_vs_gpt_nano": {
+      "baseline": "gpt_nano",
+      "candidate": "claude",
+      "metric": "strict_at_3",
+      "paired_cases": 35,
+      "gained": [
+        "B7-022",
+        "B7-029",
+        "B7-033",
+        "B7-039",
+        "B7-040",
+        "B7-045",
+        "B7-046"
+      ],
+      "lost": [
+        "B7-004",
+        "B7-013"
+      ],
+      "both_correct": [
+        "B7-001",
+        "B7-009",
+        "B7-010",
+        "B7-012",
+        "B7-016",
+        "B7-018",
+        "B7-019",
+        "B7-024",
+        "B7-028",
+        "B7-035",
+        "B7-041",
+        "B7-042",
+        "B7-043",
+        "B7-044",
+        "B7-048"
+      ],
+      "both_wrong": [
+        "B7-002",
+        "B7-011",
+        "B7-014",
+        "B7-017",
+        "B7-021",
+        "B7-023",
+        "B7-026",
+        "B7-027",
+        "B7-034",
+        "B7-037",
+        "B7-047"
+      ],
+      "net_improvement": 5,
+      "absolute_improvement_pp": 14.285714285714285,
+      "relative_improvement": 0.29411764705882354,
+      "mcnemar_exact_p": 0.1796875
     }
+  },
+  "latest_spend_snapshot": {
+    "evaluated_at": "2026-11-24T17:25:27.369658+00:00",
+    "local_recorded_cost": 0.1177583,
+    "previous_team_spend": 0.14,
+    "estimated_team_spend": 0.2577583,
+    "budget_usd": 1.5,
+    "estimated_remaining_budget": 1.2422417,
+    "gemini_pricing_confirmed": false,
+    "latest_diagnostic_cost_confirmed": false
   }
 }

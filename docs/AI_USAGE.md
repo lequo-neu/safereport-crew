@@ -226,3 +226,19 @@ estimated combined spending was $0.1959263.
 The draft PR was not opened before the live experiments as
 originally planned. The frozen dataset and original answer key
 were not modified during the live evaluations.
+
+### B7 follow-up — November 24, 2026
+
+ChatGPT assisted with the Claude result reconciliation,
+paired McNemar comparisons, measured routing configuration,
+Gemini diagnostic and regression tests.
+
+Claude completed all 35 eligible cases using my own API key.
+The original frozen labels were not changed.
+
+The final personal-key Gemini 3.5 Flash diagnostic returned
+HTTP 503 UNAVAILABLE on B7-017. Gemini remains unmeasured,
+and further B7 retries were stopped.
+
+Only the retrieve accuracies for Claude and GPT-5 Nano
+are measured. Other model and step priors remain unchanged.

@@ -34,6 +34,8 @@ model_id = "claude-sonnet-5-5"
 prices = [2.00, 10.00]
 roles = ["retrieve", "decide"]
 prior = { code = 0.90, retrieve = 0.90, decide = 0.92, write = 0.92 }
+measured = { retrieve = 0.6285714285714286 }
+measured_source = "eval/results/router_slice.json"
 checked_on = "2026-11-19"
 note = "Anthropic's current Sonnet."
 
