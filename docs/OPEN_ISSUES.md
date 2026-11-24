@@ -132,7 +132,9 @@ measured outside the 2025 holdout.
 * **Emphasis program gaps**, all Advance: warehousing NAICS 491110 for retail post offices (#26)
   and the trenching program (#27), from B1; staffing employers doing construction work at height
   (#30), from B3. All four Category 1 misses and three false alarms of B3 come from the emphasis
-  program criterion.
+  program criterion. #30 is addressed by a narrow work route for NAICS 5613 measured outside the
+  holdout ([docs/FALLS_STAFFING.md](FALLS_STAFFING.md)); it does not catch K083, and the B3
+  numbers stay those of the Basic rule.
 * **CSV downloads on Windows (#17)** had blank rows and two failing tests; fixed in #21 (downloads
   are written as their text is).
 * **The B1 walkthrough screenshots** are kept on Hamad's machine (`.local/b1/screenshots/`), not

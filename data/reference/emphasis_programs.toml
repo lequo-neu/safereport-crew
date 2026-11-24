@@ -42,7 +42,31 @@ industries = ["23"]
 triggers = ['\b(fell|falls?|falling)\s+(\w+\s+){0,4}(from|off)\b', 'fall to (a )?lower level', '\bfell\b.{0,40}\b\d+\s*(feet|foot|ft)\b']
 anywhere_triggers = ['(?=.*\b(fell|falls?|falling)\b)(?=.*(roof ?top|rooftop|on (a|the) roof|utility line|power line|cable line|arborist|tree trimming|trimming (a )?tree|holiday light|billboard|road sign|power ?wash|pressure ?wash|gutter|chimney|window clean|communication tower|cell tower))']
 verified = true
-scope_note = "Section II of the directive: every construction fall from height, and outside construction only ten activities (roof top work, utility lines, tree trimming, holiday lights, road signs and billboards, power washing buildings, gutters, chimneys, windows, communication towers). Other work at height needs area office approval, so it is not Category 1 here."
+scope_note = "Section II of the directive: every construction fall from height, and outside construction only ten activities (roof top work, utility lines, tree trimming, holiday lights, road signs and billboards, power washing buildings, gutters, chimneys, windows, communication towers). Other work at height needs area office approval, so it is not Category 1 here. II.A covers 'all construction inspections related to falls' and the directive never names a NAICS code, so construction is the work, not the employer's code: a staffing agency (NAICS 5613) whose worker fell while doing construction work is covered (issue #30). Construction work is 'construction, alteration, and/or repair' (29 CFR 1910.12(b)); the evidence below names only work that is clearly that, and painting, installing lights or fixtures and work at an unnamed job site stay out because they are as often maintenance."
+# Issue #30. Staffing agencies (NAICS 5613) place workers in every industry, so their code says
+# nothing about the work. For them the program applies when the narrative names construction
+# work (one of work_evidence) and one of the fall triggers above matches. OSHA's own event title
+# "struck by ... falling object" means the thing fell, not the worker, so it vetoes the match;
+# so does a narrative where something fell onto the worker (a pasted report has no event title).
+work_industries = ["5613"]
+work_label = "construction work"
+work_evidence = [
+  '\bunder construction\b|\bbeing (built|constructed|framed|renovated|remodell?ed)\b',
+  '\bconstruction (site|project|job|jobsite|work|zone|area|crew|worker|laborer|labou?rer)s?\b',
+  '\b(new|commercial|residential|building|home|house|road|highway|bridge) construction\b',
+  '\bscaffold',
+  '\broofing\b|\broofers?\b|\bre-?roof|\bshingl(e|es|ing)\b|\bdrip edge\b|\broof (deck|decking|panels?|sheathing|truss(es)?|eaves?)\b',
+  '\bframing\b|\bframers?\b|\b(roof|floor) truss(es)?\b|\bsheathing\b',
+  '\b(hang|hanging|hung|install\w*) (the |some )?(dry ?wall|sheet ?rock|siding|insulation|trusses|joists)\b|\blaying (down )?insulation\b',
+  '\bstructural steel\b|\bsteel erect|\biron ?work|\brebar\b|\bconcrete forms?\b|\bformwork\b|\b(pour|pouring|placing) concrete\b',
+  '\bmasonry\b|\bbrick ?lay|\bblock ?lay',
+  '\bdemoli(tion|sh)|\brenovat|\bremodel',
+  '\bexcavat|\btrench',
+]
+work_exclusions = [
+  'struck by (\w+ )?(object )?falling|falling object|object falling',
+  '\b(fell|falling|dropped) (\w+ ){0,8}?(on|onto|upon) (him|them|her[.,;]|the (employee|worker|laborer)s?\b|an? (employee|worker|laborer)\b)',
+]
 text = """Falls while working at heights: in construction, any fall to a lower level; outside construction, falls during roof top work, utility line work, tree trimming, holiday light installation, sign and billboard maintenance, power washing, gutter, chimney and window cleaning, and communication towers."""
 
 [[documents]]
