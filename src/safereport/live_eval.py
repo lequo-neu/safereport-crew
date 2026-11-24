@@ -33,17 +33,19 @@ def _backend(model: str, ledger: SpendLedger):
     return backends[model]
 
 
-def _terms(backend, narrative: str) -> list[str]:
+def _terms(backend, narrative: str, *, attempts: int = 4) -> list[str]:
+    if attempts < 1:
+        raise ValueError("At least one attempt is required")
     material = offline.intake({"report_id": "x", "narrative": narrative})["material"]
     prompt = json.dumps({"narrative": redact(narrative).text, "material": material})
-    for attempt in range(4):
+    for attempt in range(attempts):
         try:
             reply = backend.complete("standards_terms", prompt)
             break
         except ModelError as error:
             # A busy provider answers 5xx or 429 now and then; this experiment wants this model's
             # answer, so it waits and asks again instead of falling back to another model.
-            if error.kind not in ("server_error", "rate_limit") or attempt == 3:
+            if error.kind not in ("server_error", "rate_limit") or attempt == attempts - 1:
                 raise
             time.sleep(2 * (attempt + 1))
     return [str(t) for t in (reply.data or {}).get("terms", [])][:8]

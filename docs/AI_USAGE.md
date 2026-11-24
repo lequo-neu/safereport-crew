@@ -190,5 +190,39 @@ the final label freeze. This limits the claim of fully blind
 adjudication. No live model answers were examined before freezing
 the reference CSV.
 
-The local full regression suite passed 432 tests. No paid model
-calls had been made at the time of the draft PR.
+The initial offline regression suite passed 432 tests.
+
+After the reference labels were frozen, Khoa ran the offline
+hybrid baseline and GPT-5 Nano evaluation on the 35 eligible
+reports. Strict Hit@3 was 12/35 offline and 17/35 with Nano.
+The paired comparison found five improvements, no deterioration,
+and an exact McNemar p-value of 0.0625.
+
+Gemini 3.5 Flash failed at B7-017 after 10 completed cases.
+An additional rerun encountered the same failure. Gemini 3.6
+Flash passed a separate synthetic diagnostic but its evaluation
+stopped at B7-004 because of a rate limit after two completed cases.
+Both experiments are preserved in the evaluation results.
+
+ChatGPT assisted with diagnosing provider failures and testing
+a correction for Gemini thinking-token accounting. Five dedicated
+mocked tests passed. The provider correction and its tests are
+deferred to a separate follow-up rather than included in B7.
+
+Gemini recovery is deferred. Neither Gemini version is assigned
+measured accuracy. Claude was not evaluated because credentials
+were unavailable. Gemma remains unmeasured.
+
+GPT-5 Nano's measured strict Hit@3 replaces its retrieval prior.
+Other step types and unmeasured models retain their priors.
+These assumptions are not equivalent to measured accuracy.
+
+Recorded local expenditure was $0.0559263, including diagnostic
+calls and incomplete evaluations. Gemini prices remain unconfirmed,
+and historical thinking-token consumption is not fully reconciled.
+Using the previously reported team expenditure of $0.14,
+estimated combined spending was $0.1959263.
+
+The draft PR was not opened before the live experiments as
+originally planned. The frozen dataset and original answer key
+were not modified during the live evaluations.
