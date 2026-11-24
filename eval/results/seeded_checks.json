@@ -1,0 +1,3634 @@
+{
+  "evaluation": "B6 seeded citation errors",
+  "mode": "offline",
+  "paid_api_calls": 0,
+  "facts_source": "safereport.offline.intake",
+  "seed_sha256": "9c603ea327c42ca648c22e14f73f7edbe18834f7594192148cebf3fb09eb68fd",
+  "answer_key_sha256": "59e869da67c085b7151d24ca35095ec3a560a947b8d8c1eed390602f59be2be8",
+  "reference_reports": 60,
+  "reference_with_standard": 51,
+  "seeded_reports": 24,
+  "naics_assumption": "Manufacturing (31)",
+  "ecfr_files": {
+    "title-29-part-1910.xml": "187e944ad547cc65c9acfa8135c9a6f43da30a5b5d5cde2ad293ec6369dcbf3a"
+  },
+  "overall": {
+    "expected_rule_detection": {
+      "hits": 24,
+      "total": 24,
+      "rate": 1.0,
+      "ci95": [
+        0.862,
+        1.0
+      ]
+    },
+    "caught": {
+      "hits": 24,
+      "total": 24,
+      "rate": 1.0,
+      "ci95": [
+        0.862,
+        1.0
+      ]
+    },
+    "flagged_for_person": {
+      "hits": 0,
+      "total": 24,
+      "rate": 0.0,
+      "ci95": [
+        0.0,
+        0.138
+      ]
+    },
+    "missed_expected_rule": {
+      "hits": 0,
+      "total": 24,
+      "rate": 0.0,
+      "ci95": [
+        0.0,
+        0.138
+      ]
+    },
+    "any_issue": {
+      "hits": 24,
+      "total": 24,
+      "rate": 1.0,
+      "ci95": [
+        0.862,
+        1.0
+      ]
+    }
+  },
+  "by_rule": {
+    "energy_control": {
+      "expected_rule_detection": {
+        "hits": 4,
+        "total": 4,
+        "rate": 1.0,
+        "ci95": [
+          0.51,
+          1.0
+        ]
+      },
+      "caught": {
+        "hits": 4,
+        "total": 4,
+        "rate": 1.0,
+        "ci95": [
+          0.51,
+          1.0
+        ]
+      },
+      "flagged_for_person": {
+        "hits": 0,
+        "total": 4,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.49
+        ]
+      },
+      "missed_expected_rule": {
+        "hits": 0,
+        "total": 4,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.49
+        ]
+      },
+      "any_issue": {
+        "hits": 4,
+        "total": 4,
+        "rate": 1.0,
+        "ci95": [
+          0.51,
+          1.0
+        ]
+      }
+    },
+    "fall_family": {
+      "expected_rule_detection": {
+        "hits": 3,
+        "total": 3,
+        "rate": 1.0,
+        "ci95": [
+          0.438,
+          1.0
+        ]
+      },
+      "caught": {
+        "hits": 3,
+        "total": 3,
+        "rate": 1.0,
+        "ci95": [
+          0.438,
+          1.0
+        ]
+      },
+      "flagged_for_person": {
+        "hits": 0,
+        "total": 3,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.562
+        ]
+      },
+      "missed_expected_rule": {
+        "hits": 0,
+        "total": 3,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.562
+        ]
+      },
+      "any_issue": {
+        "hits": 3,
+        "total": 3,
+        "rate": 1.0,
+        "ci95": [
+          0.438,
+          1.0
+        ]
+      }
+    },
+    "mechanical_press_only": {
+      "expected_rule_detection": {
+        "hits": 4,
+        "total": 4,
+        "rate": 1.0,
+        "ci95": [
+          0.51,
+          1.0
+        ]
+      },
+      "caught": {
+        "hits": 4,
+        "total": 4,
+        "rate": 1.0,
+        "ci95": [
+          0.51,
+          1.0
+        ]
+      },
+      "flagged_for_person": {
+        "hits": 0,
+        "total": 4,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.49
+        ]
+      },
+      "missed_expected_rule": {
+        "hits": 0,
+        "total": 4,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.49
+        ]
+      },
+      "any_issue": {
+        "hits": 4,
+        "total": 4,
+        "rate": 1.0,
+        "ci95": [
+          0.51,
+          1.0
+        ]
+      }
+    },
+    "powered_truck_only": {
+      "expected_rule_detection": {
+        "hits": 4,
+        "total": 4,
+        "rate": 1.0,
+        "ci95": [
+          0.51,
+          1.0
+        ]
+      },
+      "caught": {
+        "hits": 4,
+        "total": 4,
+        "rate": 1.0,
+        "ci95": [
+          0.51,
+          1.0
+        ]
+      },
+      "flagged_for_person": {
+        "hits": 0,
+        "total": 4,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.49
+        ]
+      },
+      "missed_expected_rule": {
+        "hits": 0,
+        "total": 4,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.49
+        ]
+      },
+      "any_issue": {
+        "hits": 4,
+        "total": 4,
+        "rate": 1.0,
+        "ci95": [
+          0.51,
+          1.0
+        ]
+      }
+    },
+    "unknown_citation": {
+      "expected_rule_detection": {
+        "hits": 3,
+        "total": 3,
+        "rate": 1.0,
+        "ci95": [
+          0.438,
+          1.0
+        ]
+      },
+      "caught": {
+        "hits": 3,
+        "total": 3,
+        "rate": 1.0,
+        "ci95": [
+          0.438,
+          1.0
+        ]
+      },
+      "flagged_for_person": {
+        "hits": 0,
+        "total": 3,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.562
+        ]
+      },
+      "missed_expected_rule": {
+        "hits": 0,
+        "total": 3,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.562
+        ]
+      },
+      "any_issue": {
+        "hits": 3,
+        "total": 3,
+        "rate": 1.0,
+        "ci95": [
+          0.438,
+          1.0
+        ]
+      }
+    },
+    "woodworking_only": {
+      "expected_rule_detection": {
+        "hits": 3,
+        "total": 3,
+        "rate": 1.0,
+        "ci95": [
+          0.438,
+          1.0
+        ]
+      },
+      "caught": {
+        "hits": 3,
+        "total": 3,
+        "rate": 1.0,
+        "ci95": [
+          0.438,
+          1.0
+        ]
+      },
+      "flagged_for_person": {
+        "hits": 0,
+        "total": 3,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.562
+        ]
+      },
+      "missed_expected_rule": {
+        "hits": 0,
+        "total": 3,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.562
+        ]
+      },
+      "any_issue": {
+        "hits": 3,
+        "total": 3,
+        "rate": 1.0,
+        "ci95": [
+          0.438,
+          1.0
+        ]
+      }
+    },
+    "wrong_part": {
+      "expected_rule_detection": {
+        "hits": 3,
+        "total": 3,
+        "rate": 1.0,
+        "ci95": [
+          0.438,
+          1.0
+        ]
+      },
+      "caught": {
+        "hits": 3,
+        "total": 3,
+        "rate": 1.0,
+        "ci95": [
+          0.438,
+          1.0
+        ]
+      },
+      "flagged_for_person": {
+        "hits": 0,
+        "total": 3,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.562
+        ]
+      },
+      "missed_expected_rule": {
+        "hits": 0,
+        "total": 3,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.562
+        ]
+      },
+      "any_issue": {
+        "hits": 3,
+        "total": 3,
+        "rate": 1.0,
+        "ci95": [
+          0.438,
+          1.0
+        ]
+      }
+    }
+  },
+  "false_rejection": {
+    "hits": 4,
+    "total": 51,
+    "rate": 0.0784313725490196,
+    "ci95": [
+      0.031,
+      0.185
+    ]
+  },
+  "misses": [],
+  "false_rejections": [
+    {
+      "case": "C02",
+      "sir_id": "2016098765",
+      "primary": "1910.109",
+      "wrongly_rejected": true,
+      "automatic_fix_requested": true,
+      "issues": [
+        {
+          "rule": "general_duty",
+          "message": "no Part 1910 standard covers bite; OSHA uses the General Duty Clause",
+          "suggestion": "cite OSH Act 5(a)(1)",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2016098765",
+        "activity": "setup",
+        "hazard_type": "bite",
+        "machine_or_hazard": "sting",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 26
+          },
+          {
+            "label": "hazard",
+            "start": 63,
+            "end": 68
+          }
+        ]
+      }
+    },
+    {
+      "case": "C14",
+      "sir_id": "2017010791",
+      "primary": "1910.22(a)",
+      "wrongly_rejected": true,
+      "automatic_fix_requested": false,
+      "issues": [
+        {
+          "rule": "fall_only",
+          "message": "1910.22 is about falls, but the worker was hurt by machine",
+          "suggestion": "cite the standard for what hurt the worker",
+          "fix": false
+        }
+      ],
+      "intake": {
+        "report_id": "2017010791",
+        "activity": "unknown",
+        "hazard_type": "machine",
+        "machine_or_hazard": "press",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the employee operating, cleaning or servicing the machine?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 43,
+            "end": 48
+          },
+          {
+            "label": "material",
+            "start": 81,
+            "end": 86
+          }
+        ]
+      }
+    },
+    {
+      "case": "C27",
+      "sir_id": "2016076862",
+      "primary": "1910.212(a)(1)",
+      "wrongly_rejected": true,
+      "automatic_fix_requested": true,
+      "issues": [
+        {
+          "rule": "energy_control",
+          "message": "the worker was setup a machine, which points to control of hazardous energy",
+          "suggestion": "cite 1910.147 as primary, with the guarding standard as secondary",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2016076862",
+        "activity": "setup",
+        "hazard_type": "machine",
+        "machine_or_hazard": "machine",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 33,
+            "end": 42
+          },
+          {
+            "label": "hazard",
+            "start": 43,
+            "end": 50
+          },
+          {
+            "label": "material",
+            "start": 28,
+            "end": 32
+          }
+        ]
+      }
+    },
+    {
+      "case": "C32",
+      "sir_id": "2021076263",
+      "primary": "1910.22(a)",
+      "wrongly_rejected": true,
+      "automatic_fix_requested": false,
+      "issues": [
+        {
+          "rule": "fall_only",
+          "message": "1910.22 is about falls, but the worker was hurt by machine",
+          "suggestion": "cite the standard for what hurt the worker",
+          "fix": false
+        }
+      ],
+      "intake": {
+        "report_id": "2021076263",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "caught",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 25
+          },
+          {
+            "label": "hazard",
+            "start": 68,
+            "end": 74
+          }
+        ]
+      }
+    }
+  ],
+  "seeded_per_case": [
+    {
+      "case": "C01",
+      "sir_id": "2022021032",
+      "true_primary": "1910.147",
+      "seeded_primary": "1910.212(a)(1)",
+      "seeded_secondary": "",
+      "expected_rule": "energy_control",
+      "why": "Cleaning a laminator requires consideration of hazardous energy.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "energy_control"
+      ],
+      "issues": [
+        {
+          "rule": "energy_control",
+          "message": "the worker was cleaning a machine, which points to control of hazardous energy",
+          "suggestion": "cite 1910.147 as primary, with the guarding standard as secondary",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2022021032",
+        "activity": "cleaning",
+        "hazard_type": "machine",
+        "machine_or_hazard": "roller",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 79,
+            "end": 87
+          },
+          {
+            "label": "hazard",
+            "start": 39,
+            "end": 45
+          }
+        ]
+      }
+    },
+    {
+      "case": "C21",
+      "sir_id": "2025010991",
+      "true_primary": "1910.147",
+      "seeded_primary": "1910.212(a)(1)",
+      "seeded_secondary": "",
+      "expected_rule": "energy_control",
+      "why": "Equipment setup exposed the worker to unexpected pneumatic energy.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "energy_control"
+      ],
+      "issues": [
+        {
+          "rule": "energy_control",
+          "message": "the worker was setup a machine, which points to control of hazardous energy",
+          "suggestion": "cite 1910.147 as primary, with the guarding standard as secondary",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2025010991",
+        "activity": "setup",
+        "hazard_type": "machine",
+        "machine_or_hazard": "spindle",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 53,
+            "end": 63
+          },
+          {
+            "label": "hazard",
+            "start": 203,
+            "end": 210
+          },
+          {
+            "label": "material",
+            "start": 26,
+            "end": 30
+          }
+        ]
+      }
+    },
+    {
+      "case": "C43",
+      "sir_id": "2015064000",
+      "true_primary": "1910.147",
+      "seeded_primary": "1910.212(a)(1)",
+      "seeded_secondary": "",
+      "expected_rule": "energy_control",
+      "why": "Removing a bolt from a flour mill is a maintenance activity.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "energy_control"
+      ],
+      "issues": [
+        {
+          "rule": "energy_control",
+          "message": "the worker was servicing a machine, which points to control of hazardous energy",
+          "suggestion": "cite 1910.147 as primary, with the guarding standard as secondary",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2015064000",
+        "activity": "servicing",
+        "hazard_type": "machine",
+        "machine_or_hazard": "mill",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 43,
+            "end": 56
+          },
+          {
+            "label": "hazard",
+            "start": 35,
+            "end": 39
+          }
+        ]
+      }
+    },
+    {
+      "case": "C53",
+      "sir_id": "2017088401",
+      "true_primary": "1910.147",
+      "seeded_primary": "1910.212(a)(1)",
+      "seeded_secondary": "",
+      "expected_rule": "energy_control",
+      "why": "Cleaning a rotary airlock without lockout exposes hazardous energy.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "energy_control"
+      ],
+      "issues": [
+        {
+          "rule": "energy_control",
+          "message": "the worker was cleaning a machine, which points to control of hazardous energy",
+          "suggestion": "cite 1910.147 as primary, with the guarding standard as secondary",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2017088401",
+        "activity": "cleaning",
+        "hazard_type": "machine",
+        "machine_or_hazard": "airlock",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 36,
+            "end": 44
+          },
+          {
+            "label": "hazard",
+            "start": 71,
+            "end": 78
+          }
+        ]
+      }
+    },
+    {
+      "case": "C06",
+      "sir_id": "2023054125",
+      "true_primary": "1910.212(a)(1)",
+      "seeded_primary": "1910.217",
+      "seeded_secondary": "",
+      "expected_rule": "mechanical_press_only",
+      "why": "A steel winding machine is not established as a mechanical power press.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "mechanical_press_only"
+      ],
+      "issues": [
+        {
+          "rule": "mechanical_press_only",
+          "message": "1910.217 covers mechanical power presses, and the narrative does not say the press is one",
+          "suggestion": "cite 1910.212(a)(3)(ii) as primary and 1910.217 as secondary",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2023054125",
+        "activity": "unknown",
+        "hazard_type": "machine",
+        "machine_or_hazard": "winder",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the employee operating, cleaning or servicing the machine?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 80,
+            "end": 86
+          },
+          {
+            "label": "material",
+            "start": 37,
+            "end": 42
+          }
+        ]
+      }
+    },
+    {
+      "case": "C12",
+      "sir_id": "2015050190",
+      "true_primary": "1910.212(a)(1)",
+      "seeded_primary": "1910.217",
+      "seeded_secondary": "",
+      "expected_rule": "mechanical_press_only",
+      "why": "A conveyor system is not a mechanical power press.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "mechanical_press_only"
+      ],
+      "issues": [
+        {
+          "rule": "mechanical_press_only",
+          "message": "1910.217 covers mechanical power presses, and the narrative does not say the press is one",
+          "suggestion": "cite 1910.212(a)(3)(ii) as primary and 1910.217 as secondary",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2015050190",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "conveyor",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 26
+          },
+          {
+            "label": "hazard",
+            "start": 36,
+            "end": 44
+          }
+        ]
+      }
+    },
+    {
+      "case": "C27",
+      "sir_id": "2016076862",
+      "true_primary": "1910.212(a)(1)",
+      "seeded_primary": "1910.217",
+      "seeded_secondary": "",
+      "expected_rule": "mechanical_press_only",
+      "why": "A pipe threading machine does not establish mechanical press coverage.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "energy_control",
+        "mechanical_press_only"
+      ],
+      "issues": [
+        {
+          "rule": "energy_control",
+          "message": "the worker was setup a machine, which points to control of hazardous energy",
+          "suggestion": "cite 1910.147 as primary, with the guarding standard as secondary",
+          "fix": true
+        },
+        {
+          "rule": "mechanical_press_only",
+          "message": "1910.217 covers mechanical power presses, and the narrative does not say the press is one",
+          "suggestion": "cite 1910.212(a)(3)(ii) as primary and 1910.217 as secondary",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2016076862",
+        "activity": "setup",
+        "hazard_type": "machine",
+        "machine_or_hazard": "machine",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 33,
+            "end": 42
+          },
+          {
+            "label": "hazard",
+            "start": 43,
+            "end": 50
+          },
+          {
+            "label": "material",
+            "start": 28,
+            "end": 32
+          }
+        ]
+      }
+    },
+    {
+      "case": "C31",
+      "sir_id": "20241110373",
+      "true_primary": "1910.212(a)(1)",
+      "seeded_primary": "1910.217",
+      "seeded_secondary": "",
+      "expected_rule": "mechanical_press_only",
+      "why": "Printing machinery is outside the mechanical power press category.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "mechanical_press_only"
+      ],
+      "issues": [
+        {
+          "rule": "mechanical_press_only",
+          "message": "1910.217 covers mechanical power presses, and the narrative does not say the press is one",
+          "suggestion": "cite 1910.212(a)(3)(ii) as primary and 1910.217 as secondary",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "20241110373",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "machine",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 26
+          },
+          {
+            "label": "hazard",
+            "start": 38,
+            "end": 45
+          }
+        ]
+      }
+    },
+    {
+      "case": "C03",
+      "sir_id": "2024065125",
+      "true_primary": "",
+      "seeded_primary": "1910.178",
+      "seeded_secondary": "",
+      "expected_rule": "powered_truck_only",
+      "why": "The incident involves a front-end loader rather than an established industrial truck.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "powered_truck_only"
+      ],
+      "issues": [
+        {
+          "rule": "powered_truck_only",
+          "message": "1910.178 covers powered industrial trucks, but the vehicle is grinder",
+          "suggestion": "a front end loader or a road truck has no Part 1910 truck standard; cite OSH Act 5(a)(1)",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2024065125",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "grinder",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 90,
+            "end": 99
+          },
+          {
+            "label": "hazard",
+            "start": 58,
+            "end": 65
+          }
+        ]
+      }
+    },
+    {
+      "case": "C33",
+      "sir_id": "2017043125",
+      "true_primary": "",
+      "seeded_primary": "1910.178",
+      "seeded_secondary": "",
+      "expected_rule": "powered_truck_only",
+      "why": "A road freight truck is not a powered industrial truck.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "powered_truck_only"
+      ],
+      "issues": [
+        {
+          "rule": "powered_truck_only",
+          "message": "1910.178 covers powered industrial trucks, but the vehicle is caught",
+          "suggestion": "a front end loader or a road truck has no Part 1910 truck standard; cite OSH Act 5(a)(1)",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2017043125",
+        "activity": "unknown",
+        "hazard_type": "machine",
+        "machine_or_hazard": "caught",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the employee operating, cleaning or servicing the machine?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 67,
+            "end": 73
+          }
+        ]
+      }
+    },
+    {
+      "case": "C44",
+      "sir_id": "20171111103",
+      "true_primary": "1910.176(b)",
+      "seeded_primary": "1910.178",
+      "seeded_secondary": "",
+      "expected_rule": "powered_truck_only",
+      "why": "The report concerns rolling pipe on a flatbed trailer, not forklift operation.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "powered_truck_only"
+      ],
+      "issues": [
+        {
+          "rule": "powered_truck_only",
+          "message": "1910.178 covers powered industrial trucks, but the vehicle is tractor",
+          "suggestion": "a front end loader or a road truck has no Part 1910 truck standard; cite OSH Act 5(a)(1)",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "20171111103",
+        "activity": "normal operation",
+        "hazard_type": "other_vehicle",
+        "machine_or_hazard": "tractor",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 23
+          },
+          {
+            "label": "hazard",
+            "start": 44,
+            "end": 51
+          },
+          {
+            "label": "material",
+            "start": 24,
+            "end": 28
+          }
+        ]
+      }
+    },
+    {
+      "case": "C51",
+      "sir_id": "2017065646",
+      "true_primary": "",
+      "seeded_primary": "1910.178",
+      "seeded_secondary": "",
+      "expected_rule": "powered_truck_only",
+      "why": "A delivery vehicle liftgate does not establish industrial truck coverage.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "energy_control",
+        "powered_truck_only"
+      ],
+      "issues": [
+        {
+          "rule": "energy_control",
+          "message": "the worker was unjamming a machine, which points to control of hazardous energy",
+          "suggestion": "cite 1910.147 as primary, with the guarding standard as secondary",
+          "fix": true
+        },
+        {
+          "rule": "powered_truck_only",
+          "message": "1910.178 covers powered industrial trucks, but the vehicle is another kind",
+          "suggestion": "a front end loader or a road truck has no Part 1910 truck standard; cite OSH Act 5(a)(1)",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2017065646",
+        "activity": "unjamming",
+        "hazard_type": "machine",
+        "machine_or_hazard": "",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 107,
+            "end": 119
+          }
+        ]
+      }
+    },
+    {
+      "case": "C15",
+      "sir_id": "2023054246",
+      "true_primary": "1910.212(a)(1)",
+      "seeded_primary": "1910.213",
+      "seeded_secondary": "",
+      "expected_rule": "woodworking_only",
+      "why": "The wheel cutter processes steel rebar rather than wood.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "woodworking_only"
+      ],
+      "issues": [
+        {
+          "rule": "woodworking_only",
+          "message": "1910.213 covers woodworking machines, but the material is metal",
+          "suggestion": "cite 1910.212 (general machine guarding)",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2023054246",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "cutter",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 21
+          },
+          {
+            "label": "hazard",
+            "start": 30,
+            "end": 36
+          },
+          {
+            "label": "material",
+            "start": 44,
+            "end": 49
+          }
+        ]
+      }
+    },
+    {
+      "case": "C47",
+      "sir_id": "20190911393",
+      "true_primary": "1910.212(a)(1)",
+      "seeded_primary": "1910.213",
+      "seeded_secondary": "",
+      "expected_rule": "woodworking_only",
+      "why": "The bandsaw cuts frozen fish rather than wood.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "woodworking_only"
+      ],
+      "issues": [
+        {
+          "rule": "woodworking_only",
+          "message": "1910.213 covers woodworking machines, but the material is food",
+          "suggestion": "cite 1910.212 (general machine guarding)",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "20190911393",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "blade",
+        "material": "food",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 23
+          },
+          {
+            "label": "hazard",
+            "start": 104,
+            "end": 109
+          },
+          {
+            "label": "material",
+            "start": 34,
+            "end": 38
+          }
+        ]
+      }
+    },
+    {
+      "case": "C54",
+      "sir_id": "2016087805",
+      "true_primary": "1910.147",
+      "seeded_primary": "1910.213",
+      "seeded_secondary": "",
+      "expected_rule": "woodworking_only",
+      "why": "The vertical lathe setup does not establish woodworking applicability.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "energy_control",
+        "woodworking_only"
+      ],
+      "issues": [
+        {
+          "rule": "energy_control",
+          "message": "the worker was servicing a machine, which points to control of hazardous energy",
+          "suggestion": "cite 1910.147 as primary, with the guarding standard as secondary",
+          "fix": true
+        },
+        {
+          "rule": "woodworking_only",
+          "message": "1910.213 covers woodworking machines, but the material is not wood",
+          "suggestion": "cite 1910.212 (general machine guarding)",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2016087805",
+        "activity": "servicing",
+        "hazard_type": "machine",
+        "machine_or_hazard": "lathe",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 70,
+            "end": 79
+          },
+          {
+            "label": "hazard",
+            "start": 38,
+            "end": 43
+          }
+        ]
+      }
+    },
+    {
+      "case": "C08",
+      "sir_id": "2016065612",
+      "true_primary": "1910.132",
+      "seeded_primary": "1926.95",
+      "seeded_secondary": "",
+      "expected_rule": "wrong_part",
+      "why": "Forging incident in a manufacturing reference case, not construction.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "wrong_part"
+      ],
+      "issues": [
+        {
+          "rule": "wrong_part",
+          "message": "Part 1926 is for construction only",
+          "suggestion": "cite the Part 1910 standard",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2016065612",
+        "activity": "unknown",
+        "hazard_type": "hot_substance",
+        "machine_or_hazard": "burn",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "What was the employee doing when the injury happened?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 209,
+            "end": 213
+          }
+        ]
+      }
+    },
+    {
+      "case": "C17",
+      "sir_id": "2016098345",
+      "true_primary": "1910.333",
+      "seeded_primary": "1926.416",
+      "seeded_secondary": "",
+      "expected_rule": "wrong_part",
+      "why": "Electrical troubleshooting in the manufacturing reference set.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "wrong_part"
+      ],
+      "issues": [
+        {
+          "rule": "wrong_part",
+          "message": "Part 1926 is for construction only",
+          "suggestion": "cite the Part 1910 standard",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2016098345",
+        "activity": "unknown",
+        "hazard_type": "electrical",
+        "machine_or_hazard": "arc flash",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "What was the employee doing when the injury happened?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 77,
+            "end": 86
+          }
+        ]
+      }
+    },
+    {
+      "case": "C26",
+      "sir_id": "2023076637",
+      "true_primary": "1910.101(b)",
+      "seeded_primary": "1926.350",
+      "seeded_secondary": "",
+      "expected_rule": "wrong_part",
+      "why": "Compressed-gas storage incident in the manufacturing reference set.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "wrong_part"
+      ],
+      "issues": [
+        {
+          "rule": "wrong_part",
+          "message": "Part 1926 is for construction only",
+          "suggestion": "cite the Part 1910 standard",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2023076637",
+        "activity": "unknown",
+        "hazard_type": "machine",
+        "machine_or_hazard": "cylinder",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the employee operating, cleaning or servicing the machine?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 113,
+            "end": 121
+          }
+        ]
+      }
+    },
+    {
+      "case": "C13",
+      "sir_id": "2019055327",
+      "true_primary": "1910.28(b)(1)",
+      "seeded_primary": "1910.23",
+      "seeded_secondary": "",
+      "expected_rule": "fall_family",
+      "why": "Fall from an elevated work platform rather than a ladder.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "fall_family"
+      ],
+      "issues": [
+        {
+          "rule": "fall_family",
+          "message": "a fall height fall is 1910.28, not 1910.23",
+          "suggestion": "cite 1910.28",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2019055327",
+        "activity": "unknown",
+        "hazard_type": "fall_height",
+        "machine_or_hazard": "fell approximately 10 feet",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "Was fall protection provided and in use?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 87,
+            "end": 113
+          }
+        ]
+      }
+    },
+    {
+      "case": "C23",
+      "sir_id": "2022032299",
+      "true_primary": "1910.23",
+      "seeded_primary": "1910.22",
+      "seeded_secondary": "",
+      "expected_rule": "fall_family",
+      "why": "The worker fell from a fiberglass stepladder.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "fall_family"
+      ],
+      "issues": [
+        {
+          "rule": "fall_family",
+          "message": "a ladder fall is 1910.23, not 1910.22",
+          "suggestion": "cite 1910.23",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2022032299",
+        "activity": "unknown",
+        "hazard_type": "ladder",
+        "machine_or_hazard": "ladder",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "What type of ladder was used, and was it in good condition?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 37,
+            "end": 43
+          }
+        ]
+      }
+    },
+    {
+      "case": "C09",
+      "sir_id": "2024087686",
+      "true_primary": "1910.22(a)",
+      "seeded_primary": "1910.28",
+      "seeded_secondary": "",
+      "expected_rule": "fall_family",
+      "why": "The worker fell on the same level after losing balance on pavement.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "fall_family"
+      ],
+      "issues": [
+        {
+          "rule": "fall_family",
+          "message": "a same level fall is 1910.22, not 1910.28",
+          "suggestion": "cite 1910.22",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2024087686",
+        "activity": "unknown",
+        "hazard_type": "same_level",
+        "machine_or_hazard": "lost their balance",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "What caused the slip or trip: the surface, an object, or the lighting?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 44,
+            "end": 62
+          }
+        ]
+      }
+    },
+    {
+      "case": "C10",
+      "sir_id": "2018088059",
+      "true_primary": "1910.179(n)",
+      "seeded_primary": "1910.999(z)",
+      "seeded_secondary": "",
+      "expected_rule": "unknown_citation",
+      "why": "Deliberately invented citation for a crane-related incident.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "unknown_citation"
+      ],
+      "issues": [
+        {
+          "rule": "unknown_citation",
+          "message": "1910.999(z) is not in the eCFR index",
+          "suggestion": "",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2018088059",
+        "activity": "normal operation",
+        "hazard_type": "crane_load",
+        "machine_or_hazard": "crane",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 25,
+            "end": 34
+          },
+          {
+            "label": "hazard",
+            "start": 46,
+            "end": 51
+          },
+          {
+            "label": "material",
+            "start": 94,
+            "end": 99
+          }
+        ]
+      }
+    },
+    {
+      "case": "C38",
+      "sir_id": "20201110485",
+      "true_primary": "1910.1200",
+      "seeded_primary": "1910.999(z)",
+      "seeded_secondary": "",
+      "expected_rule": "unknown_citation",
+      "why": "Deliberately invented citation for a chemical exposure incident.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "unknown_citation"
+      ],
+      "issues": [
+        {
+          "rule": "unknown_citation",
+          "message": "1910.999(z) is not in the eCFR index",
+          "suggestion": "",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "20201110485",
+        "activity": "unknown",
+        "hazard_type": "chemical",
+        "machine_or_hazard": "Exposure to",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Which substance was involved, and was its safety data sheet available?"
+        ],
+        "spans": []
+      }
+    },
+    {
+      "case": "C59",
+      "sir_id": "20171211784",
+      "true_primary": "1910.213(h)",
+      "seeded_primary": "1910.999(z)",
+      "seeded_secondary": "",
+      "expected_rule": "unknown_citation",
+      "why": "Deliberately invented citation for a woodworking incident.",
+      "expected_rule_detected": true,
+      "caught": true,
+      "flagged_for_person": false,
+      "any_issue": true,
+      "actual_rules": [
+        "unknown_citation"
+      ],
+      "issues": [
+        {
+          "rule": "unknown_citation",
+          "message": "1910.999(z) is not in the eCFR index",
+          "suggestion": "",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "20171211784",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "saw",
+        "material": "wood",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 21
+          },
+          {
+            "label": "hazard",
+            "start": 35,
+            "end": 38
+          },
+          {
+            "label": "material",
+            "start": 64,
+            "end": 68
+          }
+        ]
+      }
+    }
+  ],
+  "reference_per_case": [
+    {
+      "case": "C01",
+      "sir_id": "2022021032",
+      "primary": "1910.147",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2022021032",
+        "activity": "cleaning",
+        "hazard_type": "machine",
+        "machine_or_hazard": "roller",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 79,
+            "end": 87
+          },
+          {
+            "label": "hazard",
+            "start": 39,
+            "end": 45
+          }
+        ]
+      }
+    },
+    {
+      "case": "C02",
+      "sir_id": "2016098765",
+      "primary": "1910.109",
+      "wrongly_rejected": true,
+      "automatic_fix_requested": true,
+      "issues": [
+        {
+          "rule": "general_duty",
+          "message": "no Part 1910 standard covers bite; OSHA uses the General Duty Clause",
+          "suggestion": "cite OSH Act 5(a)(1)",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2016098765",
+        "activity": "setup",
+        "hazard_type": "bite",
+        "machine_or_hazard": "sting",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 26
+          },
+          {
+            "label": "hazard",
+            "start": 63,
+            "end": 68
+          }
+        ]
+      }
+    },
+    {
+      "case": "C05",
+      "sir_id": "2016021592",
+      "primary": "1910.212(a)(3)(ii)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2016021592",
+        "activity": "unknown",
+        "hazard_type": "machine",
+        "machine_or_hazard": "press",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the employee operating, cleaning or servicing the machine?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 81,
+            "end": 86
+          }
+        ]
+      }
+    },
+    {
+      "case": "C06",
+      "sir_id": "2023054125",
+      "primary": "1910.212(a)(1)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2023054125",
+        "activity": "unknown",
+        "hazard_type": "machine",
+        "machine_or_hazard": "winder",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the employee operating, cleaning or servicing the machine?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 80,
+            "end": 86
+          },
+          {
+            "label": "material",
+            "start": 37,
+            "end": 42
+          }
+        ]
+      }
+    },
+    {
+      "case": "C07",
+      "sir_id": "2018076670",
+      "primary": "1910.25",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2018076670",
+        "activity": "unknown",
+        "hazard_type": "other",
+        "machine_or_hazard": "",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "What was the employee doing when the injury happened?"
+        ],
+        "spans": []
+      }
+    },
+    {
+      "case": "C08",
+      "sir_id": "2016065612",
+      "primary": "1910.132",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2016065612",
+        "activity": "unknown",
+        "hazard_type": "hot_substance",
+        "machine_or_hazard": "burn",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "What was the employee doing when the injury happened?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 209,
+            "end": 213
+          }
+        ]
+      }
+    },
+    {
+      "case": "C09",
+      "sir_id": "2024087686",
+      "primary": "1910.22(a)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2024087686",
+        "activity": "unknown",
+        "hazard_type": "same_level",
+        "machine_or_hazard": "lost their balance",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "What caused the slip or trip: the surface, an object, or the lighting?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 44,
+            "end": 62
+          }
+        ]
+      }
+    },
+    {
+      "case": "C10",
+      "sir_id": "2018088059",
+      "primary": "1910.179(n)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2018088059",
+        "activity": "normal operation",
+        "hazard_type": "crane_load",
+        "machine_or_hazard": "crane",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 25,
+            "end": 34
+          },
+          {
+            "label": "hazard",
+            "start": 46,
+            "end": 51
+          },
+          {
+            "label": "material",
+            "start": 94,
+            "end": 99
+          }
+        ]
+      }
+    },
+    {
+      "case": "C11",
+      "sir_id": "2016010587",
+      "primary": "1910.213",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2016010587",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "saw",
+        "material": "wood",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 23
+          },
+          {
+            "label": "hazard",
+            "start": 40,
+            "end": 43
+          },
+          {
+            "label": "material",
+            "start": 24,
+            "end": 28
+          }
+        ]
+      }
+    },
+    {
+      "case": "C12",
+      "sir_id": "2015050190",
+      "primary": "1910.212(a)(1)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2015050190",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "conveyor",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 26
+          },
+          {
+            "label": "hazard",
+            "start": 36,
+            "end": 44
+          }
+        ]
+      }
+    },
+    {
+      "case": "C13",
+      "sir_id": "2019055327",
+      "primary": "1910.28(b)(1)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2019055327",
+        "activity": "unknown",
+        "hazard_type": "fall_height",
+        "machine_or_hazard": "fell approximately 10 feet",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "Was fall protection provided and in use?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 87,
+            "end": 113
+          }
+        ]
+      }
+    },
+    {
+      "case": "C14",
+      "sir_id": "2017010791",
+      "primary": "1910.22(a)",
+      "wrongly_rejected": true,
+      "automatic_fix_requested": false,
+      "issues": [
+        {
+          "rule": "fall_only",
+          "message": "1910.22 is about falls, but the worker was hurt by machine",
+          "suggestion": "cite the standard for what hurt the worker",
+          "fix": false
+        }
+      ],
+      "intake": {
+        "report_id": "2017010791",
+        "activity": "unknown",
+        "hazard_type": "machine",
+        "machine_or_hazard": "press",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the employee operating, cleaning or servicing the machine?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 43,
+            "end": 48
+          },
+          {
+            "label": "material",
+            "start": 81,
+            "end": 86
+          }
+        ]
+      }
+    },
+    {
+      "case": "C15",
+      "sir_id": "2023054246",
+      "primary": "1910.212(a)(1)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2023054246",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "cutter",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 21
+          },
+          {
+            "label": "hazard",
+            "start": 30,
+            "end": 36
+          },
+          {
+            "label": "material",
+            "start": 44,
+            "end": 49
+          }
+        ]
+      }
+    },
+    {
+      "case": "C16",
+      "sir_id": "2024065447",
+      "primary": "1910.243(c)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2024065447",
+        "activity": "unknown",
+        "hazard_type": "struck_by_object",
+        "machine_or_hazard": "Struck by",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "What was the employee doing when the injury happened?"
+        ],
+        "spans": []
+      }
+    },
+    {
+      "case": "C17",
+      "sir_id": "2016098345",
+      "primary": "1910.333",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2016098345",
+        "activity": "unknown",
+        "hazard_type": "electrical",
+        "machine_or_hazard": "arc flash",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "What was the employee doing when the injury happened?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 77,
+            "end": 86
+          }
+        ]
+      }
+    },
+    {
+      "case": "C19",
+      "sir_id": "2023043437",
+      "primary": "1910.212(a)(1)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2023043437",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "machine",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 25
+          },
+          {
+            "label": "hazard",
+            "start": 50,
+            "end": 57
+          }
+        ]
+      }
+    },
+    {
+      "case": "C21",
+      "sir_id": "2025010991",
+      "primary": "1910.147",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2025010991",
+        "activity": "setup",
+        "hazard_type": "machine",
+        "machine_or_hazard": "spindle",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 53,
+            "end": 63
+          },
+          {
+            "label": "hazard",
+            "start": 203,
+            "end": 210
+          },
+          {
+            "label": "material",
+            "start": 26,
+            "end": 30
+          }
+        ]
+      }
+    },
+    {
+      "case": "C22",
+      "sir_id": "2025011013",
+      "primary": "1910.178",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2025011013",
+        "activity": "normal operation",
+        "hazard_type": "powered_truck",
+        "machine_or_hazard": "pallet jack",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the operator trained and evaluated on this truck?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 25
+          },
+          {
+            "label": "hazard",
+            "start": 35,
+            "end": 46
+          }
+        ]
+      }
+    },
+    {
+      "case": "C23",
+      "sir_id": "2022032299",
+      "primary": "1910.23",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2022032299",
+        "activity": "unknown",
+        "hazard_type": "ladder",
+        "machine_or_hazard": "ladder",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "What type of ladder was used, and was it in good condition?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 37,
+            "end": 43
+          }
+        ]
+      }
+    },
+    {
+      "case": "C24",
+      "sir_id": "2016042778",
+      "primary": "1910.147",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2016042778",
+        "activity": "unknown",
+        "hazard_type": "machine",
+        "machine_or_hazard": "",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "Was the employee operating, cleaning or servicing the machine?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": []
+      }
+    },
+    {
+      "case": "C25",
+      "sir_id": "2022043091",
+      "primary": "1910.22(a)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2022043091",
+        "activity": "unknown",
+        "hazard_type": "same_level",
+        "machine_or_hazard": "She tripped",
+        "material": "wood",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "What caused the slip or trip: the surface, an object, or the lighting?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 50,
+            "end": 61
+          },
+          {
+            "label": "material",
+            "start": 83,
+            "end": 87
+          }
+        ]
+      }
+    },
+    {
+      "case": "C26",
+      "sir_id": "2023076637",
+      "primary": "1910.101(b)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2023076637",
+        "activity": "unknown",
+        "hazard_type": "machine",
+        "machine_or_hazard": "cylinder",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the employee operating, cleaning or servicing the machine?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 113,
+            "end": 121
+          }
+        ]
+      }
+    },
+    {
+      "case": "C27",
+      "sir_id": "2016076862",
+      "primary": "1910.212(a)(1)",
+      "wrongly_rejected": true,
+      "automatic_fix_requested": true,
+      "issues": [
+        {
+          "rule": "energy_control",
+          "message": "the worker was setup a machine, which points to control of hazardous energy",
+          "suggestion": "cite 1910.147 as primary, with the guarding standard as secondary",
+          "fix": true
+        }
+      ],
+      "intake": {
+        "report_id": "2016076862",
+        "activity": "setup",
+        "hazard_type": "machine",
+        "machine_or_hazard": "machine",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 33,
+            "end": 42
+          },
+          {
+            "label": "hazard",
+            "start": 43,
+            "end": 50
+          },
+          {
+            "label": "material",
+            "start": 28,
+            "end": 32
+          }
+        ]
+      }
+    },
+    {
+      "case": "C28",
+      "sir_id": "2025054275",
+      "primary": "1910.212(a)(3)(ii)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2025054275",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "cutter",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 26
+          },
+          {
+            "label": "hazard",
+            "start": 29,
+            "end": 35
+          }
+        ]
+      }
+    },
+    {
+      "case": "C29",
+      "sir_id": "2024087151",
+      "primary": "1910.25",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2024087151",
+        "activity": "unknown",
+        "hazard_type": "other",
+        "machine_or_hazard": "",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "What was the employee doing when the injury happened?"
+        ],
+        "spans": []
+      }
+    },
+    {
+      "case": "C30",
+      "sir_id": "20181010732",
+      "primary": "1910.178(o)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "20181010732",
+        "activity": "unknown",
+        "hazard_type": "powered_truck",
+        "machine_or_hazard": "forklift",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "Was the operator trained and evaluated on this truck?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 51,
+            "end": 59
+          }
+        ]
+      }
+    },
+    {
+      "case": "C31",
+      "sir_id": "20241110373",
+      "primary": "1910.212(a)(1)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "20241110373",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "machine",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 26
+          },
+          {
+            "label": "hazard",
+            "start": 38,
+            "end": 45
+          }
+        ]
+      }
+    },
+    {
+      "case": "C32",
+      "sir_id": "2021076263",
+      "primary": "1910.22(a)",
+      "wrongly_rejected": true,
+      "automatic_fix_requested": false,
+      "issues": [
+        {
+          "rule": "fall_only",
+          "message": "1910.22 is about falls, but the worker was hurt by machine",
+          "suggestion": "cite the standard for what hurt the worker",
+          "fix": false
+        }
+      ],
+      "intake": {
+        "report_id": "2021076263",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "caught",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 25
+          },
+          {
+            "label": "hazard",
+            "start": 68,
+            "end": 74
+          }
+        ]
+      }
+    },
+    {
+      "case": "C34",
+      "sir_id": "2023032350",
+      "primary": "1910.147",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2023032350",
+        "activity": "servicing",
+        "hazard_type": "machine",
+        "machine_or_hazard": "hydraulic",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 26
+          },
+          {
+            "label": "hazard",
+            "start": 86,
+            "end": 95
+          },
+          {
+            "label": "material",
+            "start": 61,
+            "end": 66
+          }
+        ]
+      }
+    },
+    {
+      "case": "C36",
+      "sir_id": "2019065907",
+      "primary": "1910.147",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2019065907",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "roller",
+        "material": "paper",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 25
+          },
+          {
+            "label": "hazard",
+            "start": 163,
+            "end": 169
+          },
+          {
+            "label": "material",
+            "start": 63,
+            "end": 68
+          }
+        ]
+      }
+    },
+    {
+      "case": "C37",
+      "sir_id": "2016087242",
+      "primary": "1910.22(a)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2016087242",
+        "activity": "unknown",
+        "hazard_type": "same_level",
+        "machine_or_hazard": "he tripped",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "What caused the slip or trip: the surface, an object, or the lighting?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 35,
+            "end": 45
+          }
+        ]
+      }
+    },
+    {
+      "case": "C38",
+      "sir_id": "20201110485",
+      "primary": "1910.1200",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "20201110485",
+        "activity": "unknown",
+        "hazard_type": "chemical",
+        "machine_or_hazard": "Exposure to",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Which substance was involved, and was its safety data sheet available?"
+        ],
+        "spans": []
+      }
+    },
+    {
+      "case": "C39",
+      "sir_id": "2016076570",
+      "primary": "1910.132",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2016076570",
+        "activity": "cleaning",
+        "hazard_type": "hot_substance",
+        "machine_or_hazard": "hot",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 24
+          },
+          {
+            "label": "hazard",
+            "start": 32,
+            "end": 35
+          }
+        ]
+      }
+    },
+    {
+      "case": "C41",
+      "sir_id": "20241211440",
+      "primary": "1910.23",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "20241211440",
+        "activity": "unknown",
+        "hazard_type": "ladder",
+        "machine_or_hazard": "ladder",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "From what height did the employee fall?",
+          "What type of ladder was used, and was it in good condition?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 86,
+            "end": 92
+          }
+        ]
+      }
+    },
+    {
+      "case": "C42",
+      "sir_id": "2015129645",
+      "primary": "1910.147",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2015129645",
+        "activity": "setup",
+        "hazard_type": "machine",
+        "machine_or_hazard": "machine",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 26
+          },
+          {
+            "label": "hazard",
+            "start": 49,
+            "end": 56
+          }
+        ]
+      }
+    },
+    {
+      "case": "C43",
+      "sir_id": "2015064000",
+      "primary": "1910.147",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2015064000",
+        "activity": "servicing",
+        "hazard_type": "machine",
+        "machine_or_hazard": "mill",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 43,
+            "end": 56
+          },
+          {
+            "label": "hazard",
+            "start": 35,
+            "end": 39
+          }
+        ]
+      }
+    },
+    {
+      "case": "C44",
+      "sir_id": "20171111103",
+      "primary": "1910.176(b)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "20171111103",
+        "activity": "normal operation",
+        "hazard_type": "other_vehicle",
+        "machine_or_hazard": "tractor",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 23
+          },
+          {
+            "label": "hazard",
+            "start": 44,
+            "end": 51
+          },
+          {
+            "label": "material",
+            "start": 24,
+            "end": 28
+          }
+        ]
+      }
+    },
+    {
+      "case": "C45",
+      "sir_id": "2022076106",
+      "primary": "1910.147",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2022076106",
+        "activity": "servicing",
+        "hazard_type": "machine",
+        "machine_or_hazard": "machine",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 31
+          },
+          {
+            "label": "hazard",
+            "start": 72,
+            "end": 79
+          }
+        ]
+      }
+    },
+    {
+      "case": "C46",
+      "sir_id": "2018054349",
+      "primary": "1910.28(c)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2018054349",
+        "activity": "unknown",
+        "hazard_type": "fall_height",
+        "machine_or_hazard": "roof",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "From what height did the employee fall?",
+          "Was fall protection provided and in use?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 31,
+            "end": 35
+          },
+          {
+            "label": "material",
+            "start": 11,
+            "end": 16
+          }
+        ]
+      }
+    },
+    {
+      "case": "C47",
+      "sir_id": "20190911393",
+      "primary": "1910.212(a)(1)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "20190911393",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "blade",
+        "material": "food",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 23
+          },
+          {
+            "label": "hazard",
+            "start": 104,
+            "end": 109
+          },
+          {
+            "label": "material",
+            "start": 34,
+            "end": 38
+          }
+        ]
+      }
+    },
+    {
+      "case": "C48",
+      "sir_id": "2015021117",
+      "primary": "1910.28(b)(1)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2015021117",
+        "activity": "unknown",
+        "hazard_type": "fall_height",
+        "machine_or_hazard": "fell 12 feet",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "Was fall protection provided and in use?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 12,
+            "end": 24
+          }
+        ]
+      }
+    },
+    {
+      "case": "C49",
+      "sir_id": "2015074893",
+      "primary": "1910.212(a)(1)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2015074893",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "roller",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 48,
+            "end": 55
+          },
+          {
+            "label": "hazard",
+            "start": 34,
+            "end": 40
+          }
+        ]
+      }
+    },
+    {
+      "case": "C50",
+      "sir_id": "2022010882",
+      "primary": "1910.25",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2022010882",
+        "activity": "unknown",
+        "hazard_type": "machine",
+        "machine_or_hazard": "machine",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "Was the employee operating, cleaning or servicing the machine?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 60,
+            "end": 67
+          }
+        ]
+      }
+    },
+    {
+      "case": "C52",
+      "sir_id": "2022031962",
+      "primary": "1910.212(a)(1)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2022031962",
+        "activity": "unknown",
+        "hazard_type": "machine",
+        "machine_or_hazard": "slitter",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "Was the employee operating, cleaning or servicing the machine?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 63,
+            "end": 70
+          }
+        ]
+      }
+    },
+    {
+      "case": "C53",
+      "sir_id": "2017088401",
+      "primary": "1910.147",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2017088401",
+        "activity": "cleaning",
+        "hazard_type": "machine",
+        "machine_or_hazard": "airlock",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 36,
+            "end": 44
+          },
+          {
+            "label": "hazard",
+            "start": 71,
+            "end": 78
+          }
+        ]
+      }
+    },
+    {
+      "case": "C54",
+      "sir_id": "2016087805",
+      "primary": "1910.147",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2016087805",
+        "activity": "servicing",
+        "hazard_type": "machine",
+        "machine_or_hazard": "lathe",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 70,
+            "end": 79
+          },
+          {
+            "label": "hazard",
+            "start": 38,
+            "end": 43
+          }
+        ]
+      }
+    },
+    {
+      "case": "C56",
+      "sir_id": "2021075388",
+      "primary": "1910.147",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2021075388",
+        "activity": "unjamming",
+        "hazard_type": "machine",
+        "machine_or_hazard": "machine",
+        "material": "plastic",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the machine shut down and locked out before the work began?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 71,
+            "end": 83
+          },
+          {
+            "label": "hazard",
+            "start": 48,
+            "end": 55
+          },
+          {
+            "label": "material",
+            "start": 27,
+            "end": 31
+          }
+        ]
+      }
+    },
+    {
+      "case": "C57",
+      "sir_id": "2019021333",
+      "primary": "1910.178(n)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2019021333",
+        "activity": "unknown",
+        "hazard_type": "powered_truck",
+        "machine_or_hazard": "forklift",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": true,
+        "missing_facts": [
+          "Was the operator trained and evaluated on this truck?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 28,
+            "end": 36
+          }
+        ]
+      }
+    },
+    {
+      "case": "C58",
+      "sir_id": "2015042423",
+      "primary": "1910.212(a)(1)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2015042423",
+        "activity": "unknown",
+        "hazard_type": "machine",
+        "machine_or_hazard": "machine",
+        "material": "metal",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the employee operating, cleaning or servicing the machine?",
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 54,
+            "end": 61
+          },
+          {
+            "label": "material",
+            "start": 42,
+            "end": 46
+          }
+        ]
+      }
+    },
+    {
+      "case": "C59",
+      "sir_id": "20171211784",
+      "primary": "1910.213(h)",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "20171211784",
+        "activity": "normal operation",
+        "hazard_type": "machine",
+        "machine_or_hazard": "saw",
+        "material": "wood",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was a guard in place at the point of operation?"
+        ],
+        "spans": [
+          {
+            "label": "activity",
+            "start": 16,
+            "end": 21
+          },
+          {
+            "label": "hazard",
+            "start": 35,
+            "end": 38
+          },
+          {
+            "label": "material",
+            "start": 64,
+            "end": 68
+          }
+        ]
+      }
+    },
+    {
+      "case": "C60",
+      "sir_id": "2019066412",
+      "primary": "1910.178",
+      "wrongly_rejected": false,
+      "automatic_fix_requested": false,
+      "issues": [],
+      "intake": {
+        "report_id": "2019066412",
+        "activity": "unknown",
+        "hazard_type": "powered_truck",
+        "machine_or_hazard": "narrow aisle",
+        "material": "",
+        "injury": "injury",
+        "event_code": "",
+        "source_code": "",
+        "confidence": 0.5,
+        "fatality_potential": false,
+        "missing_facts": [
+          "Was the operator trained and evaluated on this truck?"
+        ],
+        "spans": [
+          {
+            "label": "hazard",
+            "start": 81,
+            "end": 93
+          }
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Purposeful stress-test sample, not population accuracy.",
+    "Detection does not establish successful correction.",
+    "Accepted alternative sections are not treated as simultaneously required secondary citations.",
+    "Citation existence checks are restricted to Part 1910; wrong_part checks regulatory scope."
+  ],
+  "false_rejection_breakdown": {
+    "automatic_fix_requested": {
+      "hits": 2,
+      "total": 51,
+      "rate": 0.0392156862745098,
+      "ci95": [
+        0.011,
+        0.132
+      ]
+    },
+    "human_review_only": {
+      "hits": 2,
+      "total": 51,
+      "rate": 0.0392156862745098,
+      "ci95": [
+        0.011,
+        0.132
+      ]
+    }
+  },
+  "false_rejection_analysis": [
+    {
+      "case": "C02",
+      "rules": [
+        "general_duty"
+      ],
+      "intake_confidence": 0.5,
+      "automatic_fix_requested": true,
+      "interpretation": "Offline Intake interpreted sting as a bite hazard rather than an explosive hazard."
+    },
+    {
+      "case": "C14",
+      "rules": [
+        "fall_only"
+      ],
+      "intake_confidence": 0.5,
+      "automatic_fix_requested": false,
+      "interpretation": "Offline Intake classified the press as the hazard instead of the same-level trip and fall."
+    },
+    {
+      "case": "C27",
+      "rules": [
+        "energy_control"
+      ],
+      "intake_confidence": 0.5,
+      "automatic_fix_requested": true,
+      "interpretation": "Offline Intake classified normal machine operation as setup, triggering the energy-control rule."
+    },
+    {
+      "case": "C32",
+      "rules": [
+        "fall_only"
+      ],
+      "intake_confidence": 0.5,
+      "automatic_fix_requested": false,
+      "interpretation": "Offline Intake interpreted caught as machine entanglement rather than a trip involving a cart."
+    }
+  ],
+  "evaluation_scope": {
+    "seed_selection": "Targeted, AI-assisted stress test",
+    "primary_seeds": 24,
+    "secondary_seeds": 0,
+    "seeds_without_reference_standard": 3,
+    "independent_holdout": false,
+    "confidence_note": "Offline Intake receives no baseline confidence in this evaluation, so 0.5 is its default value.",
+    "scope_note": "Measures citation-check detection and correction eligibility, not end-to-end correction accuracy."
+  }
+}
