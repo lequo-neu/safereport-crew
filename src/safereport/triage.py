@@ -144,8 +144,15 @@ def category_one(
     repeats: list[str],
     user_minor: bool = False,
     imminent_danger: bool = False,
+    emphasis_evidence: dict[str, str] | None = None,
 ) -> list[Trigger]:
-    """OSHA's Category 1 criteria that the report meets, each with its evidence."""
+    """OSHA's Category 1 criteria that the report meets, each with its evidence.
+
+    `emphasis_evidence` holds, by citation, the words that brought in a program by its work
+    route (a staffing agency doing construction work, issue #30); other programs show the
+    citation alone, as before.
+    """
+    evidence = emphasis_evidence or {}
     triggers = []
     if report.hospitalized >= 2:
         triggers.append(Trigger("two or more hospitalized", f"{report.hospitalized} hospitalized"))
@@ -154,7 +161,8 @@ def category_one(
     if repeats:
         triggers.append(Trigger("similar report from the employer within 12 months", ", ".join(repeats)))
     for program in emphasis:
-        triggers.append(Trigger("hazard under an emphasis program", program))
+        why = evidence.get(program)
+        triggers.append(Trigger("hazard under an emphasis program", f"{program}: {why}" if why else program))
     if imminent_danger:
         triggers.append(Trigger("imminent danger", "set by the user"))
     return triggers

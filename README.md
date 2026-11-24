@@ -401,6 +401,15 @@ the letter's citation and reply date (#34), and the press check reading only the
 "press" (#35). 4 of the 20 left out reports describe a worker who fell (#29). Details in
 [docs/reviews/khoa.md](docs/reviews/khoa.md).
 
+**Falls program for staffing agencies** (Advance, #30). CPL 03-00-025 covers construction work,
+not NAICS 23, so a staffing agency (NAICS 5613) is now covered when the narrative names
+construction work and a fall from height. The Category 1 row shows the words that matched. On
+the 104,996 reports outside the 2025 holdout it adds 20 reports (7 of 447 staffing reports from
+2020 on, the slice not read while writing the rule), removes none and changes nothing in any other
+industry; OSHA inspected 10 of the 20. The B3 numbers above are the Basic rule and were not
+rerun. Rule, examples, false positive concerns and limits in
+[docs/FALLS_STAFFING.md](docs/FALLS_STAFFING.md).
+
 All numbers are in [eval/results](eval/results). Reproduce them without any paid call:
 
 ```bash
@@ -436,7 +445,7 @@ src/safereport/
 config/            models.toml (models, prices, router), triage.toml (weights, days)
 data/labels/       the answer key, the three reviewers' files and the Category 1 hand check
 eval/results/      every measured number
-docs/              proposal, labelling guide, related products, open issues, AI use, reviews
+docs/              proposal, labelling guide, related products, open issues, AI use, reviews, Falls for staffing (#30)
 tests/             351 tests, offline, no keys
 ```
 

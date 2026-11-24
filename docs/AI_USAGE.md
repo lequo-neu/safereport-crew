@@ -125,6 +125,20 @@ Each task records here which AI tool helped and how the result was checked.
 
 * **B5, standards and Vietnamese talks** (Khoa). ChatGPT assisted with the review write-up, case-table preparation, and small code/test edits. Khoa compared the injury narratives with the labelling guide, checked OSHA's published standards and RRI procedure, and ran the offline test suite. Unresolved citation applicability and configuration differences are noted in `docs/reviews/khoa.md`, not treated as verified facts.
 
+## The Advance stage
+
+* **Issue #30, the Falls program for staffing agencies** (Hamad). Claude Code read CPL 03-00-025
+  from the PDF on osha.gov (text extraction), wrote the work route, the construction words, the
+  tests, the evaluation script and `docs/FALLS_STAFFING.md`. The construction words were written
+  from 29 CFR 1910.12(b) and checked against staffing reports from 2015 to 2019 only. The rule
+  was then fixed and run once on 2020 onward, and not changed after it. Two changes came before
+  that run, from tests written for it, not from data: a veto for "fell ... onto the worker", and
+  corrected test narratives. The B3 sample and the 2025 holdout were not read for the rule, and
+  the B3 results were not rerun. K083 was checked once, after the rule was fixed, to say in the
+  docs that it is not caught. The false positive concerns in the doc are Claude Code's reading of
+  the 20 added narratives, not labels, and no precision is claimed from them. No model call
+  went through the app; nothing was paid.
+
 ## The safety talk translations
 
 The Spanish, Chinese, Tagalog, Vietnamese and Arabic texts of the four safety talks were drafted

@@ -273,6 +273,7 @@ def build_graph(services: Services, checkpointer=None):
             "candidates": [s.section for s in found.sections],
             "emphasis": [h.document.citation for h in found.emphasis if h.document.verified],
             "possible_emphasis": [h.document.citation for h in found.emphasis if not h.document.verified],
+            "emphasis_evidence": found.work_evidence(),
             "history_same": sum(m.status == "same" for m in earlier),
             "history_possible": sum(m.status == "possible" for m in earlier),
             "repeats": repeats,
@@ -539,7 +540,9 @@ def build_graph(services: Services, checkpointer=None):
                 "report": report.model_dump(mode="json"), "intake": facts.model_dump(), "priority": score,
                 "parts": parts, "days": inspection_days(facts), "margin": found.margin,
                 "emphasis": emphasis, "possible_emphasis": possible, "repeats": repeats_found,
-                "category_one": [t.__dict__ for t in category_one(report, emphasis, repeats_found)],
+                "emphasis_evidence": found.work_evidence(),
+                "category_one": [t.__dict__ for t in category_one(report, emphasis, repeats_found,
+                                                                  emphasis_evidence=found.work_evidence())],
                 "candidates": [s.section for s in found.sections],
                 "pick": {"primary": found.sections[0].section if found.sections else GENERAL_DUTY, "secondary": "",
                          "quote": clip(found.sections[0].best.document.text, 600) if found.sections else ""},
@@ -607,7 +610,8 @@ def build_graph(services: Services, checkpointer=None):
                 **stage1[report_id], "intake": result["intake"], "priority": score, "parts": parts,
                 "days": inspection_days(intake), "pick": result["pick"], "candidates": result["candidates"],
                 "stage2": True,
-                "category_one": [t.__dict__ for t in category_one(report, result["emphasis"], result["repeats"])],
+                "category_one": [t.__dict__ for t in category_one(report, result["emphasis"], result["repeats"],
+                                                                  emphasis_evidence=result.get("emphasis_evidence"))],
                 "history_same": result["history_same"], "history_possible": result["history_possible"],
             }  # fmt: skip
         for report_id, pick in state.get("pick_overrides", {}).items():

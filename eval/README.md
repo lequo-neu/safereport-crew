@@ -9,3 +9,8 @@
 Nothing is tuned on the answer key or the holdout; the floors in the tests sit below the
 measured numbers to catch a regression. Later phases add the agent and router runs, seeded
 domain checks, inspection priority, two stage batch savings and the Pareto chart.
+
+`python -I scripts/eval_staffing_falls.py` (issue #30) writes `staffing_falls.json` and
+`staffing_falls_added.csv`: the Falls program before and after the work route for staffing
+agencies, on every report outside the 2025 holdout (2015 to 2019 for development, 2020 on as the
+test slice). Nothing in it is labelled; see [docs/FALLS_STAFFING.md](../docs/FALLS_STAFFING.md).

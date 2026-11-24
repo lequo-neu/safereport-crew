@@ -1,0 +1,226 @@
+{
+  "issue": "#30",
+  "program": "CPL 03-00-025",
+  "data": "OSHA Severe Injury Reports, January 2015 to November 2025, without the 1,000 reports of the 2025 holdout (data/splits/holdout_2025.csv), which hold the B3 sample. Query: narrative and OSHA event title, as in stage 1 of the weekly list.",
+  "slices": {
+    "development": "2015 to 2019: read while the construction words were written",
+    "test": "2020 to 2025: run once with the rule fixed"
+  },
+  "rule": {
+    "work_industries": [
+      "5613"
+    ],
+    "work_evidence": [
+      "\\bunder construction\\b|\\bbeing (built|constructed|framed|renovated|remodell?ed)\\b",
+      "\\bconstruction (site|project|job|jobsite|work|zone|area|crew|worker|laborer|labou?rer)s?\\b",
+      "\\b(new|commercial|residential|building|home|house|road|highway|bridge) construction\\b",
+      "\\bscaffold",
+      "\\broofing\\b|\\broofers?\\b|\\bre-?roof|\\bshingl(e|es|ing)\\b|\\bdrip edge\\b|\\broof (deck|decking|panels?|sheathing|truss(es)?|eaves?)\\b",
+      "\\bframing\\b|\\bframers?\\b|\\b(roof|floor) truss(es)?\\b|\\bsheathing\\b",
+      "\\b(hang|hanging|hung|install\\w*) (the |some )?(dry ?wall|sheet ?rock|siding|insulation|trusses|joists)\\b|\\blaying (down )?insulation\\b",
+      "\\bstructural steel\\b|\\bsteel erect|\\biron ?work|\\brebar\\b|\\bconcrete forms?\\b|\\bformwork\\b|\\b(pour|pouring|placing) concrete\\b",
+      "\\bmasonry\\b|\\bbrick ?lay|\\bblock ?lay",
+      "\\bdemoli(tion|sh)|\\brenovat|\\bremodel",
+      "\\bexcavat|\\btrench"
+    ],
+    "work_exclusions": [
+      "struck by (\\w+ )?(object )?falling|falling object|object falling",
+      "\\b(fell|falling|dropped) (\\w+ ){0,8}?(on|onto|upon) (him|them|her[.,;]|the (employee|worker|laborer)s?\\b|an? (employee|worker|laborer)\\b)"
+    ]
+  },
+  "caveat": "No report here is labelled. 'added' counts what the rule flags, not what is right; OSHA's inspection rate is past practice, and an SIR inspection depends on more than the Falls program.",
+  "all": {
+    "reports": 104996,
+    "flagged_by_falls": {
+      "old": 7516,
+      "new": 7536
+    },
+    "added": 20,
+    "removed": 0,
+    "changed_outside_naics_5613": 0,
+    "staffing_reports": 1120,
+    "staffing_fall_to_lower_level_wording": 205,
+    "staffing_flagged": {
+      "old": 7,
+      "new": 27
+    },
+    "staffing_with_construction_words_and_a_fall_vetoed": 2,
+    "added_by_naics": {
+      "561320": 13,
+      "561311": 7
+    },
+    "added_by_evidence_pattern": {
+      "\\bscaffold": 8,
+      "\\bexcavat|\\btrench": 3,
+      "\\bunder construction\\b|\\bbeing (built|constructed|framed|renovated|remodell?ed)\\b": 2,
+      "\\broofing\\b|\\broofers?\\b|\\bre-?roof|\\bshingl(e|es|ing)\\b|\\bdrip edge\\b|\\broof (deck|decking|panels?|sheathing|truss(es)?|eaves?)\\b": 2,
+      "\\b(hang|hanging|hung|install\\w*) (the |some )?(dry ?wall|sheet ?rock|siding|insulation|trusses|joists)\\b|\\blaying (down )?insulation\\b": 2,
+      "\\bconstruction (site|project|job|jobsite|work|zone|area|crew|worker|laborer|labou?rer)s?\\b": 1,
+      "\\bstructural steel\\b|\\bsteel erect|\\biron ?work|\\brebar\\b|\\bconcrete forms?\\b|\\bformwork\\b|\\b(pour|pouring|placing) concrete\\b": 1,
+      "\\bdemoli(tion|sh)|\\brenovat|\\bremodel": 1
+    },
+    "osha_inspected": {
+      "added": {
+        "inspected": 10,
+        "of": 20,
+        "rate": 0.5,
+        "wilson_95": [
+          0.299,
+          0.701
+        ]
+      },
+      "staffing_fall_wording_not_flagged": {
+        "inspected": 46,
+        "of": 180,
+        "rate": 0.256,
+        "wilson_95": [
+          0.197,
+          0.324
+        ]
+      },
+      "construction_naics_23_flagged_by_falls": {
+        "inspected": 3450,
+        "of": 7055,
+        "rate": 0.489,
+        "wilson_95": [
+          0.477,
+          0.501
+        ]
+      }
+    },
+    "not_adopted_employer_name_route": {
+      "would_add": 3,
+      "examples": [
+        "Platinum Contracting Group LLC",
+        "Construct Corps, LLC",
+        "Masse Contracting"
+      ]
+    }
+  },
+  "development": {
+    "reports": 52579,
+    "flagged_by_falls": {
+      "old": 3614,
+      "new": 3627
+    },
+    "added": 13,
+    "removed": 0,
+    "changed_outside_naics_5613": 0,
+    "staffing_reports": 673,
+    "staffing_fall_to_lower_level_wording": 133,
+    "staffing_flagged": {
+      "old": 5,
+      "new": 18
+    },
+    "staffing_with_construction_words_and_a_fall_vetoed": 1,
+    "added_by_naics": {
+      "561320": 9,
+      "561311": 4
+    },
+    "added_by_evidence_pattern": {
+      "\\bscaffold": 3,
+      "\\bunder construction\\b|\\bbeing (built|constructed|framed|renovated|remodell?ed)\\b": 2,
+      "\\broofing\\b|\\broofers?\\b|\\bre-?roof|\\bshingl(e|es|ing)\\b|\\bdrip edge\\b|\\broof (deck|decking|panels?|sheathing|truss(es)?|eaves?)\\b": 2,
+      "\\b(hang|hanging|hung|install\\w*) (the |some )?(dry ?wall|sheet ?rock|siding|insulation|trusses|joists)\\b|\\blaying (down )?insulation\\b": 2,
+      "\\bexcavat|\\btrench": 2,
+      "\\bconstruction (site|project|job|jobsite|work|zone|area|crew|worker|laborer|labou?rer)s?\\b": 1,
+      "\\bstructural steel\\b|\\bsteel erect|\\biron ?work|\\brebar\\b|\\bconcrete forms?\\b|\\bformwork\\b|\\b(pour|pouring|placing) concrete\\b": 1
+    },
+    "osha_inspected": {
+      "added": {
+        "inspected": 6,
+        "of": 13,
+        "rate": 0.462,
+        "wilson_95": [
+          0.232,
+          0.709
+        ]
+      },
+      "staffing_fall_wording_not_flagged": {
+        "inspected": 36,
+        "of": 116,
+        "rate": 0.31,
+        "wilson_95": [
+          0.233,
+          0.399
+        ]
+      },
+      "construction_naics_23_flagged_by_falls": {
+        "inspected": 1731,
+        "of": 3408,
+        "rate": 0.508,
+        "wilson_95": [
+          0.491,
+          0.525
+        ]
+      }
+    },
+    "not_adopted_employer_name_route": {
+      "would_add": 3,
+      "examples": [
+        "Platinum Contracting Group LLC",
+        "Construct Corps, LLC",
+        "Masse Contracting"
+      ]
+    }
+  },
+  "test": {
+    "reports": 52417,
+    "flagged_by_falls": {
+      "old": 3902,
+      "new": 3909
+    },
+    "added": 7,
+    "removed": 0,
+    "changed_outside_naics_5613": 0,
+    "staffing_reports": 447,
+    "staffing_fall_to_lower_level_wording": 72,
+    "staffing_flagged": {
+      "old": 2,
+      "new": 9
+    },
+    "staffing_with_construction_words_and_a_fall_vetoed": 1,
+    "added_by_naics": {
+      "561320": 4,
+      "561311": 3
+    },
+    "added_by_evidence_pattern": {
+      "\\bscaffold": 5,
+      "\\bdemoli(tion|sh)|\\brenovat|\\bremodel": 1,
+      "\\bexcavat|\\btrench": 1
+    },
+    "osha_inspected": {
+      "added": {
+        "inspected": 4,
+        "of": 7,
+        "rate": 0.571,
+        "wilson_95": [
+          0.25,
+          0.842
+        ]
+      },
+      "staffing_fall_wording_not_flagged": {
+        "inspected": 10,
+        "of": 64,
+        "rate": 0.156,
+        "wilson_95": [
+          0.087,
+          0.264
+        ]
+      },
+      "construction_naics_23_flagged_by_falls": {
+        "inspected": 1719,
+        "of": 3647,
+        "rate": 0.471,
+        "wilson_95": [
+          0.455,
+          0.488
+        ]
+      }
+    },
+    "not_adopted_employer_name_route": {
+      "would_add": 0,
+      "examples": []
+    }
+  }
+}
