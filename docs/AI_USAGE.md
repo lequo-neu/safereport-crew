@@ -138,6 +138,13 @@ Each task records here which AI tool helped and how the result was checked.
   docs that it is not caught. The false positive concerns in the doc are Claude Code's reading of
   the 20 added narratives, not labels, and no precision is claimed from them. No model call
   went through the app; nothing was paid.
+* **Issue #37, hand labels of the 20 reports #30 adds** (Hamad). Hamad labelled all 20 by hand
+  (construction_fall, confidence, reason) in a workbook Claude Code built with the narrative and
+  OSHA's event fields only: no AI answer, no suggestion, and neither the rule's matched words nor
+  OSHA's inspection flag. Claude Code checked the returned workbook (all 20 reports, allowed
+  values, reasons present, read-only columns unchanged), copied the labels unchanged into
+  `data/labels/staffing_falls_added_Hamad.csv`, and wrote the scoring script, its tests and the
+  doc text. It did not change any label. The rule was not changed after the labels.
 
 ## The safety talk translations
 

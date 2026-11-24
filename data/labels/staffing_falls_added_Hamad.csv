@@ -1,0 +1,21 @@
+id,slice,construction_fall,confidence,reason
+2015074401,development,yes,high,Worker fell 12 feet from a bricklayer scaffold during bricklaying work.
+2015107889,development,no,medium,"Worker fell 4 feet while sweeping a floor (cleaning, not construction)."
+2016076023,development,yes,high,Worker fell 15 feet through a roof opening at a construction site.
+2016088230,development,yes,high,Worker fell 24-26 feet off a roof while installing rubber roofing.
+2017043446,development,yes,high,Worker fell from a 6 foot ladder while hanging sheetrock.
+20171010383,development,yes,high,Worker fell 20 feet from a scaffold while unstrapping a new wooden beam.
+2018010643,development,yes,high,Worker fell 12-13 feet while working on concrete forms.
+2018065373,development,yes,medium,Ground gave way and worker fell into an excavation onto a form beam.
+2018065928,development,yes,high,Worker fell into a 4 foot trench while installing a propane tank.
+2018077797,development,yes,high,Worker fell off a roof while installing a drip edge.
+20181111707,development,yes,high,Worker fell from an attic while laying insulation in a building under construction.
+2019054604,development,yes,high,A 3 foot scaffold broke and the worker fell while installing ceiling tiles.
+2019088393,development,yes,high,Worker was shocked and fell from a ladder while installing insulation and ductwork.
+2020032507,test,yes,high,Worker fell 14 feet through a manhole at a demolition site.
+2022043202,test,yes,high,Worker fell 10 feet from a ladder while installing a third-floor window.
+2022109105,test,cannot_tell,low,"Worker fell 3 feet off a scaffold, but the narrative doesn't say what work he was doing."
+2023109382,test,yes,high,Board snapped and worker fell into a 9 foot trench while bracing a foundation wall.
+2024032445,test,no,medium,"Worker fell from scaffolding onto an anvil during torch metal work (shop work, not construction)."
+20241211812,test,cannot_tell,low,"Scaffold collapsed and workers fell 14-15 feet, but the narrative doesn't state their task."
+2025076516,test,yes,high,Worker fell into an elevator shaft from a scaffold while installing wood backing.
