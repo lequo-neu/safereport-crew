@@ -238,4 +238,13 @@ def offline_router(
 ) -> Router:
     """A router whose every model answers from the same deterministic handlers, offline."""
     backends = {m.name: OfflineBackend(name=m.name, handlers=dict(handlers)) for m in settings.models}
-    return Router(settings, backends, log or UsageLog(), sleep=lambda _: None)
+    measured = {
+        (model.name, step): accuracy for model in settings.models for step, accuracy in model.measured.items()
+    }
+    return Router(
+        settings,
+        backends,
+        log or UsageLog(),
+        measured=measured,
+        sleep=lambda _: None,
+    )

@@ -1,0 +1,27 @@
+{
+  "frozen_at_utc": "2026-11-24T14:57:51.835729+00:00",
+  "dataset": "data/labels/router_slice.csv",
+  "sha256": "6a263fbc8ef1055cbd141659555a3660f197896870e380cbad01ae1a45ec20ed",
+  "total_reports": 50,
+  "eligible_reports": 35,
+  "excluded_no_standard": 15,
+  "pre_discussion_agreement": {
+    "agreed": 13,
+    "reviewed": 15,
+    "rate": 0.8666666666666667
+  },
+  "reviewer_status": {
+    "single labeler": 35,
+    "settled by the team": 3,
+    "both agreed": 12
+  },
+  "team_settlement_cases": [
+    "B7-002",
+    "B7-007",
+    "B7-050"
+  ],
+  "team_settlement_source": "https://github.com/lequo-neu/safereport-crew/issues/8#issuecomment-7134452580",
+  "provisional_offline_baseline_seen_before_freeze": true,
+  "ai_assisted_label_review": true,
+  "live_model_evaluation_started": false
+}

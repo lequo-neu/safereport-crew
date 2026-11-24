@@ -173,3 +173,22 @@ the feature.
   to a cloud model.
 * Paid experiments are capped at the team's budget of $1.50 and every reply is cached
   (`outputs/model_cache.sqlite`, not committed); `safereport eval-live` records what was spent.
+
+### B7: independent router evaluation (#8)
+
+ChatGPT assisted Khoa with the sampling and validation scripts,
+reference-label QA, regulatory research, measured-router integration,
+regression tests, and debugging.
+
+The original reviewer drafts were preserved. Kevin and Hamad
+confirmed the three disputed cases in issue #8. Additional
+adjudication recommendations were AI-assisted and recorded
+separately from the original reviewer labels.
+
+A provisional offline retrieval baseline was examined before
+the final label freeze. This limits the claim of fully blind
+adjudication. No live model answers were examined before freezing
+the reference CSV.
+
+The local full regression suite passed 432 tests. No paid model
+calls had been made at the time of the draft PR.

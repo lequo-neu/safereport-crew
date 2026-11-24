@@ -31,15 +31,17 @@ class ModelSpec(BaseModel):
     context_window: int | None = None
     roles: list[str] = Field(default_factory=list)
     prior: dict[StepType, float] = Field(default_factory=dict)
+    measured: dict[StepType, float] = Field(default_factory=dict)
+    measured_source: str = ""
     checked_on: str
     note: str = ""
 
-    @field_validator("prior")
+    @field_validator("prior", "measured")
     @classmethod
     def _shares(cls, prior: dict[StepType, float]) -> dict[StepType, float]:
         for step, share in prior.items():
             if not 0 <= share <= 1:
-                raise ValueError(f"prior for {step} must be a share between 0 and 1, got {share}")
+                raise ValueError(f"accuracy for {step} must be a share between 0 and 1, got {share}")
         return prior
 
     @property
