@@ -2,7 +2,7 @@
 
 **Reviewer:** Khoa Tran (`@trankhoa0210`)
 **Review date:** 22 November 2026
-**Status:** Case-level review complete for the offline evidence available; configuration reconciliation and GUI confirmation are still open. This is an inspection-support QA review, not a finding that an employer violated an OSHA regulation.
+**Status:** Case-level offline review complete. BM25-only versus hybrid retrieval counts and the B4 regression have been reconciled. Manual Evidence-view acceptance remains open. This is an inspection-support QA review, not a finding that an employer violated an OSHA regulation.
 
 ## What I checked and how
 
@@ -18,7 +18,7 @@ For the B5 case review counts, the reproducible source is `eval/results/khoa_b5_
 
 ## Texas week — 15 cases checked
 
-The offline BM25 run covered **31 reports** (17–23 November 2025). I found **11 reports with changed citations** and **4 reports sent to a person**, forming 15 distinct cases. Kevin’s team plan says 12 corrections; I did not change the count to match. We need to rerun the same retrieval configuration, index availability and revision, and agree whether “corrections” means distinct reports or individual issues.
+The offline BM25 run covered **31 reports** (17–23 November 2025). I found **11 reports with changed citations** and **4 reports sent to a person**, forming 15 distinct cases. The team's hybrid retrieval configuration produced 12 corrected reports, while this BM25-only reconstruction produced 11. The difference has been reconciled to the retrieval configurations and case selections, as documented below. Both runs identified four human-review cases.
 
 | OSHA report | First pick → final pick | My assessment |
 |---|---|---|
@@ -89,15 +89,17 @@ Kevin asked why a powered miter saw thumb amputation during trim cutting (NAICS 
 ## Findings for Kevin to prioritize
 
 1. **Corrected in this B5 branch:** Unsupported `1910.217` secondary on a non-press machine; domain and LangGraph regression tests.
-2. **Separate issue needed:** Four construction Falls records appear to be over-excluded (`FALLING_THING`), including one mixed injury mechanism.
-3. **Separate issue needed:** Fall-family validation conflates fall hazards and falling-object provisions, producing misleading human warnings.
-4. **Separate issue needed:** Energy-control revision can retain unrelated industry-specific secondary citations.
-5. **Separate issue needed:** The sample RRI letter inherits an unsupported hazard citation and may anchor the reply deadline to the wrong event.
-6. **Verify, not declare defective:** 11 vs 12 Texas corrections, 32 vs 33 construction exclusions, and Stage 1 vs model-branch differences on `20251111512`.
+2. **Advance issue #29:** Four construction Falls records appear to be over-excluded (`FALLING_THING`), including one mixed injury mechanism.
+3. **Advance issue #32:** Fall-family validation conflates fall hazards and falling-object provisions, producing misleading human warnings.
+4. **Advance issue #33:** Energy-control revision can retain unrelated industry-specific secondary citations.
+5. **Advance issue #34:** The sample RRI letter inherits an unsupported hazard citation and may anchor the reply deadline to the wrong event.
+6. **Reconciled evaluation differences:** The 11 BM25-only versus 12 hybrid Texas corrections reflect different retrieval configurations. The 32 versus 33 construction exclusions come from different reconstructions. The remaining Stage 1 versus model-branch citation difference for `20251111512` is documented, but the correct applicable standard still requires evidence-based review.
+
+7. **Advance issue #35:** `mechanical_press_only` can reject `1910.217` when Intake reduces a genuine punch press to the generic description `press`. The original narrative and machinery type need independent verification.
 
 ## Remaining B5 acceptance checks
 
-Before Kevin merges: run full Ruff and pytest offline, confirm the baseline JSON and issue counts with the same configuration as `main`, open the Evidence view for the agreed cases, regenerate one Vietnamese Word file from the edited source and inspect it, and open one GitHub issue per confirmed defect (checking for duplicates first). No change is proposed to shared triage weights, the README, the proposal, or B4 evaluation results.
+Before Kevin merges: run full Ruff and pytest offline, confirm the baseline JSON and issue counts with the same configuration as `main`, open the Evidence view for the agreed cases, regenerate one Vietnamese Word file from the edited source and inspect it, and open one GitHub issue per confirmed defect (checking for duplicates first). No change is proposed to shared triage weights, the README, or the proposal. The B4 evaluation results were regenerated after the critic correction and committed in `eval/results/batch_savings.json`; the updated results retain 56 versus 78 model calls, with no inspection-decision changes.
 
 ## Sources
 

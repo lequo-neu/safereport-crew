@@ -68,7 +68,7 @@ TRANSLATIONS: dict[str, dict[str, dict[str, Any]]] = {
                 ),
                 "Gắn khóa cá nhân và thẻ cảnh báo tại các điểm cách ly theo quy trình khóa/gắn thẻ (LOTO).",
                 (
-                    "Sau khi cô lập và xử lý năng lượng tích trữ, xác minh máy không thể khởi động; "
+                    "Sau khi cô lập và xử lý năng lượng tích trữ, đứng tránh xa các bộ phận nguy hiểm và bấm thử khởi động để xác nhận máy không chạy; "
                     "đưa bộ điều khiển về vị trí tắt trước khi làm việc."
                 ),
                 (
@@ -163,7 +163,7 @@ TRANSLATIONS: dict[str, dict[str, dict[str, Any]]] = {
             "bước lên rơ-moóc hoặc làm việc gần mép sàn lửng.",
             "points": [
                 (
-                    "Chỉ làm việc ở mép sàn khi có biện pháp chống ngã phù hợp với công việc; "
+                    "Chỉ làm việc ở mép sàn khi có lan can, dây đai an toàn toàn thân hoặc xe nâng người phù hợp; "
                     "không bước qua khu vực không được bảo vệ."
                 ),
                 "Che chắn và đánh dấu rõ các lỗ mở trên sàn và ô lấy sáng trên mái.",
