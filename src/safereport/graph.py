@@ -896,6 +896,19 @@ def build_graph(services: Services, checkpointer=None):
         suggested = re.search(
             r"(19(?:10|26)\.\d+(?:\([A-Za-z0-9]+\))*|OSH Act 5\(a\)\(1\))", issue.get("suggestion", "")
         )
+
+        # Remove a press-only secondary citation without changing the primary.
+        if issue["rule"] == "mechanical_press_only":
+            if pick.get("secondary") == "1910.217" and pick["primary"] != "1910.217":
+                return {**pick, "secondary": ""}
+
+            # An earlier correction may already have removed the invalid citation.
+            if "1910.217" not in (
+                pick.get("primary"),
+                pick.get("secondary"),
+            ):
+                return pick
+
         if issue["rule"] == "energy_control":
             kept = pick["primary"] if _citation_ok(pick["primary"]) and pick["primary"] != "1910.147" else ""
             return {**pick, "primary": "1910.147", "secondary": kept,

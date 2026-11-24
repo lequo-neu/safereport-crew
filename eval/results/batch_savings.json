@@ -72,14 +72,14 @@
     "estimated": {
       "offline_log": {
         "input_tokens": 6404,
-        "output_tokens": 7763,
+        "output_tokens": 7764,
         "cost_usd": 0.024897,
         "calls_without_a_price": 0
       },
       "with_system_prompts": {
         "input_tokens": 18030,
-        "output_tokens": 7763,
-        "cost_usd": 0.032112
+        "output_tokens": 7764,
+        "cost_usd": 0.032113
       }
     }
   },
@@ -98,8 +98,8 @@
     },
     "estimated_cost_usd_with_system_prompts": {
       "two_stages": 0.026588,
-      "every_report": 0.032112,
-      "saved": 0.005524,
+      "every_report": 0.032113,
+      "saved": 0.005525,
       "saved_share": 0.172
     },
     "estimated_input_tokens_with_system_prompts": {
@@ -110,9 +110,9 @@
     },
     "estimated_output_tokens": {
       "two_stages": 6184,
-      "every_report": 7763,
-      "saved": 1579,
-      "saved_share": 0.203
+      "every_report": 7764,
+      "saved": 1580,
+      "saved_share": 0.204
     }
   },
   "changes": {
@@ -224,7 +224,7 @@
         "decision": "inspection",
         "category_one": "hazard under an emphasis program",
         "priority": 6.457,
-        "standard": "1910.212(a)(3)(ii)"
+        "standard": "1910.147"
       },
       "20251111467": {
         "decision": "rri_letter",
@@ -412,7 +412,7 @@
         "decision": "inspection",
         "category_one": "hazard under an emphasis program",
         "priority": 6.457,
-        "standard": "1910.212(a)(3)(ii)"
+        "standard": "1910.147"
       },
       "20251111467": {
         "decision": "rri_letter",

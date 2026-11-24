@@ -79,3 +79,17 @@ def test_a_fall_standard_needs_a_worker_who_fell_and_a_person_decides():
 
 FALL_SECTIONS = {"fall_height": "1910.28(b)(1)", "ladder": "1910.23(b)(1)", "same_level": "1910.22(a)(1)",
                  "other": "1910.28"}  # fmt: skip
+
+
+def test_mechanical_press_standard_as_secondary_on_pallet_wrapper():
+    """Flag a press-specific secondary citation on a pallet wrapper."""
+    intake = facts(machine_or_hazard="pallet wrapping machine")
+
+    issues = check_citation(
+        intake,
+        primary="1910.212(a)(3)(ii)",
+        secondary="1910.217",
+        naics="322",
+    )
+
+    assert "mechanical_press_only" in [issue.rule for issue in issues]

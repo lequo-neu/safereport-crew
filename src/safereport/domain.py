@@ -63,7 +63,7 @@ def check_citation(
                 "cite 1910.212 (general machine guarding)",
             )
         )
-    if first == "1910.217" and not MECHANICAL_PRESS.search(facts.machine_or_hazard):
+    if "1910.217" in cited and not MECHANICAL_PRESS.search(facts.machine_or_hazard):
         issues.append(
             DomainIssue(
                 "mechanical_press_only",

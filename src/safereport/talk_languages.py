@@ -24,7 +24,7 @@ LEADS = {
     "zh": "与您同类的工厂自{{since}}年以来报告了{{topic_reports}}起此类严重伤害。",
     "tl": "Ang mga planta na tulad ng sa inyo ay nag-ulat ng {{topic_reports}} malubhang pinsala ng ganitong uri "
     "mula noong {{since}}.",
-    "vi": "Các nhà máy như của bạn đã báo cáo {{topic_reports}} ca chấn thương nghiêm trọng loại này kể từ năm {{since}}.",
+    "vi": "Các cơ sở sản xuất tương tự đã báo cáo {{topic_reports}} trường hợp chấn thương nghiêm trọng thuộc nhóm này kể từ năm {{since}}.",
     "ar": "منذ عام {{since}}، أبلغت مصانع مماثلة لمصنعكم عن إصابات خطيرة من هذا النوع، وبلغ إجمالي عدد الإصابات {{topic_reports}}.",
 }
 
@@ -58,16 +58,25 @@ TRANSLATIONS: dict[str, dict[str, dict[str, Any]]] = {
             "hindi pa ito naka-lockout.",
         },
         "vi": {
-            "title": "Khóa nguồn trước khi đưa tay vào",
-            "why": "Máy có thể chạy mà không báo trước. Lúc gỡ kẹt, vệ sinh hay chỉnh nhanh là lúc tay đưa vào chỗ "
-            "lẽ ra có tấm che.",
+            "title": "Khóa và gắn thẻ cảnh báo trước khi can thiệp vào máy",
+            "why": "Máy có thể khởi động bất ngờ. Khi gỡ kẹt, vệ sinh hoặc điều chỉnh, "
+            "tay có thể tiếp xúc với các bộ phận đang chuyển động.",
             "points": [
-                "Dừng máy và ngắt mọi nguồn năng lượng: điện, khí nén, thủy lực, trọng lực và lò xo tích năng.",
-                "Gắn ổ khóa và thẻ của chính bạn vào từng điểm cách ly. Khóa của bạn, chìa của bạn.",
-                "Thử khởi động máy trước khi đưa tay vào, rồi đưa công tắc về vị trí tắt.",
-                "Nếu máy kẹt lặp lại, hãy báo người giám sát. Không gỡ kẹt khi máy đang chạy.",
+                (
+                    "Dừng máy, cô lập mọi nguồn năng lượng và xử lý an toàn năng lượng tích trữ: "
+                    "điện, khí nén, thủy lực, trọng lực và lò xo."
+                ),
+                "Gắn khóa cá nhân và thẻ cảnh báo tại các điểm cách ly theo quy trình khóa/gắn thẻ (LOTO).",
+                (
+                    "Sau khi cô lập và xử lý năng lượng tích trữ, đứng tránh xa các bộ phận nguy hiểm và bấm thử khởi động để xác nhận máy không chạy; "
+                    "đưa bộ điều khiển về vị trí tắt trước khi làm việc."
+                ),
+                (
+                    "Nếu máy thường xuyên bị kẹt, báo người giám sát; "
+                    "không gỡ kẹt khi máy chưa được cô lập an toàn."
+                ),
             ],
-            "close": "Hãy tự hỏi: còn năng lượng nào có thể làm máy chuyển động? Nếu chưa chắc, tức là máy chưa được khóa.",
+            "close": "Trước khi thao tác, hãy kiểm tra: còn nguồn năng lượng nào có thể khiến máy chuyển động không?",
         },
         "ar": {
             "title": "اعزل الطاقة وأقفلها قبل أن تمد يدك",
@@ -104,14 +113,16 @@ TRANSLATIONS: dict[str, dict[str, dict[str, Any]]] = {
             "close": "Kung pinababagal ng guard ang trabaho, sabihin ito. Hindi solusyon ang pagtanggal dito.",
         },
         "vi": {
-            "title": "Luôn giữ tấm che máy",
-            "why": "Trục cán, lưỡi dao và dây đai cuốn găng tay hay tay áo vào nhanh hơn bất kỳ ai kịp phản ứng.",
+            "title": "Giữ bộ phận che chắn của máy đúng vị trí",
+            "why": "Trục cán, lưỡi dao và dây đai có thể cuốn găng tay hoặc tay áo "
+            "trước khi người vận hành kịp phản ứng.",
             "points": [
-                "Không bao giờ chạy máy khi tấm che đã bị tháo, cong vênh hay bị vô hiệu hóa.",
-                "Giữ tay tránh xa vùng gia công; dùng que đẩy và dụng cụ cấp phôi.",
-                "Báo ngay tấm che bị thiếu hoặc hỏng trước khi bắt đầu ca.",
+                "Không vận hành máy khi bộ phận che chắn bị tháo, hư hỏng hoặc bị vô hiệu hóa.",
+                "Giữ tay tránh xa vùng gia công; sử dụng que đẩy và dụng cụ cấp phôi phù hợp.",
+                "Báo ngay bộ phận che chắn bị thiếu hoặc hỏng trước khi bắt đầu ca làm việc.",
             ],
-            "close": "Nếu tấm che làm chậm công việc, hãy nói ra. Tháo nó ra không phải là cách sửa.",
+            "close": "Nếu bộ phận che chắn gây vướng, báo người giám sát; "
+            "không tự ý tháo hay bỏ qua để làm nhanh.",
         },
         "ar": {
             "title": "أبقِ حواجز الحماية في مكانها",
@@ -147,14 +158,18 @@ TRANSLATIONS: dict[str, dict[str, dict[str, Any]]] = {
             "close": "Bago umakyat, itanong kung paano ka protektado kapag nadulas ka.",
         },
         "vi": {
-            "title": "Mép nào cũng có thể ngã",
-            "why": "Phần lớn các vụ ngã xảy ra trong việc ngắn, quen tay: bước lên rơ-moóc, ngó qua mép sàn lửng.",
+            "title": "Phòng ngã tại mép sàn và khu vực trên cao",
+            "why": "Nguy cơ ngã có thể xuất hiện cả trong công việc quen thuộc: "
+            "bước lên rơ-moóc hoặc làm việc gần mép sàn lửng.",
             "points": [
-                "Dùng lan can, dây an toàn hoặc xe nâng người; không bao giờ bước qua mép không có che chắn.",
-                "Che và đánh dấu các lỗ hổng và giếng trời.",
-                "Giữ ba điểm tiếp xúc khi leo lên, leo xuống thiết bị.",
+                (
+                    "Chỉ làm việc ở mép sàn khi có lan can, dây đai an toàn toàn thân hoặc xe nâng người phù hợp; "
+                    "không bước qua khu vực không được bảo vệ."
+                ),
+                "Che chắn và đánh dấu rõ các lỗ mở trên sàn và ô lấy sáng trên mái.",
+                "Giữ ba điểm tiếp xúc khi lên xuống thang hoặc bậc lên xuống thiết bị.",
             ],
-            "close": "Trước khi lên cao, hãy hỏi: nếu trượt chân, điều gì bảo vệ bạn?",
+            "close": "Trước khi lên cao, hãy xác định: nếu trượt chân, biện pháp nào sẽ bảo vệ bạn?",
         },
         "ar": {
             "title": "كل حافة غير محمية قد تشكّل خطرًا للسقوط",
@@ -190,13 +205,20 @@ TRANSLATIONS: dict[str, dict[str, dict[str, Any]]] = {
         },
         "vi": {
             "title": "Xe nâng và con người",
-            "why": "Người lái xe nâng thường không nhìn thấy người đi phía sau kiện hàng.",
+            "why": "Người vận hành xe nâng có thể không nhìn thấy người đi bộ bị khuất sau hàng hóa.",
             "points": [
-                "Chỉ người đã được đào tạo và đánh giá mới được lái xe nâng.",
-                "Đi trong lối đi có vạch kẻ và nhìn vào mắt người lái trước khi băng qua.",
-                "Giữ hàng thấp và chắc; không bao giờ đứng lên càng nâng.",
+                "Chỉ người đã được đào tạo, đánh giá và cho phép mới được vận hành xe nâng.",
+                (
+                    "Đi đúng lối dành cho người đi bộ; chỉ băng qua khi người lái "
+                    "đã nhìn thấy bạn và xác nhận nhường đường."
+                ),
+                (
+                    "Giữ hàng thấp và ổn định khi di chuyển; "
+                    "không đứng trên càng nâng hoặc dưới tải đang nâng."
+                ),
             ],
-            "close": "Nếu bạn không nhìn thấy mắt người lái, người lái cũng không thấy bạn.",
+            "close": "Nếu tầm nhìn bị che khuất, hãy dừng lại và giữ khoảng cách; "
+            "đừng đoán rằng người lái đã nhìn thấy mình.",
         },
         "ar": {
             "title": "الرافعات الشوكية والمشاة",

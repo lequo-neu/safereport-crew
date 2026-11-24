@@ -1,0 +1,27 @@
+{
+  "reviewer": "Khoa Tran",
+  "method": "Offline checkpoint reconstruction and manual narrative review; purpose-selected construction sample",
+  "source_command": "python scripts/khoa_b5_review_counts.py",
+  "texas": {
+    "reviewed_flagged_cases": 15,
+    "citation_changed_reports": 11,
+    "human_review_cases": 4,
+    "reported_week_total_offline": 31,
+    "reported_team_corrections_not_yet_reproduced": 12
+  },
+  "construction_exclusions": {
+    "reviewed_sample": 20,
+    "object_struck_worker_cases": 17,
+    "worker_fell_cases": 4,
+    "mixed_object_and_worker_fall_cases": 1,
+    "worker_fall_only_cases": 3,
+    "object_only_cases": 16,
+    "local_helper_exclusion_total_not_reproduced_here": 32,
+    "team_plan_exclusion_total_not_reproduced_here": 33
+  },
+  "limitations": [
+    "The 31-report and 32/33 comparison totals come from separate audit runs or the team plan, not these two sampled CSV files.",
+    "This sample was selected for review, not randomly sampled; do not extrapolate its error fraction.",
+    "Citation revisions are not necessarily correct OSHA standards or substantiated violations."
+  ]
+}
