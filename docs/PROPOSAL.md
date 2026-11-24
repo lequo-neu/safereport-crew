@@ -7,7 +7,7 @@
 
 **SafeReport Crew: a multi agent copilot that turns severe workplace injury reports into inspection and prevention decisions**
 
-**Status on 23 November 2026:** phases 0 to 3 are built and tested (the data and indexes, the seven agent crew, the Gradio app); phase 4 is under way, with the first checks merged (the review of the triage logic and the app, the inspection AUC, the hand check of the Category 1 rules, the batch savings and the review of the cited standards and the Writer). Code: [github.com/lequo-neu/safereport-crew](https://github.com/lequo-neu/safereport-crew), on `main`; 351 tests pass, and the suite runs without data or API keys as in CI.
+**Status on 23 November 2026:** phases 0 to 3 are built and tested (the data and indexes, the seven agent crew, the Gradio app); phase 4 is under way, with the first checks merged (the review of the triage logic and the app, the inspection AUC, the hand check of the Category 1 rules, the batch savings and the review of the cited standards and the Writer). Code: [github.com/lequo-neu/safereport-crew](https://github.com/lequo-neu/safereport-crew), on `main`; 386 tests pass, and the suite runs without data or API keys as in CI.
 
 ## Problem
 

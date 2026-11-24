@@ -99,16 +99,56 @@ outside it). The query is the narrative and OSHA's event title, as in stage 1 of
   (2024032445), and one report names no work at all (2022109105, stepping off a scaffold 3 feet
   up). The development slice has a borderline case of another kind: 2015107889, sweeping a
   loading dock at a building under construction, a 4 foot fall. These
-  observations come from Claude Code reading the 20 narratives. They are not labels and no
-  precision is claimed. The scaffold pattern was not changed after the test run. Narrowing it
-  is a decision for the team, and it should be measured on new reports.
+  observations came from Claude Code reading the 20 narratives before any label; the hand
+  labels below replace them. The scaffold pattern was not changed after the test run or after
+  the labels. Narrowing it is a decision for the team, and it should be measured on new reports.
 * **Not adopted, measured:** the employer's name ("... Contracting", "Construct Corps") would
   have added 3 development reports and no test report.
 
+## Hand labels of the 20 added reports (issue #37)
+
+Hamad labelled each added report by hand, from the narrative and OSHA's event fields only (the
+rule's matched words, OSHA's inspection flag and any AI reading were kept out of the workbook):
+was the worker doing construction work, and did the worker fall to a lower level? Answers are
+yes, no or cannot_tell, with a confidence and a reason. The labels are in
+`data/labels/staffing_falls_added_Hamad.csv` and, beside each report, in
+`eval/results/staffing_falls_added.csv`; `python -I scripts/score_staffing_falls_labels.py`
+writes the precision to `hand_labels` in `eval/results/staffing_falls.json`.
+
+cannot_tell is neither right nor wrong, so precision is given three ways. The headline is the
+strict one, which counts cannot_tell as not confirmed.
+
+| | Development 2015 to 2019 | Test 2020 to 2025 |
+|---|---|---|
+| Added reports labelled | 13 | 7 |
+| yes / no / cannot_tell | 12 / 1 / 0 | 4 / 1 / 2 |
+| **Precision, strict** (yes of all) | 12 of 13, 92% (67 to 99) | **4 of 7, 57% (25 to 84)** |
+| Precision, decided (yes of yes + no) | 12 of 13, 92% (67 to 99) | 4 of 5, 80% (38 to 96) |
+| Precision, lenient (yes + cannot_tell of all) | 12 of 13, 92% (67 to 99) | 6 of 7, 86% (49 to 97) |
+
+Ranges are 95% Wilson intervals. The development figure is optimistic: those reports were read
+while the construction words were written. The test figure is the measure of the rule.
+
+* **Not yes, test:** 2024032445 no (torch work on metal from scaffolding, shop work, not
+  construction); 2022109105 and 20241211812 cannot_tell (a fall from a scaffold, 3 feet and
+  14 to 15 feet, but the task is not named). These are the two doubtful reports named in #36 and
+  the collapsed scaffold among the examples above.
+* **Not yes, development:** 2015107889 no (sweeping a loading dock floor at a building under
+  construction: cleaning, not construction).
+* **By evidence word:** all 3 test reports not labelled yes came in through "scaffold", which
+  added 5 of the 7 test reports; 2 of those 5 are yes. Every test addition through another word
+  (demolition, trench) is yes, and so are the 3 development additions through "scaffold". The
+  pattern was not changed after the labels; a narrower one is a later change, measured on
+  reports not used here.
+* **One labeller.** The labels are Hamad's alone, with no second reader, so labeller agreement
+  is not known; the two cannot_tell answers are low confidence and another reader could decide
+  them either way, which is what the strict to lenient range shows.
+
 ## Limits
 
-* The added reports are not labelled. The rule's precision is not known, only what it flags.
-  The OSHA inspection rate is past practice, not truth.
+* Precision rests on 7 test reports, so the interval is wide (25 to 84 strict), and on one
+  labeller. Recall is not measured: the labels cover only what the rule adds, not the staffing
+  fall reports it leaves out. The OSHA inspection rate is past practice, not truth.
 * A pasted narrative has no OSHA event title, so the falling-object veto there rests on the
   narrative alone.
 * Words, not understanding. A narrative that names construction work only in other words

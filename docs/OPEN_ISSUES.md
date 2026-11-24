@@ -133,7 +133,8 @@ measured outside the 2025 holdout.
   and the trenching program (#27), from B1; staffing employers doing construction work at height
   (#30), from B3. All four Category 1 misses and three false alarms of B3 come from the emphasis
   program criterion. #30 is addressed by a narrow work route for NAICS 5613 measured outside the
-  holdout ([docs/FALLS_STAFFING.md](FALLS_STAFFING.md)); it does not catch K083, and the B3
+  holdout ([docs/FALLS_STAFFING.md](FALLS_STAFFING.md)); hand labels (#37) give a test precision of
+  4 of 7 (2 unclear, all 3 misses through "scaffold"); it does not catch K083, and the B3
   numbers stay those of the Basic rule.
 * **CSV downloads on Windows (#17)** had blank rows and two failing tests; fixed in #21 (downloads
   are written as their text is).

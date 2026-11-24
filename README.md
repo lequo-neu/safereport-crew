@@ -5,7 +5,7 @@ whether to send an inspector or a letter, and helps a plant learn from injuries 
 
 Final project for IE5374 Applied Generative AI, by **Seven Team-5374**: Quoc Hung Le (Kevin),
 Hamad Al Sulaimi, Khoa Tran. Phases 0 to 3 of 4 are built, and the first phase 4 checks (B1 to
-B5) are in; 351 tests pass offline.
+B5) are in; 386 tests pass offline.
 
 | If you want to | Go to |
 |---|---|
@@ -406,9 +406,16 @@ not NAICS 23, so a staffing agency (NAICS 5613) is now covered when the narrativ
 construction work and a fall from height. The Category 1 row shows the words that matched. On
 the 104,996 reports outside the 2025 holdout it adds 20 reports (7 of 447 staffing reports from
 2020 on, the slice not read while writing the rule), removes none and changes nothing in any other
-industry; OSHA inspected 10 of the 20. The B3 numbers above are the Basic rule and were not
-rerun. Rule, examples, false positive concerns and limits in
-[docs/FALLS_STAFFING.md](docs/FALLS_STAFFING.md).
+industry; OSHA inspected 10 of the 20. Hamad labelled the 20 by hand (#37): on the 7 test
+additions 4 are construction work and a fall to a lower level, 1 is not and 2 cannot be told, so
+precision is 4 of 7 (57%, 95% Wilson interval 25 to 84) counting the 2 unclear ones as not
+confirmed, and 4 of the 5 decided (80%, 38 to 96); on the 13 development additions it is 12 of 13.
+All 3 test reports not labelled yes came in through "scaffold"; the rule was not changed after
+the labels. Rule, labels, examples and limits in [docs/FALLS_STAFFING.md](docs/FALLS_STAFFING.md).
+
+The B2 and B3 numbers above were measured with the rules at bb68e2b, before #30; a rerun on
+`main` now uses the new Falls rule and can differ, so check out bb68e2b to reproduce them. B4 is
+unchanged (checked on #36).
 
 All numbers are in [eval/results](eval/results). Reproduce them without any paid call:
 
@@ -446,7 +453,7 @@ config/            models.toml (models, prices, router), triage.toml (weights, d
 data/labels/       the answer key, the three reviewers' files and the Category 1 hand check
 eval/results/      every measured number
 docs/              proposal, labelling guide, related products, open issues, AI use, reviews, Falls for staffing (#30)
-tests/             351 tests, offline, no keys
+tests/             386 tests, offline, no keys
 ```
 
 ## For developers
