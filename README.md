@@ -5,7 +5,7 @@ whether to send an inspector or a letter, and helps a plant learn from injuries 
 
 Final project for IE5374 Applied Generative AI, by **Seven Team-5374**: Quoc Hung Le (Kevin),
 Hamad Al Sulaimi, Khoa Tran. Phases 0 to 3 of 4 are built, and the first phase 4 checks (B1 to
-B4) are in; 347 tests pass offline.
+B5) are in; 351 tests pass offline.
 
 | If you want to | Go to |
 |---|---|
@@ -330,7 +330,9 @@ would break. Only the safety talk, read aloud to a crew, comes in one more langu
 the five most spoken at home after English in the 2025 American Community Survey (table B16001,
 as summarized by [Access Multilingual](https://accessmultilingual.com/resources/languages-spoken-in-the-united-states-census-2024)):
 Spanish, Chinese, Tagalog, Vietnamese and Arabic. The translations were drafted with an AI
-assistant and need a native speaker's review before a plant uses them.
+assistant. Hamad reviewed the Arabic as a native speaker (B1) and Khoa reviewed the Vietnamese
+(B5); the Spanish, Chinese and Tagalog still need a native speaker's review before a plant uses
+them.
 
 ## Results
 
@@ -390,6 +392,15 @@ cases agree with the rules by construction. Agreement with a second labeller on 
 Category 1 12 of 15 (kappa 0.62). Details and limits in
 [docs/reviews/hamad.md](docs/reviews/hamad.md#b3-hand-check-of-the-category-1-rules-issue-4).
 
+**The cited standards, read by hand** (B5; the 15 Texas week reports the critic changed or sent
+to a person in an offline BM25 run, 20 construction reports the Falls program leaves out, and one
+RRI letter): an invalid 1910.217 could stay as the secondary citation, which the critic now
+catches too. Four gaps go to Advance: a fall check that ignores the falling object rules of
+1910.28(c) (#32), unrelated secondary citations kept after an energy control correction (#33),
+the letter's citation and reply date (#34), and the press check reading only the Intake's word
+"press" (#35). 4 of the 20 left out reports describe a worker who fell (#29). Details in
+[docs/reviews/khoa.md](docs/reviews/khoa.md).
+
 All numbers are in [eval/results](eval/results). Reproduce them without any paid call:
 
 ```bash
@@ -423,10 +434,10 @@ src/safereport/
   spend.py         reply cache and the $1.50 cap
   app.py, views.py the Gradio app
 config/            models.toml (models, prices, router), triage.toml (weights, days)
-data/labels/       the answer key and the three reviewers' files
+data/labels/       the answer key, the three reviewers' files and the Category 1 hand check
 eval/results/      every measured number
-docs/              proposal, labelling guide, related products, open issues, AI use
-tests/             347 tests, offline, no keys
+docs/              proposal, labelling guide, related products, open issues, AI use, reviews
+tests/             351 tests, offline, no keys
 ```
 
 ## For developers

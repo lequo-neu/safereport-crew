@@ -1,7 +1,7 @@
 # Open issues
 
 Updated on 19 November 2026, after the team decisions and the second independent review, and
-on 23 November 2026 with what the Basic stage checks (B1 to B4) found.
+on 23 November 2026 with what the Basic stage checks (B1 to B5) found.
 
 ## Decided by the team (19 November 2026)
 
@@ -78,8 +78,11 @@ on 23 November 2026 with what the Basic stage checks (B1 to B4) found.
 10. **Retrieval without a model is weak.** With BM25 and embeddings, the primary section is in the
     top 3 for 41.2% of the 51 cases (95% CI 28.8 to 54.8). With a model's terms it is 60.8% to
     70.6%, so the offline mode is a fallback, not the way to cite standards.
-11. **Model IDs move.** `gpt-5-nano` is listed by one third party for retirement on 11 December
-    2026, and `gemini-3.5-flash` forwards to 3.6 Flash. Recheck before the demo.
+11. **Model IDs move.** Rechecked on 23 November 2026: OpenAI's deprecations page lists
+    `gpt-5-nano` (snapshot 2025-08-07) for shutdown on 11 December 2026, after the demo, so the ID
+    stays for this project; a later run would move to the replacement OpenAI names there. Google
+    lists `gemini-3.5-flash` as deprecated, with requests routed to 3.6 Flash and no shutdown date.
+    `claude-sonnet-5-5` is current. Recheck once more on the demo day.
 
 ## Found while building the app (Phase 3)
 
@@ -108,8 +111,9 @@ on 23 November 2026 with what the Basic stage checks (B1 to B4) found.
 
 ## Found in the Basic stage checks (23 November 2026)
 
-From `docs/reviews/hamad.md` (B1, B3) and the B2 and B4 results. None of them changed a rule
-during the Basic stage; rule changes are Advance work, measured outside the 2025 holdout.
+From `docs/reviews/hamad.md` (B1, B3), `docs/reviews/khoa.md` (B5) and the B2 and B4 results.
+None of them changed a Category 1 rule during the Basic stage; rule changes are Advance work,
+measured outside the 2025 holdout.
 
 * **Repeat offenders and SVEP.** OSHA's fourth Category 1 criterion needs the employer's citation
   history and the Severe Violator Enforcement Program list. The SIR file does not link to OSHA's
@@ -133,11 +137,25 @@ during the Basic stage; rule changes are Advance work, measured outside the 2025
   are written as their text is).
 * **The B1 walkthrough screenshots** are kept on Hamad's machine (`.local/b1/screenshots/`), not
   in the repository; the steps and results are in `docs/reviews/hamad.md`.
+* **An invalid 1910.217 as the secondary citation** (B5): the press check looked only at the
+  primary. Fixed in #31: it checks both, and removes the secondary without dropping a valid
+  primary. On the B4 week, 20251111462 (die setup on a punch press) now ends on 1910.147.
+* **Critic and Writer gaps found in B5**, all Advance: the fall check flags 1910.28 for a person whenever
+  the worker did not fall, though 1910.28(c) covers falling objects (#32); an energy control
+  correction keeps an unrelated industry standard as the secondary (#33); the RRI letter keeps a
+  weak citation and dates the reply from the letter, not the call (#34); the press check reads
+  only the Intake's word "press", so a real punch press can lose 1910.217 (#35).
+* **The construction Falls filter** (#29, Advance): 4 of 20 reports it leaves out describe a
+  worker who fell, one of them with an object that struck the worker too.
+* **Report 20251111512** (thumb amputation on a powered miter saw): stage 1 cites 1910.212 and the
+  model branch 1910.243. Khoa's provisional choice between the two is 1910.212, with 1910.213
+  (woodworking machinery) still to check; the narrative does not say how the saw was mounted or
+  guarded, so it stays for a person.
 
 ## Still open
 
 * **A fall standard for an injury that was not a fall** (added on 19 November 2026, with the
-  team's agreement). A section of 1910.22, .23, .28, .29 or .140 needs an injury where the worker
+  team's agreement; B5 found that it also flags falling object cases that 1910.28(c) covers, see #32). A section of 1910.22, .23, .28, .29 or .140 needs an injury where the worker
   fell. Measured once on the answer key, the rule flagged 2 of the 10 fall cases (C14, C32): the
   offline Intake reads "heel caught on a cart" as a machine. The rule was not adjusted to those
   cases; it is a check for a person (an amber badge, a line under the answer) and the critic does
@@ -148,6 +166,6 @@ during the Basic stage; rule changes are Advance work, measured outside the 2025
   for Claude on retrieval, 0.75 for GPT 5 nano). The live numbers come from the final test set,
   so routing on them would select models on the test set. Proposal: measure the router's
   accuracies on reports outside the key (for example a labelled slice of the 2025 holdout), and
-  report the key only as the final score.
+  report the key only as the final score. This is B7 (#8).
 
 * **Name of the drafting tool** for the answer key, for `docs/AI_USAGE.md`.

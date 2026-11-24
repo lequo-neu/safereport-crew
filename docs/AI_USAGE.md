@@ -128,8 +128,11 @@ Each task records here which AI tool helped and how the result was checked.
 ## The safety talk translations
 
 The Spanish, Chinese, Tagalog, Vietnamese and Arabic texts of the four safety talks were drafted
-with an AI assistant. No team member is a native speaker of all five, so each needs a native
-speaker's review before a plant prints it; the README says so beside the feature.
+with an AI assistant. Hamad reviewed the Arabic line by line as a native speaker (B1), and Khoa
+reviewed the Vietnamese (B5, read again by Kevin). The Vietnamese forklift talk adds one rule the
+other languages do not have: do not stand under a raised load. The Spanish, Chinese and Tagalog
+texts still need a native speaker's review before a plant prints them; the README says so beside
+the feature.
 
 ## The product's own use of models
 
