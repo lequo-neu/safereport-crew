@@ -145,6 +145,15 @@ Each task records here which AI tool helped and how the result was checked.
   values, reasons present, read-only columns unchanged), copied the labels unchanged into
   `data/labels/staffing_falls_added_Hamad.csv`, and wrote the scoring script, its tests and the
   doc text. It did not change any label. The rule was not changed after the labels.
+* **Issue #38, the Colab notebook: foundation and Texas week** (Hamad). Claude Code wrote parts 1
+  to 16 of `notebooks/safereport_crew.ipynb` (as section files in `notebooks/sections/`), the
+  script that assembles them, `tests/test_notebook.py`, the notebook README and the Colab test
+  checklist, from the README, the graph code and a local run. Every number the notebook shows is
+  printed by a cell from the run or the data, not written in its text. It was run end to end on a
+  local machine from a fresh clone of the pinned commit. On Google Colab, Claude in Chrome ran it
+  (commit 1b504c7) in a fresh runtime, following `notebooks/COLAB_TEST_CHECKLIST.md`; Hamad
+  supervised the run and checked the outputs. Khoa's parts (17 to 19) are placeholders. No model
+  call went through the app; nothing was paid.
 
 ## The safety talk translations
 
