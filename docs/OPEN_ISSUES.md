@@ -1,6 +1,7 @@
-# Open issues before Phase 3
+# Open issues
 
-Updated on 19 November 2026, after the team decisions and the second independent review.
+Updated on 19 November 2026, after the team decisions and the second independent review, and
+on 23 November 2026 with what the Basic stage checks (B1 to B4) found.
 
 ## Decided by the team (19 November 2026)
 
@@ -104,6 +105,34 @@ Updated on 19 November 2026, after the team decisions and the second independent
   planning (zero stays allowed: a week without spare days is real, and the plan then says how
   many days the Category 1 reports need). An empty week (Wyoming, 17 to 23 November 2025) says
   so and cannot be approved. A safety talk needs one of the four topics.
+
+## Found in the Basic stage checks (23 November 2026)
+
+From `docs/reviews/hamad.md` (B1, B3) and the B2 and B4 results. None of them changed a rule
+during the Basic stage; rule changes are Advance work, measured outside the 2025 holdout.
+
+* **Repeat offenders and SVEP.** OSHA's fourth Category 1 criterion needs the employer's citation
+  history and the Severe Violator Enforcement Program list. The SIR file does not link to OSHA's
+  citation records, so neither the crew nor the hand check can tell.
+* **Local and regional emphasis programs are not encoded.** The crew encodes twelve national
+  programs; a report covered only by a local or regional program is missed and not counted as a
+  miss. The Region 6 (Texas) programs are a candidate for Advance (#10).
+* **Imminent danger is left to a person's flag.** No narrative rule decides it, and the hand check
+  reports it apart (`cannot_tell` on all 100).
+* **Employer history is checked only within the same state.** An earlier report from the same
+  company in another state does not count.
+* **The employer history criterion and OSHA's choices (#18).** It marks 94 of the 1,000 holdout
+  reports as Category 1, and OSHA inspected 19 of them (20%), below the 30% overall rate; it is
+  the main reason putting Category 1 first lowers the AUC. Whether "employer" means the company
+  or the establishment (Dollar Tree, B1) is decided in Advance; the rule stays as written.
+* **Emphasis program gaps**, all Advance: warehousing NAICS 491110 for retail post offices (#26)
+  and the trenching program (#27), from B1; staffing employers doing construction work at height
+  (#30), from B3. All four Category 1 misses and three false alarms of B3 come from the emphasis
+  program criterion.
+* **CSV downloads on Windows (#17)** had blank rows and two failing tests; fixed in #21 (downloads
+  are written as their text is).
+* **The B1 walkthrough screenshots** are kept on Hamad's machine (`.local/b1/screenshots/`), not
+  in the repository; the steps and results are in `docs/reviews/hamad.md`.
 
 ## Still open
 

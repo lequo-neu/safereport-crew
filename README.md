@@ -4,7 +4,8 @@
 whether to send an inspector or a letter, and helps a plant learn from injuries like its own.**
 
 Final project for IE5374 Applied Generative AI, by **Seven Team-5374**: Quoc Hung Le (Kevin),
-Hamad Al Sulaimi, Khoa Tran. Phases 0 to 3 of 4 are built; 307 tests pass offline.
+Hamad Al Sulaimi, Khoa Tran. Phases 0 to 3 of 4 are built, and the first phase 4 checks (B1 to
+B4) are in; 347 tests pass offline.
 
 | If you want to | Go to |
 |---|---|
@@ -268,9 +269,10 @@ flowchart TD
 | **Writer** | generation | inspection briefs, RRI letters, safety talks, answers; every number is a placeholder filled from a FactLedger |
 | **Decision critic** | decision making | checks every citation against eCFR, the OSHA domain rules, every number and the plan rules, and sends work back |
 
-**Why two stages?** Three model calls per report would be about 85 calls for one Texas week and
-over 500 nationwide. Stage 1 codes every report without a model in seconds; only the reports
-that need it go to the model branches (20 of 31 in the Texas week).
+**Why two stages?** Sending every report of the Texas week through the model branches takes 78
+model calls. Stage 1 codes every report without a model in seconds; only the reports that need
+it go to the model branches (20 of 31 in the Texas week), which takes 56 calls (measured offline,
+B4).
 
 ### How the router picks a model
 
@@ -366,6 +368,19 @@ only when the confidence is at least 0.7 covers 51% of reports, 80% of them righ
 **Employer matching:** of 150 hand checked name pairs, the "same" rule held for 100 of 100 and
 45 of 50 "possible" pairs were one employer, so possible matches wait for a person.
 
+**Inspection priority against OSHA's own choices** (B2; the 1,000 reports of the 2025 holdout,
+303 inspected): ROC AUC 0.633 (95% interval 0.596 to 0.671) for the crew's ranking, against 0.592
+(0.559 to 0.625) for severity alone, a difference of 0.041 (0.003 to 0.079). The Category 2
+priority alone scores 0.682; putting Category 1 first lowers it, mainly through the employer
+history criterion (OSHA inspected 19 of its 94 reports, 20%; see #18). OSHA's choices are past
+practice, not proof of the right choice. The result file keeps a fingerprint of the triage values
+(`triage_values_sha256`), so a changed weight shows.
+
+**What the two stage batch saves** (B4; the Texas week, 17 to 23 November 2025, offline): 56 model
+calls against 78 with every report through the model branches, 22 fewer (28%); the estimated cost
+is 17% lower. No inspection decision, Category 1 call or priority changed; one cited standard
+differs (20251111512: 1910.212 against 1910.243).
+
 **OSHA's Category 1 rules, checked on 100 hand labelled 2025 reports** (B3; the rules as they
 are, no tuning): Category 1 recall 86% (24 of 28; 95% interval 69 to 94), false alarms 5% (3 of
 65; 2 to 13), `cannot_tell` 7%. The misses (K009, K055, K059, K083) and false alarms (K031,
@@ -411,7 +426,7 @@ config/            models.toml (models, prices, router), triage.toml (weights, d
 data/labels/       the answer key and the three reviewers' files
 eval/results/      every measured number
 docs/              proposal, labelling guide, related products, open issues, AI use
-tests/             307 tests, offline, no keys
+tests/             347 tests, offline, no keys
 ```
 
 ## For developers
@@ -450,8 +465,11 @@ per inspection are in [config/triage.toml](config/triage.toml).
 * Inspector days per inspection are assumptions, shown as values you can change.
 * The week map plans no travel; one state stands in for one office's territory. Map tiles come
   from CARTO and OpenStreetMap, so the browser needs the internet for them.
-* Phase 4 is next: router accuracies measured outside the key, a seeded domain check set, the
-  inspection AUC, batch savings, the router on the Pareto chart, and the prevention plan.
+* OSHA's Category 1 rules here do not cover repeat offenders and SVEP (the file has no citation
+  history) or local and regional emphasis programs, look for employer history only in the same
+  state, and leave imminent danger to a person's flag (B3).
+* Still to come in phase 4: router accuracies measured outside the key, a seeded domain check
+  set, the router on the Pareto chart, and the prevention plan.
 
 More in [docs/OPEN_ISSUES.md](docs/OPEN_ISSUES.md); how we used AI tools is in
 [docs/AI_USAGE.md](docs/AI_USAGE.md); related products are compared in
