@@ -9,13 +9,13 @@ Seven Team-5374. Written on 20 November 2026. How we work is in [CONTRIBUTING.md
 
 | Who | GitHub | Role from now on |
 |---|---|---|
-| Hamad Al Sulaimi | `hmdsulaimi` | builds and measures (triage, evaluation), shares the submission work with Khoa |
+| Hamad Al Sulaimi | `hmdsulaimi` | builds and measures (triage, evaluation), folds the results into the shared documents, shares the submission work with Khoa |
 | Khoa Tran | `trankhoa0210` | builds and measures (standards, routing), shares the submission work with Hamad |
-| Quoc Hung Le (Kevin) | `lequo-neu` | reviews every pull request when asked, owns the repository settings, folds the results into the README and proposal at the end of the Basic stage |
+| Quoc Hung Le (Kevin) | `lequo-neu` | reviews and merges every pull request, owns the repository settings and tags the submitted commit |
 
-The work is split evenly between Hamad and Khoa. Kevin reviews and merges, and takes no task from
-this list beyond folding the results into the shared documents, so nobody waits on him for
-anything but a review.
+The work is split evenly between Hamad and Khoa. Kevin reviews and merges and takes no task from
+this list, so nobody waits on him for anything but a review. From 24 November the fold in of the
+results (#19) is Hamad's, by pull request.
 
 The safety talk translations get a native speaker's review, as the README and proposal promise:
 Hamad reads the Arabic (in B1) and Khoa the Vietnamese (in B5).
@@ -61,7 +61,7 @@ the other person.
 
 **Results go in their own files, not in the README.** B2, B3, B4, B6 and B7 each write only their
 own file in `eval/results/` (and `data/labels/`). The pull request description gives the sentence
-or table row the README should show. When the last Basic pull request is merged, Kevin updates
+or table row the README should show. When the last Basic pull request is merged, Hamad updates
 `README.md`, `docs/PROPOSAL.md` and `docs/OPEN_ISSUES.md` from those files in one pass, so five
 pull requests never edit the same table.
 

@@ -7,7 +7,7 @@
 
 **SafeReport Crew: a multi agent copilot that turns severe workplace injury reports into inspection and prevention decisions**
 
-**Status on 23 November 2026:** phases 0 to 3 are built and tested (the data and indexes, the seven agent crew, the Gradio app); phase 4 is under way, with the first checks merged (the review of the triage logic and the app, the inspection AUC, the hand check of the Category 1 rules, the batch savings and the review of the cited standards and the Writer). Code: [github.com/lequo-neu/safereport-crew](https://github.com/lequo-neu/safereport-crew), on `main`; 386 tests pass, and the suite runs without data or API keys as in CI.
+**Status on 24 November 2026:** phases 0 to 3 are built and tested (the data and indexes, the seven agent crew, the Gradio app); phase 4 is under way, with the Basic checks merged (the review of the triage logic and the app, the inspection AUC, the hand check of the Category 1 rules, the batch savings, the review of the cited standards and the Writer, the seeded citation errors and the router accuracies measured outside the answer key) and the prevention plan built. Code: [github.com/lequo-neu/safereport-crew](https://github.com/lequo-neu/safereport-crew), on `main`; 479 tests pass, and the suite runs without data or API keys as in CI.
 
 ## Problem
 
@@ -145,7 +145,7 @@ Our comparison is in `docs/RELATED_PRODUCTS.md`. EHS suites (VelocityEHS, Cority
 5. A seeded wrong citation (`1910.212` for a jam clearing injury) and a section that does not exist are caught and fixed. **Built.**
 6. A lockout safety talk in English and one more language, downloaded as Word, and the week's list as CSV. **Built.**
 7. Best quality, lowest cost and private modes; one provider in a simulated outage, with the batch finishing through the fallback; the Evaluation page and Pareto chart. **Built;** the Pareto chart has the measured models, the router's own point comes in phase 4.
-8. Extension: a $40,000 prevention plan for a plastics plant, at the low and high end of control effectiveness. **Phase 4.**
+8. Extension: a $40,000 prevention plan for a plastics plant, at the low and high end of control effectiveness. **Built (#41).**
 
 ## Plan
 

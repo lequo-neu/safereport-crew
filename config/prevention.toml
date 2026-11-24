@@ -1,0 +1,46 @@
+# The controls the prevention plan (N13) can fund, and the injuries each one addresses.
+#
+# `events` are OIICS 3 event code prefixes (the `event_code_v3` column, estimated before 2024, as on
+# the Trends page); `sources` are source code prefixes, used only for reports no event control
+# took. Each report goes to the first control that matches it, in this order, so no injury is
+# counted twice.
+#
+# `yearly_cost` (US dollars a year) and `effect` (the low and high share of the matched severe
+# injuries the control prevents) are PLANNING ASSUMPTIONS for the demo, not measured values. A
+# plant replaces them with its own quotes and judgement in the app; the plan is solved at both
+# ends of every range so the answer shows how much rests on them.
+
+[[controls]]
+name = "lockout program"
+why = "struck or caught by running equipment during maintenance, cleaning or testing (OIICS 652)"
+events = ["652"]
+yearly_cost = 12000
+effect = [0.4, 0.8]
+
+[[controls]]
+name = "machine guarding"
+why = "caught in running equipment in normal operation (OIICS 653)"
+events = ["653"]
+yearly_cost = 25000
+effect = [0.4, 0.8]
+
+[[controls]]
+name = "fall protection"
+why = "falls to a lower level (OIICS 41)"
+events = ["41"]
+yearly_cost = 10000
+effect = [0.3, 0.7]
+
+[[controls]]
+name = "housekeeping"
+why = "falls on the same level after a slip or trip (OIICS 43)"
+events = ["43"]
+yearly_cost = 4000
+effect = [0.2, 0.5]
+
+[[controls]]
+name = "forklift training"
+why = "any other event where the source is a powered forklift or platform truck (source 8621)"
+sources = ["8621"]
+yearly_cost = 6000
+effect = [0.2, 0.5]

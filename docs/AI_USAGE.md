@@ -154,6 +154,17 @@ Each task records here which AI tool helped and how the result was checked.
   (commit 1b504c7) in a fresh runtime, following `notebooks/COLAB_TEST_CHECKLIST.md`; Hamad
   supervised the run and checked the outputs. Khoa's parts (17 to 19) are placeholders. No model
   call went through the app; nothing was paid.
+* **Issue #41, the prevention plan** (Kevin). Claude Code wrote `src/safereport/prevention.py`,
+  the prevention node, the Writer's template, the Trends page section, `config/prevention.toml`,
+  `data/reference/safety_pays.toml`, `tests/test_prevention.py` and `docs/PREVENTION_PLAN.md`.
+  The Safety Pays costs were read from osha.gov (the estimator text page and the background page)
+  by a fetch agent and copied with their source; the map from OSHA's nature titles to Safety Pays
+  types is Claude Code's, written from the list of titles in the file. The controls' yearly costs
+  and effect ranges are planning assumptions Claude Code proposed for the demo, not measured
+  values; they are marked as assumptions in the config, the app and the answer, and the user can
+  change them. The plan reads every report, as the Trends page does; nothing was tuned on the
+  answer key or the 2025 holdout, and no Category 1 rule or triage weight changed.
+  No model call went through the app; nothing was paid.
 
 ## The safety talk translations
 
@@ -239,7 +250,7 @@ The draft PR was not opened before the live experiments as
 originally planned. The frozen dataset and original answer key
 were not modified during the live evaluations.
 
-### B7 follow-up — November 24, 2026
+### B7 follow-up: November 24, 2026
 
 ChatGPT assisted with the Claude result reconciliation,
 paired McNemar comparisons, measured routing configuration,
@@ -255,7 +266,7 @@ and further B7 retries were stopped.
 Only the retrieve accuracies for Claude and GPT-5 Nano
 are measured. Other model and step priors remain unchanged.
 
-### B7 review correction — November 24, 2026
+### B7 review correction: November 24, 2026
 
 Following Kevin's review of PR #42, ChatGPT assisted
 with the measured-first model selection correction,

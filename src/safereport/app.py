@@ -483,8 +483,18 @@ def build_app(crew: Crew) -> gr.Blocks:
                 talk = gr.Markdown(elem_classes="sr-md")
                 talk_files = gr.File(label="Word files", file_count="multiple", interactive=False)
                 section("Prevention plan", "critic")
-                gr.Markdown("What to fix first within a yearly budget. Planned for Phase 4; not built yet.",
-                            elem_classes="sr-small")  # fmt: skip
+                gr.Markdown("What to fund first within a yearly budget, for a plant in the industry and state "
+                            "picked above. The costs and effects below are planning assumptions: change them to "
+                            "your own quotes.", elem_classes="sr-small")  # fmt: skip
+                with gr.Row(equal_height=False, elem_classes="sr-actions"):
+                    plan_budget = gr.Number(40000, label="Yearly budget ($)", minimum=0, scale=2)
+                    plan_injuries = gr.Number(
+                        1.0, label="Severe injuries a year at your plant", minimum=0, scale=2
+                    )
+                    make_plan = gr.Button("Make the plan", scale=1, min_width=150)
+                plan_controls = gr.Dataframe(views.controls_table(), interactive=True, label="Controls")
+                plan_answer = gr.Markdown(elem_classes="sr-md")
+                plan_table = gr.Dataframe(interactive=False, label="The plan by control")
 
             with gr.Tab("AI controls and evaluation", id="controls"):
                 page("AI Controls and Evaluation", INTROS["controls"])
@@ -640,6 +650,9 @@ def build_app(crew: Crew) -> gr.Blocks:
         write.click(lambda t, es, st, ind, sess: views.safety_talk(crew, sess, t, es, st, ind),
                     [topic, talk_language, trend_state, industry, session],
                     [talk, talk_files]).then(lambda sess: views.files(crew, sess), session, downloads)  # fmt: skip
+        make_plan.click(lambda st, ind, yr, b, n, tab: views.prevention_plan(crew, st, ind, yr, b, n, tab),
+                        [trend_state, industry, since, plan_budget, plan_injuries, plan_controls],
+                        [plan_answer, plan_table])  # fmt: skip
         apply.click(lambda m, r, off: views.apply_controls(crew, m, r, off), [mode, redact, switched_off],
                     [controls_note, models])  # fmt: skip
         refresh_usage.click(lambda: views.usage_table(crew), None, usage)
