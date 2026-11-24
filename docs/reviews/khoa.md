@@ -12,7 +12,7 @@ I started with `docs/LABELING_GUIDE.md`: identify the activity and injury mechan
 
 ## Baseline reproduction and testing
 
-I previously ran `.venv/bin/safereport eval-baselines` and compared the principal metrics with `eval/results/phase1_baselines.json`. On 1,000 holdout reports, full OIICS-code accuracy was **59.6%**, group accuracy **78.7%**, and division accuracy **90.7%**. The strict standards Hit@3 for the saved hybrid narrative-plus-code baseline was **41.2% on 51 labeled cases**. These are baseline/retrieval metrics, not final citation correctness. The original 324 tests passed before B5 edits; my local audit log later recorded **326 passed** with Ruff clean. The PR should be judged on a new offline test run on the receiving clone.
+I previously ran `.venv/bin/safereport eval-baselines` and compared the principal metrics with `eval/results/phase1_baselines.json`. On 1,000 holdout reports, full OIICS-code accuracy was **59.6%**, group accuracy **78.7%**, and division accuracy **90.7%**. The strict standards Hit@3 for the saved hybrid narrative-plus-code baseline was **41.2% on 51 labeled cases**. These are baseline/retrieval metrics, not final citation correctness. The latest local B5 validation passed **351 tests**, Ruff lint, and Ruff formatting for all 72 tracked Python files. GitHub CI remains a separate acceptance check.
 
 For the B5 case review counts, the reproducible source is `eval/results/khoa_b5_review_counts.json`, generated from the two committed case tables by `python scripts/khoa_b5_review_counts.py`. My raw offline checkpoint and test logs are retained in my local evidence archive rather than committed to the repository.
 
@@ -54,7 +54,7 @@ I reran `python -I scripts/eval_batch_savings.py` after the B5 critic change. Fo
 
 The rerun retained 56 versus 78 model calls, a saving of 22 calls (28.2%). No inspection decisions, Category 1 classifications or priority scores changed. The one remaining between-path citation difference is report 20251111512 (1910.212 versus 1910.243). The regenerated `eval/results/batch_savings.json` includes the updated result and minor token-estimation differences.
 
-An unresolved critic limitation remains: `mechanical_press_only` can receive only the generic machine description "press" from Intake and incorrectly reject 1910.217 even for a genuine punch press. This requires a separate issue and regression test; the current B5 correction does not fully resolve it.
+An unresolved critic limitation remains: `mechanical_press_only` can receive only the generic machine description "press" from Intake and incorrectly reject 1910.217 even for a genuine punch press. This is tracked in [issue #35](https://github.com/lequo-neu/safereport-crew/issues/35); a separate regression test is still needed in the Advance stage. The current B5 correction does not fully resolve it.
 
 ## Construction `FALLING_THING` filter — 20 excluded narratives
 
@@ -89,17 +89,17 @@ Kevin asked why a powered miter saw thumb amputation during trim cutting (NAICS 
 ## Findings for Kevin to prioritize
 
 1. **Corrected in this B5 branch:** Unsupported `1910.217` secondary on a non-press machine; domain and LangGraph regression tests.
-2. **Advance issue #29:** Four construction Falls records appear to be over-excluded (`FALLING_THING`), including one mixed injury mechanism.
-3. **Advance issue #32:** Fall-family validation conflates fall hazards and falling-object provisions, producing misleading human warnings.
-4. **Advance issue #33:** Energy-control revision can retain unrelated industry-specific secondary citations.
-5. **Advance issue #34:** The sample RRI letter inherits an unsupported hazard citation and may anchor the reply deadline to the wrong event.
+2. **Advance issue [#29](https://github.com/lequo-neu/safereport-crew/issues/29):** Four construction Falls records appear to be over-excluded (`FALLING_THING`), including one mixed injury mechanism.
+3. **Advance issue [#32](https://github.com/lequo-neu/safereport-crew/issues/32):** Fall-family validation conflates fall hazards and falling-object provisions, producing misleading human warnings.
+4. **Advance issue [#33](https://github.com/lequo-neu/safereport-crew/issues/33):** Energy-control revision can retain unrelated industry-specific secondary citations.
+5. **Advance issue [#34](https://github.com/lequo-neu/safereport-crew/issues/34):** The sample RRI letter inherits an unsupported hazard citation and may anchor the reply deadline to the wrong event.
 6. **Reconciled evaluation differences:** The 11 BM25-only versus 12 hybrid Texas corrections reflect different retrieval configurations. The 32 versus 33 construction exclusions come from different reconstructions. The remaining Stage 1 versus model-branch citation difference for `20251111512` is documented, but the correct applicable standard still requires evidence-based review.
 
-7. **Advance issue #35:** `mechanical_press_only` can reject `1910.217` when Intake reduces a genuine punch press to the generic description `press`. The original narrative and machinery type need independent verification.
+7. **Advance issue [#35](https://github.com/lequo-neu/safereport-crew/issues/35):** `mechanical_press_only` can reject `1910.217` when Intake reduces a genuine punch press to the generic description `press`. The original narrative and machinery type need independent verification.
 
 ## Remaining B5 acceptance checks
 
-Before Kevin merges: run full Ruff and pytest offline, confirm the baseline JSON and issue counts with the same configuration as `main`, open the Evidence view for the agreed cases, regenerate one Vietnamese Word file from the edited source and inspect it, and open one GitHub issue per confirmed defect (checking for duplicates first). No change is proposed to shared triage weights, the README, or the proposal. The B4 evaluation results were regenerated after the critic correction and committed in `eval/results/batch_savings.json`; the updated results retain 56 versus 78 model calls, with no inspection-decision changes.
+Local validation is complete: **351 tests passed**, Ruff lint and formatting passed, the BM25/hybrid review counts were reconciled, and the four Advance findings were documented in [#32](https://github.com/lequo-neu/safereport-crew/issues/32), [#33](https://github.com/lequo-neu/safereport-crew/issues/33), [#34](https://github.com/lequo-neu/safereport-crew/issues/34) and [#35](https://github.com/lequo-neu/safereport-crew/issues/35). The earlier construction Falls concern is tracked in [#29](https://github.com/lequo-neu/safereport-crew/issues/29). The regenerated B4 evaluation is committed in `eval/results/batch_savings.json`: 56 versus 78 model calls, with no inspection-decision changes. **Still pending manual acceptance:** compare the agreed corrections and human-review cases in the Gradio Evidence view using the team configuration, and visually inspect a newly generated Vietnamese Word document. GitHub CI and Kevin's final approval remain pending. No changes to shared triage weights, the README or the proposal are proposed.
 
 ## Sources
 
