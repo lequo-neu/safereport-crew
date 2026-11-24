@@ -71,13 +71,26 @@ python -c "import nbformat; from nbclient import NotebookClient as C; nb = nbfor
 
 ## Limits and external dependencies
 
-* **OSHA's file** cannot be downloaded by a script; the reader downloads it in a browser.
+* **OSHA's file** cannot be downloaded by a script; the reader downloads it in a browser. The
+  notebook is pinned to the November 2025 release. Since November 2026 OSHA's page links
+  `January2015toDecember2025.zip` by default; the November one is still served at
+  https://www.osha.gov/sites/default/files/January2015toNovember2025.zip (checked 24 November
+  2026, 16,224,511 bytes, the same size and SHA-256 as the file the project was built from). Part 6
+  refuses another release by name and by last report date. If OSHA removes the November file,
+  the notebook cannot run as pinned; that needs a team decision, not a silent switch.
 * **Network at run time:** GitHub (clone), PyPI (install, Colab only), the public eCFR API
   (`fetch-ecfr`), and Hugging Face only when `USE_EMBEDDINGS = True`.
 * **The pin.** `REPO_REF` is a commit of `main`; set it to the release tag when the team tags the
   hand-in version. The notebook's own file is not part of that commit; it only installs it.
-* **Colab packages.** `pip install -e` may upgrade packages Colab preloaded (pandas 3); if Colab asks
-  for a restart, restart and run all again (the clone and install are skipped then).
+* **Colab packages.** The project needs pandas 3 (`pandas>=3.1,<4`) and `google-colab` pins
+  pandas 2.2.3, so pip prints a dependency-resolver ERROR line during the install. It is a real
+  conflict that pip reports but does not block: Colab's own pandas-based extras may misbehave in
+  that session; the notebook does not use them. Part 5 stops if pandas was loaded before the
+  install, so the notebook never mixes two versions; restart the session and run all again.
+* **Stage 2 count.** With `USE_EMBEDDINGS = False` the Texas week sends 23 reports to stage 2;
+  B4 (`eval/results/batch_savings.json`) measured 20 with the hybrid search. Both count the same
+  thing; with BM25 alone three reports have a retrieval margin under `min_retrieval_margin`.
+  Part 12 reads B4's number from the file and lists the difference.
 * **Offline answers.** Every model step is answered by the offline rules, so the agents' outputs
   show the flow, not model quality. The model results are in part 17 and the README.
 * With `USE_EMBEDDINGS = False` the regulation search is BM25 only, which the README reports as

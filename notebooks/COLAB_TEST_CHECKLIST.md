@@ -7,8 +7,10 @@ sharing the link.
 
 ## Before you start
 
-- [ ] **(person)** Download `January2015toNovember2025.zip` from https://www.osha.gov/severe-injury-reports
-      ("Download the full SIR data set") to this computer.
+- [ ] **(person)** Download the **November 2025** release in a browser, from its direct address:
+      https://www.osha.gov/sites/default/files/January2015toNovember2025.zip (16,224,511 bytes on
+      24 November 2026). Do **not** use "Download the full SIR data set" on the SIR page: since
+      November 2026 it gives `January2015toDecember2025.zip`, a newer release the notebook refuses.
 - [ ] The branch with the notebook is pushed. Open it in Colab by URL:
       `https://colab.research.google.com/github/lequo-neu/safereport-crew/blob/<branch>/notebooks/safereport_crew.ipynb`
       (after the merge, `<branch>` is `main`).
@@ -22,10 +24,19 @@ sharing the link.
 - [ ] *Runtime > Run all*. If Colab warns that the notebook is not from Google, choose *Run anyway*.
 - [ ] Part 4 prints a Python version from 3.11 to 3.13 and `Model API key variables removed from
       this session: 0` (any other number: stop, a key was set in the runtime).
-- [ ] Part 5 ends with `SafeReport 0.1.0 at commit <first 12 of REPO_REF>` and no error. If Colab
-      asks to restart the session: *Runtime > Restart session*, then *Run all* again.
-- [ ] Part 6 shows the file picker: **(person)** choose the zip. The cell prints the size and
-      `columns checked`.
+- [ ] Part 5: pip prints a red `ERROR: pip's dependency resolver does not currently take into
+      account ...` line saying `google-colab ... requires pandas==2.2.3, but you have pandas 3.x`
+      (seen on the first Colab run). This is expected and documented in part 5; the cell still
+      succeeds. Write down the exact line for the PR. Any *other* pip error is a failure.
+- [ ] Part 5 then prints `pandas 3.x installed, not yet loaded` (or `, loaded`) and ends with
+      `SafeReport 0.1.0 at commit <first 12 of REPO_REF>`. If it stops with "pandas ... is loaded in
+      this session": *Runtime > Restart session*, then *Run all* again, and note that it happened.
+- [ ] Part 6 shows the file picker: **(person)** choose the November zip. The cell prints
+      `16,224,511 bytes`, no "Note: this zip is not byte for byte ..." line, and `105,996 reports,
+      01 Jan 2015 to 30 Nov 2025, columns checked`.
+- [ ] Optional negative check, on a second runtime: choose `January2015toDecember2025.zip` instead.
+      The cell must stop with `WrongReleaseError: ... release ending in December 2025 ...` and the
+      November address. Nothing is extracted.
 - [ ] Part 7 runs `build-data`, `fetch-ecfr`, `build-index --no-dense`, `train-baseline` and `check`
       without a traceback; `check` lists Reports, Indexes and Baseline as `ready`. Note how long each
       took (printed in seconds).
@@ -34,12 +45,16 @@ sharing the link.
 - [ ] Part 10 prints the Planner's question about the state.
 - [ ] Part 11 shows the handoff table and ends with `The run is paused at: Approve the list, or ask
       for changes?`.
+- [ ] Part 12 also prints B4's count read from `eval/results/batch_savings.json` (`B4 (hybrid search): 20
+      of 31`) next to this run's (`This run (bm25 search): 23 of 31` on the first Colab run) and a table
+      of the reports on which they differ. A different count here is explained by the search setting,
+      not a failure; a different count *with* `USE_EMBEDDINGS = True` is worth reporting.
 - [ ] Parts 12 to 15 show the stage 1 table, one stage 2 report (Intake, Standards, Analyst), the
       plan, the summary's placeholders with their sources, one RRI letter, and the critic's checks.
 - [ ] Part 16 prints the moved report, the decision log (asked for changes, then approved) and
       the final answer; the last table lists the seven agents.
-- [ ] No cell shows a red error. Search the page (Ctrl+F) for `Traceback` and `Error`: none outside
-      the explanatory text.
+- [ ] No cell ends in a traceback. Search the page (Ctrl+F) for `Traceback`: none. Searching for
+      `ERROR` finds only pip's pandas line in part 5 (above) and the explanatory text.
 
 ## Checks on the content
 

@@ -98,9 +98,11 @@ print("The run is paused at:", approval_request["question"])
 # ## 12. Stage 1: every report, coded without a model
 #
 # Stage 1 is the fast path. For each report of the week it codes the event with the trained
-# classifier, checks the Category 1 rules, matches the employer against past reports, and runs a
-# keyword search of the regulations. Its result per report is what decides whether that report
-# needs a stage 2 branch.
+# classifier, checks the Category 1 rules, matches the employer against past reports, and searches
+# the regulations (BM25, plus embeddings when `USE_EMBEDDINGS = True`). Its result per report decides
+# whether that report needs a stage 2 branch: it does when the coder is unsure, when the two best
+# regulation sections score too close together, when the injury is severe, or when the report is
+# near the cut of the plan (a Category 1 report only when the coder is unsure).
 
 
 # %%
@@ -113,7 +115,7 @@ def stage1_row(report_id: str, item: dict) -> dict:
         "event code": intake["event_code"],
         "confidence": round(intake["confidence"], 2),
         "Category 1": "; ".join(f"{c['criterion']} ({c['evidence']})" for c in item["category_one"]) or "-",
-        "standard (keyword search)": item["pick"].get("primary", ""),
+        "standard (stage 1 search)": item["pick"].get("primary", ""),
         "stage 2 branch": report_id in state["stage2"],
     }
 
@@ -127,6 +129,46 @@ display(
     )
 )
 display(stage1)
+
+# %% [markdown]
+# **How this count compares with B4.** The B4 evaluation (`eval/results/batch_savings.json`) measured
+# the same Texas week and counted the same thing: the reports the fan-out sends to a stage 2 branch.
+# Its count can differ from the one above because it depends on the regulation search: B4 ran with
+# the search named in the file's `method.retrieval`, and this notebook uses the one set by
+# `USE_EMBEDDINGS`. A report goes to stage 2 when the scores of its two best sections are closer
+# than the router's `min_retrieval_margin`, and the two searches score sections differently. The
+# cell reads B4's numbers from the file and lists the reports on which the two runs differ, with
+# the inputs the fan-out read for them in this run.
+
+# %%
+b4 = json.loads((REPO_DIR / "eval" / "results" / "batch_savings.json").read_text())
+assert (b4["week"]["start"], b4["week"]["end"]) == (str(week_start), str(week_end)), "not the same week"
+b4_branches = set(state["stage1"]) - set(b4["reports_skipped_by_two_stages"])
+here = set(state["stage2"])
+router_settings = services.settings.router
+print(
+    f"B4 ({b4['method']['retrieval']} search): {b4['two_stages']['reports_through_stage2']} of {b4['two_stages']['reports']} reports through stage 2"
+)
+print(f"This run ({'hybrid' if USE_EMBEDDINGS else 'bm25'} search): {len(here)} of {len(state['stage1'])}")
+print(
+    f"Thresholds: min_confidence {router_settings.min_confidence}, min_retrieval_margin {router_settings.min_retrieval_margin}"
+)
+differ = sorted(here ^ b4_branches)
+if differ:
+    display(
+        pd.DataFrame(
+            [
+                {
+                    "report": rid,
+                    "stage 2 here": rid in here,
+                    "stage 2 in B4": rid in b4_branches,
+                    "coder confidence": round(state["stage1"][rid]["intake"]["confidence"], 3),
+                    "retrieval margin here": round(state["stage1"][rid]["margin"], 4),
+                }
+                for rid in differ
+            ]
+        )
+    )
 
 # %% [markdown]
 # ## 13. Stage 2: one report through Intake, Standards and Analyst
