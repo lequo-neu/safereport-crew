@@ -275,3 +275,44 @@ labels, measured accuracies, private mode and
 provider-failure fallback chain remain unchanged.
 
 No additional paid model calls were made.
+
+### B8: router cost and accuracy comparison (#9)
+
+ChatGPT assisted Khoa with the evaluation design, source-data
+validation, router replay implementation, visualization,
+Gradio integration, regression tests and interpretation.
+
+The evaluation uses the frozen B7 reference slice of 50 reports,
+of which 35 have an eligible reference standard. The original
+answer key, frozen labels, B7 results, routing configuration
+and production routing policy were not changed.
+
+The production Router.choose() method was exercised with all
+four configured backends registered offline. Sixteen synthetic
+signal combinations were checked under each of the lowest-cost
+and best-quality routing modes.
+
+All 32 selections chose Claude using measured retrieval accuracy.
+The router replay therefore reproduces Claude's 22/35 strict
+Hit@3 result (62.9%, Wilson 95% interval 46.3% to 76.8%) and
+historical evaluation cost of $0.061832.
+
+The router point is a retrospective replay, not an independent
+live evaluation. The same B7 slice supplied the measured routing
+accuracies. Synthetic routing signals are not observed report-level
+signals. No additional accuracy or cost advantage over Claude
+alone is demonstrated.
+
+Gemini and Gemma remain unmeasured and are excluded from the
+cost-accuracy chart. Historical costs are reused from B7.
+No additional model calls were made and nothing was paid.
+
+A separate B7/B8 chart and evaluation table were added to the
+Admin page, preserving the original 51-case answer-key benchmark.
+Claude and the router share their actual chart coordinates.
+
+Khoa ran the reproduction command twice and obtained identical
+JSON fingerprints. All 20 dedicated B8 tests and all 486
+repository tests passed locally. Ruff linting and formatting
+checks passed. Dedicated tests also prevent backend calls
+during the replay.

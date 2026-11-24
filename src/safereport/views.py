@@ -42,7 +42,7 @@ from safereport.graph import (
 )
 from safereport.icons import svg
 from safereport.ledger import FactLedger
-from safereport.outputs import pareto_chart, sensitivity_chart, word_document
+from safereport.outputs import pareto_chart, router_pareto_chart, sensitivity_chart, word_document
 from safereport.schemas import CITATION, DIRECTIVE, GENERAL_DUTY, IntakeResult, clip
 from safereport.talk_languages import LANGUAGES, extra_language
 from safereport.triage import MAX_DAYS
@@ -1429,6 +1429,70 @@ def evaluation(crew: Crew):
             "was tuned on it, and the router does not use these numbers. Event coding is measured on the 2025 "
             "holdout, which the baseline never saw. The cost of a run is the average cost per call times 51.")  # fmt: skip
     return picture(pareto_chart(points)), coding_table, retrieval, note
+
+
+def router_evaluation():
+    """The B7/B8 retrieval comparison, separate from the answer key."""
+    path = RESULTS_DIR / "router_pareto.json"
+
+    columns = [
+        "Method",
+        "Hits",
+        "Strict Hit@3",
+        "95% interval",
+        "Historical cost (USD)",
+    ]
+
+    if not path.exists():
+        return (
+            None,
+            pd.DataFrame(columns=columns),
+            (
+                "Run `python scripts/eval_router_pareto.py` "
+                "to generate the B7/B8 comparison. No API key is needed."
+            ),
+        )
+
+    result = json.loads(path.read_text())
+    points = result["points"]
+
+    rows = [
+        [
+            point["label"],
+            f"{point['hits']}/{point['cases']}",
+            f"{point['accuracy']:.1%}",
+            _interval(point["ci95"]),
+            f"${point['cost']:.5f}",
+        ]
+        for point in points
+    ]
+
+    table = pd.DataFrame(rows, columns=columns)
+
+    selected = next(point["label"] for point in points if point["model"] == result["selected_model"])
+
+    note = (
+        f"Retrospective replay on the B7 slice: "
+        f"{result['eligible_reports']} eligible of "
+        f"{result['total_reports']} reports. "
+        f"The router selected {selected} in all "
+        f"{len(result['routing_decisions'])} synthetic "
+        "routing decisions across both routing modes. "
+        "The router and selected model share the same "
+        "accuracy and historical evaluation cost. "
+        "Costs are reused from B7; replay makes no new model calls. "
+        "Gemini and Gemma remain unmeasured and are not plotted. "
+        "The same B7 slice supplied the routing accuracies, "
+        "so this is not an independent test of router generalization. "
+        "The comparison covers standards retrieval only, "
+        "not end-to-end decision accuracy."
+    )
+
+    return (
+        picture(router_pareto_chart(points)),
+        table,
+        note,
+    )
 
 
 def _interval(bounds: list[float]) -> str:
