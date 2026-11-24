@@ -138,6 +138,13 @@ Each task records here which AI tool helped and how the result was checked.
   docs that it is not caught. The false positive concerns in the doc are Claude Code's reading of
   the 20 added narratives, not labels, and no precision is claimed from them. No model call
   went through the app; nothing was paid.
+* **Issue #38, the Colab notebook: foundation and Texas week** (Hamad). Claude Code wrote parts 1
+  to 16 of `notebooks/safereport_crew.ipynb` (as section files in `notebooks/sections/`), the
+  script that assembles them, `tests/test_notebook.py`, the notebook README and the Colab test
+  checklist, from the README, the graph code and a local run. Every number the notebook shows is
+  printed by a cell from the run or the data, not written in its text. It was run end to end on a
+  local machine from a fresh clone of the pinned commit; the Colab run is checked by hand with the
+  checklist. Khoa's parts (17 to 19) are placeholders. No model call; nothing was paid.
 
 ## The safety talk translations
 

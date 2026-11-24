@@ -66,6 +66,11 @@ ignore = ["E501", "S101", "BLE001", "RUF001", "RUF002", "RUF003", "PERF401"]
 # Command line tools print their results on purpose.
 "src/safereport/cli.py" = ["T201"]
 "scripts/*" = ["T201"]
+# The Colab notebook prints its results, runs the project's commands, and imports in the cell that
+# needs a module, as notebooks do.
+"notebooks/*" = ["T201", "S603", "S607", "E402"]
+# A section is one part of the notebook; names from earlier sections are checked in the .ipynb.
+"notebooks/sections/*" = ["T201", "S603", "S607", "E402", "F821"]
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
