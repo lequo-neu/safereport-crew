@@ -34,7 +34,8 @@ def test_a_critic_rejection_escalates_the_writer(router: Router):
 def test_measured_accuracy_replaces_the_prior(router: Router):
     router.measured[("gpt_nano", "code")] = 0.5
     choice = router.choose("code", Signals())
-    assert choice.model.name != "gpt_nano"
+    assert choice.model.name == "gpt_nano"
+    assert not choice.based_on_prior
     assert router.accuracy(router.settings.model("gpt_nano"), "code") == (0.5, False)
 
 
@@ -90,3 +91,69 @@ def test_a_model_in_an_outage_is_skipped_until_its_cool_down_ends():
     assert record.model == "claude" and "claude" not in router.down, (
         "after the cool down claude answers again"
     )
+
+
+@pytest.mark.parametrize("mode", ["lowest_cost", "best_quality"])
+@pytest.mark.parametrize(
+    "signals",
+    [
+        Signals(),
+        Signals(intake_confidence=0.4),
+        Signals(
+            intake_confidence=0.4,
+            retrieval_margin=0.01,
+        ),
+    ],
+)
+def test_retrieval_prefers_measured_models(router, mode, signals):
+    choice = router.choose("retrieve", signals, mode=mode)
+
+    assert choice.model.name == "claude"
+    assert not choice.based_on_prior
+
+    if mode == "lowest_cost":
+        assert "no model clears" in choice.reason
+        assert "measured" in choice.reason
+
+
+@pytest.mark.parametrize("mode", ["lowest_cost", "best_quality"])
+def test_retrieval_uses_nano_when_claude_is_unregistered(router, mode):
+    router.backends.pop("claude")
+
+    choice = router.choose("retrieve", Signals(), mode=mode)
+
+    assert choice.model.name == "gpt_nano"
+    assert not choice.based_on_prior
+
+
+@pytest.mark.parametrize("mode", ["lowest_cost", "best_quality"])
+def test_retrieval_uses_priors_without_measured_backends(router, mode):
+    router.backends.pop("claude")
+    router.backends.pop("gpt_nano")
+
+    choice = router.choose("retrieve", Signals(), mode=mode)
+
+    assert choice.model.name == "gemini_flash"
+    assert choice.based_on_prior
+
+
+@pytest.mark.parametrize(
+    ("step", "expected"),
+    [
+        ("code", "gpt_nano"),
+        ("decide", "claude"),
+        ("write", "gpt_nano"),
+    ],
+)
+def test_unmeasured_steps_keep_existing_policy(router, step, expected):
+    choice = router.choose("retrieve" if step == "retrieve" else step, Signals())
+
+    assert choice.model.name == expected
+    assert choice.based_on_prior
+
+
+def test_private_retrieval_stays_local(router):
+    choice = router.choose("retrieve", Signals(), mode="private")
+
+    assert choice.model.name == "gemma_local"
+    assert choice.based_on_prior

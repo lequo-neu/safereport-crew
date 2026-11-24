@@ -254,3 +254,24 @@ and further B7 retries were stopped.
 
 Only the retrieve accuracies for Claude and GPT-5 Nano
 are measured. Other model and step priors remain unchanged.
+
+### B7 review correction — November 24, 2026
+
+Following Kevin's review of PR #42, ChatGPT assisted
+with the measured-first model selection correction,
+merge conflict resolution and regression tests.
+
+For lowest-cost and best-quality routing, available
+measured models now take precedence over unmeasured
+priors for the same step. When no available model has
+a measurement, the existing prior-based policy applies.
+
+All 32 diagnostic routing decisions selected Claude
+for retrieval with all four backends registered.
+All 30 targeted regression tests passed.
+
+The original routing thresholds, frozen reference
+labels, measured accuracies, private mode and
+provider-failure fallback chain remain unchanged.
+
+No additional paid model calls were made.

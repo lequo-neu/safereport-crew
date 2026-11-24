@@ -154,6 +154,10 @@ class Router:
         level = difficulty(signals, self.settings)
         bar = self.settings.router.bar[level]
         scored = [(m, *self.accuracy(m, step)) for m in models]
+        # Once a step has measurements, priors no longer compete.
+        measured = [s for s in scored if not s[2]]
+        if measured:
+            scored = measured
         if mode == "best_quality":
             model, share, prior = max(scored, key=lambda s: s[1])
             return Choice(model, f"best quality: highest accuracy for {step} ({share:.2f})", prior)
@@ -163,7 +167,9 @@ class Router:
         if not clearing:
             model, share, prior = max(scored, key=lambda s: s[1])
             return Choice(
-                model, f"{why}: no model clears {bar:.2f}, so the most accurate ({share:.2f})", prior
+                model,
+                f"{why}: no model clears {bar:.2f}, so the most accurate {'measured ' if measured else ''}model ({share:.2f})",
+                prior,
             )
 
         def price(spec: ModelSpec) -> float:
