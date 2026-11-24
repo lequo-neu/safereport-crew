@@ -150,8 +150,10 @@ Each task records here which AI tool helped and how the result was checked.
   script that assembles them, `tests/test_notebook.py`, the notebook README and the Colab test
   checklist, from the README, the graph code and a local run. Every number the notebook shows is
   printed by a cell from the run or the data, not written in its text. It was run end to end on a
-  local machine from a fresh clone of the pinned commit; the Colab run is checked by hand with the
-  checklist. Khoa's parts (17 to 19) are placeholders. No model call; nothing was paid.
+  local machine from a fresh clone of the pinned commit. On Google Colab, Claude in Chrome ran it
+  (commit 1b504c7) in a fresh runtime, following `notebooks/COLAB_TEST_CHECKLIST.md`; Hamad
+  supervised the run and checked the outputs. Khoa's parts (17 to 19) are placeholders. No model
+  call went through the app; nothing was paid.
 
 ## The safety talk translations
 
