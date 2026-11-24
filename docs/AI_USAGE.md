@@ -185,3 +185,93 @@ checks and eCFR citation verification.
 
 The original answer key and domain rules remained unchanged.
 No paid model calls were made.
+
+### B7: independent router evaluation (#8)
+
+ChatGPT assisted Khoa with the sampling and validation scripts,
+reference-label QA, regulatory research, measured-router integration,
+regression tests, and debugging.
+
+The original reviewer drafts were preserved. Kevin and Hamad
+confirmed the three disputed cases in issue #8. Additional
+adjudication recommendations were AI-assisted and recorded
+separately from the original reviewer labels.
+
+A provisional offline retrieval baseline was examined before
+the final label freeze. This limits the claim of fully blind
+adjudication. No live model answers were examined before freezing
+the reference CSV.
+
+The initial offline regression suite passed 432 tests.
+
+After the reference labels were frozen, Khoa ran the offline
+hybrid baseline and GPT-5 Nano evaluation on the 35 eligible
+reports. Strict Hit@3 was 12/35 offline and 17/35 with Nano.
+The paired comparison found five improvements, no deterioration,
+and an exact McNemar p-value of 0.0625.
+
+Gemini 3.5 Flash failed at B7-017 after 10 completed cases.
+An additional rerun encountered the same failure. Gemini 3.6
+Flash passed a separate synthetic diagnostic but its evaluation
+stopped at B7-004 because of a rate limit after two completed cases.
+Both experiments are preserved in the evaluation results.
+
+ChatGPT assisted with diagnosing provider failures and testing
+a correction for Gemini thinking-token accounting. Five dedicated
+mocked tests passed. The provider correction and its tests are
+deferred to a separate follow-up rather than included in B7.
+
+Gemini recovery is deferred. Neither Gemini version is assigned
+measured accuracy. Claude was not evaluated because credentials
+were unavailable. Gemma remains unmeasured.
+
+GPT-5 Nano's measured strict Hit@3 replaces its retrieval prior.
+Other step types and unmeasured models retain their priors.
+These assumptions are not equivalent to measured accuracy.
+
+Recorded local expenditure was $0.0559263, including diagnostic
+calls and incomplete evaluations. Gemini prices remain unconfirmed,
+and historical thinking-token consumption is not fully reconciled.
+Using the previously reported team expenditure of $0.14,
+estimated combined spending was $0.1959263.
+
+The draft PR was not opened before the live experiments as
+originally planned. The frozen dataset and original answer key
+were not modified during the live evaluations.
+
+### B7 follow-up — November 24, 2026
+
+ChatGPT assisted with the Claude result reconciliation,
+paired McNemar comparisons, measured routing configuration,
+Gemini diagnostic and regression tests.
+
+Claude completed all 35 eligible cases using my own API key.
+The original frozen labels were not changed.
+
+The final personal-key Gemini 3.5 Flash diagnostic returned
+HTTP 503 UNAVAILABLE on B7-017. Gemini remains unmeasured,
+and further B7 retries were stopped.
+
+Only the retrieve accuracies for Claude and GPT-5 Nano
+are measured. Other model and step priors remain unchanged.
+
+### B7 review correction — November 24, 2026
+
+Following Kevin's review of PR #42, ChatGPT assisted
+with the measured-first model selection correction,
+merge conflict resolution and regression tests.
+
+For lowest-cost and best-quality routing, available
+measured models now take precedence over unmeasured
+priors for the same step. When no available model has
+a measurement, the existing prior-based policy applies.
+
+All 32 diagnostic routing decisions selected Claude
+for retrieval with all four backends registered.
+All 30 targeted regression tests passed.
+
+The original routing thresholds, frozen reference
+labels, measured accuracies, private mode and
+provider-failure fallback chain remain unchanged.
+
+No additional paid model calls were made.

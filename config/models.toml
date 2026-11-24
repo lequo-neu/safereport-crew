@@ -34,6 +34,8 @@ model_id = "claude-sonnet-5-5"
 prices = [2.00, 10.00]
 roles = ["retrieve", "decide"]
 prior = { code = 0.90, retrieve = 0.90, decide = 0.92, write = 0.92 }
+measured = { retrieve = 0.6285714285714286 }
+measured_source = "eval/results/router_slice.json"
 checked_on = "2026-11-19"
 note = "Anthropic's current Sonnet."
 
@@ -45,6 +47,8 @@ model_id = "gpt-5-nano"
 prices = [0.05, 0.40]
 roles = ["code"]
 prior = { code = 0.82, retrieve = 0.75, decide = 0.75, write = 0.80 }
+measured = { retrieve = 0.4857142857142857 }
+measured_source = "eval/results/router_slice.json"
 checked_on = "2026-11-19"
 note = "Listed on OpenAI's model page (snapshot gpt-5-nano-2025-08-07). One third party lists retirement on 2026-12-11; recheck before the demo."
 

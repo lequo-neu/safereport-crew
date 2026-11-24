@@ -154,6 +154,10 @@ class Router:
         level = difficulty(signals, self.settings)
         bar = self.settings.router.bar[level]
         scored = [(m, *self.accuracy(m, step)) for m in models]
+        # Once a step has measurements, priors no longer compete.
+        measured = [s for s in scored if not s[2]]
+        if measured:
+            scored = measured
         if mode == "best_quality":
             model, share, prior = max(scored, key=lambda s: s[1])
             return Choice(model, f"best quality: highest accuracy for {step} ({share:.2f})", prior)
@@ -163,7 +167,9 @@ class Router:
         if not clearing:
             model, share, prior = max(scored, key=lambda s: s[1])
             return Choice(
-                model, f"{why}: no model clears {bar:.2f}, so the most accurate ({share:.2f})", prior
+                model,
+                f"{why}: no model clears {bar:.2f}, so the most accurate {'measured ' if measured else ''}model ({share:.2f})",
+                prior,
             )
 
         def price(spec: ModelSpec) -> float:
@@ -238,4 +244,13 @@ def offline_router(
 ) -> Router:
     """A router whose every model answers from the same deterministic handlers, offline."""
     backends = {m.name: OfflineBackend(name=m.name, handlers=dict(handlers)) for m in settings.models}
-    return Router(settings, backends, log or UsageLog(), sleep=lambda _: None)
+    measured = {
+        (model.name, step): accuracy for model in settings.models for step, accuracy in model.measured.items()
+    }
+    return Router(
+        settings,
+        backends,
+        log or UsageLog(),
+        measured=measured,
+        sleep=lambda _: None,
+    )
