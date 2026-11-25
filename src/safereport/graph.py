@@ -39,6 +39,7 @@ from safereport.ecfr import CitationIndex
 from safereport.employers import EmployerIndex, normalize_name, repeat_summary
 from safereport.ledger import FactLedger, percent
 from safereport.outputs import sensitivity_chart, trend_chart, triage_csv
+from safereport.prevention import load_controls, make_plan, money, names, with_changes
 from safereport.redaction import redact
 from safereport.retrieval import IndexRegistry
 from safereport.router import Mode, Router, Signals
@@ -98,6 +99,7 @@ TASK_NEEDS: dict[str, tuple[str, ...]] = {
     "triage": ("state",),
     "repeat_employers": ("state",),
     "trend": ("start",),
+    "prevention_plan": ("budget",),
 }
 ASKABLE = frozenset(n for needs in TASK_NEEDS.values() for n in needs)
 
@@ -342,6 +344,7 @@ def build_graph(services: Services, checkpointer=None):
         question = {
             "state": "Which state should I look at?",
             "start": "From which year?",
+            "budget": "What is the yearly budget for prevention, in dollars?",
             "request": "What would you like to know? For example a narrative, a trend, or this week's inspections.",
         }
         answers = dict(
@@ -500,12 +503,47 @@ def build_graph(services: Services, checkpointer=None):
 
     def prevention(state: CrewState) -> dict[str, Any]:
         task = task_of(state, "prevention_plan")
+        p = state["params"]
+        try:
+            budget = float(str(p["budget"]).replace("$", "").replace(",", "").strip())
+            plant_injuries = float(p.get("plant_injuries", 1.0))
+        except ValueError:
+            finding = {
+                "kind": "note",
+                "text": "The budget and the injuries a year must be numbers, for example 40000.",
+            }
+            return {"done": [task["id"]], "findings": {task["id"]: finding},
+                    "trace": [_trace("Optimizer", "the budget is not a number")]}  # fmt: skip
+        since = int(str(p.get("start", "2019"))[:4])
+        result = make_plan(services.store, budget=budget, naics_prefix=p.get("naics_prefix", "3"),
+                           state=p.get("state", ""), since=since, plant_injuries=plant_injuries,
+                           controls=with_changes(load_controls(), p.get("controls")))  # fmt: skip
+        low, high = result["plans"]["low"], result["plans"]["high"]
+        source = "prevention.make_plan (PuLP CBC)"
         finding = {
-            "kind": "note",
-            "text": "The prevention plan is an extension planned for Phase 4; it is not built yet.",
-        }
+            "kind": "prevention_plan", **result,
+            "facts": {
+                "scope": (result["scope"], "ReportStore", True),
+                "budget": (money(budget), "request", True),
+                "since": (str(since), "request", True),
+                "reports": (result["reports"], "ReportStore", True),
+                "not_covered": (result["uncovered"], "prevention.assign", True),
+                "plant_injuries": (plant_injuries, "request", True),
+                "low_controls": (names(low["funded"]), source, True),
+                "low_cost": (money(low["cost"]), source, True),
+                "low_prevented": (money(low["prevented"]), source, True),
+                "high_controls": (names(high["funded"]), source, True),
+                "high_cost": (money(high["cost"]), source, True),
+                "high_prevented": (money(high["prevented"]), source, True),
+                "low_net": (money(low["net"]), source, True),
+                "high_net": (money(high["net"]), source, True),
+                "pays_years": (result["pays"]["years"], "OSHA Safety Pays", True),
+            },
+        }  # fmt: skip
+        summary = f"funds {names(low['funded'])} (low end) and {names(high['funded'])} (high end) within {money(budget)}"
         return {"done": [task["id"]], "findings": {task["id"]: finding},
-                "trace": [_trace("Optimizer", "prevention plan not built yet")]}  # fmt: skip
+                "trace": [_trace("Analyst", f"{result['reports']} reports, {result['scope']}", tool="ReportStore"),
+                          _trace("Optimizer", summary, tool="PuLP CBC")]}  # fmt: skip
 
     # ---- Triage: stage 1 for every report, stage 2 branches only where needed ----
 
@@ -736,6 +774,12 @@ def build_graph(services: Services, checkpointer=None):
                 yield (f"{task_id}:letter_{report_id}",
                        {"kind": "rri_letter", "citation": item["pick"]["primary"], "questions": item["intake"]["missing_facts"]},
                        _report_facts(item["report"]))  # fmt: skip
+        elif kind == "prevention_plan":
+            yield (
+                f"{task_id}:plan",
+                {"kind": "prevention_plan", "widened": finding["widened"]},
+                finding["facts"],
+            )
         elif kind == "note":
             return
 
@@ -788,6 +832,11 @@ def build_graph(services: Services, checkpointer=None):
                     issues.append({"doc": task_id, "rule": issue.rule, "message": issue.message,
                                    "suggestion": issue.suggestion, "route": "standards" if issue.fix else "person",
                                    "task": task_id})  # fmt: skip
+            if finding["kind"] == "prevention_plan":
+                for end, plan in finding["plans"].items():
+                    if plan["cost"] > finding["budget"] + 1e-6:
+                        issues.append({"doc": task_id, "rule": "budget", "route": "person",
+                                       "message": f"the {end} end plan costs more than the budget"})  # fmt: skip
             if finding["kind"] == "triage":
                 issues += plan_issues(finding)
                 issues += triage_citation_issues(task_id, finding)

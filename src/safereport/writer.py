@@ -196,6 +196,23 @@ def draft(payload: dict[str, Any]) -> dict[str, Any]:
                "the Area Director set to inspection) need {{shortfall}} more days."
                if payload.get("infeasible") else "")
         )  # fmt: skip
+    elif kind == "prevention_plan":
+        template = (
+            "**Prevention plan for a plant like yours ({{scope}}), with a yearly budget of {{budget}}**\n\n"
+            "* If each control works at the low end of its range: fund {{low_controls}}, for {{low_cost}} a year, "
+            "which prevents an expected {{low_prevented}} of injury cost a year.\n"
+            "* If each works at the high end: fund {{high_controls}}, for {{high_cost}} a year, "
+            "which prevents an expected {{high_prevented}}.\n"
+            "* Net of what the controls cost, the plan is worth {{low_net}} a year at the low end and "
+            "{{high_net}} at the high end.\n\n"
+            "The injury mix comes from {{reports}} severe injury reports in {{scope}} since {{since}}, scaled to "
+            "{{plant_injuries}} severe injuries a year at your plant; {{not_covered}} of those reports are events "
+            "none of these controls address. Injury costs are OSHA Safety Pays averages (NCCI claims, policy "
+            "years {{pays_years}}), direct plus indirect. The control costs and effects are planning assumptions: "
+            "replace them with your own quotes."
+            + ("\n\nThe plants you picked report too few injuries, so the mix is taken from a wider scope."
+               if payload.get("widened") else "")
+        )  # fmt: skip
     elif kind == "plant_memo":
         template = (
             "To the plant manager:\n\nIn plants of your industry, {{top_hazard}} caused {{top_hazard_reports}} "

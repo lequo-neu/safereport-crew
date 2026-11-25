@@ -4,8 +4,8 @@
 whether to send an inspector or a letter, and helps a plant learn from injuries like its own.**
 
 Final project for IE5374 Applied Generative AI, by **Seven Team-5374**: Quoc Hung Le (Kevin),
-Hamad Al Sulaimi, Khoa Tran. Phases 0 to 3 of 4 are built, and the first phase 4 checks (B1 to
-B5) are in; 386 tests pass offline.
+Hamad Al Sulaimi, Khoa Tran. Phases 0 to 3 of 4 are built; phase 4 has the Basic checks B1 to
+B7 and the prevention plan; 479 tests pass offline.
 
 | If you want to | Go to |
 |---|---|
@@ -119,7 +119,7 @@ Then go to http://localhost:7860. A five minute tour:
 | 3 | Pick "Area Director" at the top, move a row in the decision bar, click **Ask for changes** | "Plan updated with N changed rows" and what changed |
 | 4 | Click **Approve**, then **Approve** again | the first click warns that employer matches are still unanswered (a confirmed match can make a report Category 1); the second resumes the run from its saved state and logs the decision |
 | 5 | Open **Ask** and try an example | the answer beside a trace of agents, models, reasons, cost and time |
-| 6 | Pick "Plant safety manager", open **Trends and prevention**, write a lockout talk with Vietnamese as the extra language | a yearly chart, a state map, and two Word files (English and Vietnamese) |
+| 6 | Pick "Plant safety manager", open **Trends and prevention**, write a lockout talk with Vietnamese as the extra language, then click **Make the plan** under Prevention plan | a yearly chart, a state map, two Word files (English and Vietnamese), and the controls to fund first within $40,000 |
 | 7 | Pick "Admin", simulate an outage of Claude, ask again | the router falls back to another model and says why |
 
 The same crew runs from the command line:
@@ -213,7 +213,7 @@ flowchart LR
 | | **N10** a record of each decision and who made it | decision log | built |
 | Plant safety manager | **N11** injuries in plants like theirs, and the trend | trends with charts and maps | built |
 | | **N12** the rules for those hazards in plain words | plain language summaries | built |
-| | **N13** what to fix first within the budget | prevention plan | phase 4 |
+| | **N13** what to fix first within the budget | prevention plan | built (Advance, #41) |
 | | **N14** a shift safety talk in English and, if needed, one of Spanish, Chinese, Tagalog, Vietnamese or Arabic | Writer and Word export | built |
 | Admin | **N15** control what each model sees and what it costs | AI controls page, cost log | built |
 
@@ -292,6 +292,10 @@ Three routing modes: **Lowest cost**, **Best quality**, and **Private**, which k
 the local model (start the app in it with `safereport ui --live --mode private`). In the other two, a redaction step replaces employer names, addresses and
 people's names with placeholders before any call to a cloud model.
 
+Accuracy is a prior from `config/models.toml` until it is measured. Once some models have a
+measured accuracy for a step (B7 measured the search terms of Claude and GPT 5 nano), only those
+compete for that step, and priors decide only the steps nobody measured.
+
 ### What keeps the answers safe
 
 * **No citation without the official text.** The critic checks each section against eCFR and
@@ -317,7 +321,7 @@ outcome figures, record tables) and uses no official government mark.
 | **This week's reports** | Triage officer, Area Director | totals at the top; the list on the left with filters (All, Category 1, Needs review, Inspection, RRI letter) and a CSV of the selection; a case inspector on the right; the decision bar (move rows, flag an imminent danger, notes, an always inspect rule, Ask for changes, Approve); a map of the week beside the top five events; the inspector day chart; the employer matches panel; a closed routing and audit log |
 | **Ask** | everyone | chat beside the trace, an inline chart, the brief as a Word file |
 | **Evidence view** | everyone | the story with the words the Intake agent used, beside the cited rule, its checks and the employer's history |
-| **Trends and prevention** | Plant safety manager | outcome figures, a yearly chart of four outcomes over the same months, a state map that marks State Plan states, the top five events, the safety talk |
+| **Trends and prevention** | Plant safety manager | outcome figures, a yearly chart of four outcomes over the same months, a state map that marks State Plan states, the top five events, the safety talk, the prevention plan |
 | **AI controls and evaluation** | Admin | routing mode, redaction, a simulated outage per provider, the model table, the evaluation tables, the Pareto chart of cost against accuracy, every model call |
 | **Downloads** | everyone | the list as CSV; briefs, letters, summary and talks as Word files |
 
@@ -413,6 +417,40 @@ confirmed, and 4 of the 5 decided (80%, 38 to 96); on the 13 development additio
 All 3 test reports not labelled yes came in through "scaffold"; the rule was not changed after
 the labels. Rule, labels, examples and limits in [docs/FALLS_STAFFING.md](docs/FALLS_STAFFING.md).
 
+**The critic on wrong citations put in on purpose** (B6; 24 wrong citations seeded into a copy of
+the answer key across seven rules, frozen before scoring, offline): all 24 were caught by the rule
+expected (95% interval 86 to 100). The seeds were chosen to hit each rule, so this shows the rules
+work as written, not how often real mistakes are caught. 4 of the 51 correct citations were
+wrongly challenged (7.8%; 3.1 to 18.5), each because the offline Intake read the story wrong; two
+ask for an automatic fix and two for a person. Details in `eval/results/seeded_checks.json`.
+
+**Router accuracy measured outside the answer key** (B7; 50 manufacturing reports from the 2025
+holdout, none in the key, labelled by Khoa with 15 checked by Hamad, 13 of 15 agreed before
+discussion, frozen before any model run; 35 have a specific standard). Right section in the top 3
+(strict):
+
+| Search terms by | Hits of 35 | Rate (95% interval) |
+|---|---|---|
+| No model (BM25 plus embeddings) | 12 | 34.3% (20.8 to 50.8) |
+| GPT 5 nano | 17 | 48.6% (33.0 to 64.4) |
+| Claude Sonnet 5.5 | 22 | 62.9% (46.3 to 76.8) |
+
+* Claude against no model: 10 gained, 0 lost (p 0.002); against GPT 5 nano: 7 gained, 2 lost
+  (p 0.18). Gemini 3.5 Flash returned server errors again and is not measured.
+* These two rates replace the models' retrieve priors in the router. No measured model reaches the
+  bars (0.80, 0.88, 0.95), which were set on optimistic priors and were not retuned on this slice,
+  so the router sends this step to Claude as the most accurate measured model.
+* A provisional offline baseline was seen before the labels were frozen; no model answer was.
+* B7 cost about $0.12; the team has spent about $0.26 of the $1.50 cap. Labels, terms and results
+  in `data/labels/router_slice.csv` and `eval/results/router_slice.json`.
+
+**The prevention plan** (Advance, #41): for a plastics plant in Texas with $40,000 a year and one
+severe injury a year, the plan funds the lockout program and machine guarding ($37,000), which
+prevents an expected $36,951 to $73,902 of injury cost a year at the low and the high end of the
+controls' effects. The injury mix comes from 190 reports of plants like it and the costs from OSHA
+Safety Pays; the controls' costs and effects are planning assumptions the user changes. Method, a
+budget sweep and limits in [docs/PREVENTION_PLAN.md](docs/PREVENTION_PLAN.md).
+
 The B2 and B3 numbers above were measured with the rules at bb68e2b, before #30; a rerun on
 `main` now uses the new Falls rule and can differ, so check out bb68e2b to reproduce them. B4 is
 unchanged (checked on #36).
@@ -425,6 +463,10 @@ safereport eval-baselines
 
 ```bash
 safereport live-summary
+```
+
+```bash
+python scripts/score_seeded_checks.py
 ```
 
 **OSHA changed its event codes in January 2024** (OIICS 2 to OIICS 3; group 64 means "caught in
@@ -441,6 +483,7 @@ src/safereport/
   providers.py     Anthropic, OpenAI, Google and LM Studio adapters
   offline.py       the offline backend used without keys and in tests
   triage.py        Category 1 rules and the inspector day integer program
+  prevention.py    the prevention plan: Safety Pays costs and the budget integer program
   domain.py        OSHA domain checks used by the critic
   retrieval.py     BM25, FAISS and the index registry (Part 1910, Part 1926 when built)
   data.py          DuckDB over Parquet, filters that respect the 2024 code change
@@ -449,11 +492,11 @@ src/safereport/
   writer.py        templates for briefs, letters, talks and answers
   spend.py         reply cache and the $1.50 cap
   app.py, views.py the Gradio app
-config/            models.toml (models, prices, router), triage.toml (weights, days)
+config/            models.toml (models, prices, router), triage.toml (weights, days), prevention.toml (controls)
 data/labels/       the answer key, the three reviewers' files and the Category 1 hand check
 eval/results/      every measured number
-docs/              proposal, labelling guide, related products, open issues, AI use, reviews, Falls for staffing (#30)
-tests/             386 tests, offline, no keys
+docs/              proposal, labelling guide, related products, open issues, AI use, reviews, Falls for staffing (#30), prevention plan (#41)
+tests/             479 tests, offline, no keys
 ```
 
 ## For developers
@@ -495,8 +538,9 @@ per inspection are in [config/triage.toml](config/triage.toml).
 * OSHA's Category 1 rules here do not cover repeat offenders and SVEP (the file has no citation
   history) or local and regional emphasis programs, look for employer history only in the same
   state, and leave imminent danger to a person's flag (B3).
-* Still to come in phase 4: router accuracies measured outside the key, a seeded domain check
-  set, the router on the Pareto chart, and the prevention plan.
+* Still to come in phase 4: the router on the Pareto chart (B8).
+* The prevention plan's control costs and effects are assumptions, and its injury mix is that of
+  reported severe injuries in plants like the user's, not the plant's own.
 
 More in [docs/OPEN_ISSUES.md](docs/OPEN_ISSUES.md); how we used AI tools is in
 [docs/AI_USAGE.md](docs/AI_USAGE.md); related products are compared in

@@ -43,6 +43,7 @@ from safereport.graph import (
 from safereport.icons import svg
 from safereport.ledger import FactLedger
 from safereport.outputs import pareto_chart, router_pareto_chart, sensitivity_chart, word_document
+from safereport.prevention import load_controls, money
 from safereport.schemas import CITATION, DIRECTIVE, GENERAL_DUTY, IntakeResult, clip
 from safereport.talk_languages import LANGUAGES, extra_language
 from safereport.triage import MAX_DAYS
@@ -71,7 +72,8 @@ RRI_REPLY_DAYS = 5  # working days the employer has to answer the letter
 INDUSTRY_CHOICES = {"All industries": "", "Manufacturing": "3", "Food manufacturing": "311",
                     "Plastics": "326", "Primary metal": "331", "Fabricated metal": "332",
                     "Warehousing": "493", "Construction": "23"}  # fmt: skip
-HAZARD_CHOICES = {"All events": "", "Caught in machinery": "653", "Struck by an object": "64",
+HAZARD_CHOICES = {"All events": "", "Caught in machinery": "653", "Caught during maintenance": "652",
+                  "Struck by an object": "64",
                   "Falls to a lower level": "41", "Slips and trips": "43"}  # fmt: skip
 TALK_TOPICS = ("lockout", "machine guarding", "fall", "forklift")
 TALK_LANGUAGE_CHOICES = ["None (English only)", *(f"{name} ({code})" for code, name in LANGUAGES.items())]
@@ -1267,6 +1269,66 @@ def safety_talk(
             names.append(save(crew, session, f"safety_talk_{topic.replace(' ', '_')}_{language_code}.docx",
                               word_document(rendered(draft), language_code)))  # fmt: skip
     return right_to_left(out.get("answer", "")) + widened, names
+
+
+# ---- Prevention plan ----
+
+CONTROL_COLUMNS = ["Control", "What it addresses", "Yearly cost ($)", "Effect, low", "Effect, high"]
+PLAN_COLUMNS = ["Control", "Reports", "Share", "Cost per injury", "Expected cost a year", "Prevented a year",
+                "Yearly cost", "Funded (low end)", "Funded (high end)"]  # fmt: skip
+
+
+def controls_table() -> pd.DataFrame:
+    """The controls with their planning assumptions, for the user to change."""
+    return pd.DataFrame([[c.name, c.why, c.yearly_cost, c.effect[0], c.effect[1]] for c in load_controls()],
+                        columns=CONTROL_COLUMNS)  # fmt: skip
+
+
+def _plan_changes(table: pd.DataFrame | None) -> tuple[list[dict[str, Any]], str]:
+    """The user's costs and effects from the controls table, or a message saying what is wrong."""
+    changes = []
+    for row in (table if table is not None else controls_table()).itertuples(index=False):
+        try:
+            change = {"name": str(row[0]).strip().lower(), "yearly_cost": float(row[2]),
+                      "effect_low": float(row[3]), "effect_high": float(row[4])}  # fmt: skip
+        except (TypeError, ValueError):
+            return [], f"The cost and effects of {row[0]} must be numbers."
+        if not 0 <= change["effect_low"] <= change["effect_high"] <= 1 or change["yearly_cost"] < 0:
+            return (
+                [],
+                f"{row[0]}: the effects are shares from 0 to 1, low no higher than high, and the cost is zero or more.",
+            )
+        changes.append(change)
+    return changes, ""
+
+
+def prevention_plan(crew: Crew, state_name: str, industry_name: str, start_year: float, budget: float,
+                    injuries: float, table: pd.DataFrame | None = None):  # fmt: skip
+    """The controls to fund first, solved at the low and the high end of each control's effect."""
+    empty = pd.DataFrame(columns=PLAN_COLUMNS)
+    if budget is None or budget < 0:
+        return "Enter a yearly budget of zero or more dollars.", empty
+    if injuries is None or injuries <= 0:
+        return "Enter how many severe injuries a year your plant has (more than zero).", empty
+    changes, problem = _plan_changes(table)
+    if problem:
+        return problem, empty
+    params = {"naics_prefix": INDUSTRY_CHOICES.get(industry_name, "3"), "budget": float(budget),
+              "plant_injuries": float(injuries), "start": f"{int(start_year)}-01-01", "controls": changes}  # fmt: skip
+    if state_name and state_name != "All states":
+        params["state"] = state_name.upper()
+    thread = uuid.uuid4().hex
+    request = f"Make a prevention plan within a yearly budget of ${budget:,.0f}."
+    out = crew.run(thread, {"request": request, "params": params})
+    findings = crew.values(thread).get("findings", {}).values()
+    plan = next((f for f in findings if f["kind"] == "prevention_plan"), None)
+    if plan is None:
+        return out.get("answer", "No plan was made."), empty
+    low, high = set(plan["plans"]["low"]["funded"]), set(plan["plans"]["high"]["funded"])
+    rows = [[r["control"], r["reports"], f"{r['share']:.0%}", money(r["cost_per_injury"]), money(r["expected_cost"]),
+             f"{money(r['prevented'][0])} to {money(r['prevented'][1])}", money(r["yearly_cost"]),
+             "yes" if r["control"] in low else "", "yes" if r["control"] in high else ""] for r in plan["rows"]]  # fmt: skip
+    return out.get("answer", ""), pd.DataFrame(rows, columns=PLAN_COLUMNS)
 
 
 # ---- AI controls and evaluation ----
