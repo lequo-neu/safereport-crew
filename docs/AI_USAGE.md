@@ -327,3 +327,33 @@ JSON fingerprints. All 20 dedicated B8 tests and all 486
 repository tests passed locally. Ruff linting and formatting
 checks passed. Dedicated tests also prevent backend calls
 during the replay.
+
+#### B8: review corrections (PR #45)
+
+Following Kevin's review, Khoa merged the latest main
+and resolved the views.py import conflict, preserving
+both the prevention feature and the router chart.
+
+ChatGPT assisted with correcting chart annotations,
+removing the whole-file configuration fingerprint,
+reusing the shared Wilson interval function, and adding
+four regression tests.
+
+The new tests cover multiline chart labels, routine
+configuration metadata updates, the three frozen evidence
+fingerprints and rejection of changed measured model IDs.
+
+The regenerated B8 result differs only by the removal
+of the config/models.toml fingerprint. Measured accuracy,
+confidence intervals, historical costs and routing
+decisions remain unchanged.
+
+Configuration metadata may now change without invalidating
+the replay. Model identity and measured accuracy checks
+remain in place.
+
+Khoa verified that all 24 dedicated B8 tests and all 503
+repository tests passed. Ruff linting and formatting
+passed, and repeated execution reproduced identical JSON.
+
+No additional model calls or paid inference were required.

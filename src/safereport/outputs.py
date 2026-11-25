@@ -168,7 +168,7 @@ def router_pareto_chart(points: list[dict]) -> bytes:
 
         names = " + ".join(point["label"] for point in group)
 
-        label = f"{names}\\n{accuracy:.1%} | {group[0]['hits']}/{group[0]['cases']} | ${cost:.4f}"
+        label = f"{names}\n{accuracy:.1%} | {group[0]['hits']}/{group[0]['cases']} | ${cost:.4f}"
 
         right_side = cost >= max(point["cost"] for point in points) / 2
 

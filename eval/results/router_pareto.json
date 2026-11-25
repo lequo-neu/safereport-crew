@@ -501,7 +501,6 @@
   ],
   "selected_model": "claude",
   "source_sha256": {
-    "config/models.toml": "fbeda35a01575a13af7973e4b4ce7dc62d007878f533ba212163d964f38ab489",
     "data/labels/router_slice.csv": "6a263fbc8ef1055cbd141659555a3660f197896870e380cbad01ae1a45ec20ed",
     "data/labels/router_slice_manifest.json": "45d1fc8e1b69b6fd185157c6530259019c10186f21f26b7171fc23598fa94d61",
     "eval/results/router_slice.json": "381c3a751515c65902cf5269ca27ff2b569f944d1e3470d61f32f7665ccc0446"

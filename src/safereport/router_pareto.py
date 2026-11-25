@@ -14,6 +14,7 @@ import math
 from pathlib import Path
 
 from safereport.config import PROJECT_ROOT, load_model_settings
+from safereport.evaluation import wilson
 from safereport.router import Signals, difficulty, offline_router
 
 
@@ -37,23 +38,13 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _wilson(hits: int, total: int) -> tuple[float, float]:
-    """Wilson 95% interval for a binomial proportion."""
-    z = 1.959963984540054
-    share = hits / total
-    denominator = 1 + z**2 / total
-    center = (share + z**2 / (2 * total)) / denominator
-    margin = z * math.sqrt(share * (1 - share) / total + z**2 / (4 * total**2)) / denominator
-    return center - margin, center + margin
-
-
 def evaluate_router_pareto(root: Path = PROJECT_ROOT) -> dict:
     """Build a reproducible comparison from the frozen B7 evidence."""
     manifest = json.loads((root / MANIFEST).read_text())
     results = json.loads((root / RESULTS).read_text())
     settings = load_model_settings(root / CONFIG)
 
-    hashes = {name: _sha256(root / name) for name in (DATASET, MANIFEST, RESULTS, CONFIG)}
+    hashes = {name: _sha256(root / name) for name in (DATASET, MANIFEST, RESULTS)}
 
     _require(
         hashes[DATASET] == manifest["sha256"] == results["dataset_sha256"] == FROZEN_SHA256,
@@ -146,7 +137,7 @@ def evaluate_router_pareto(root: Path = PROJECT_ROOT) -> dict:
         )
 
         ci95 = model["strict_at_3_ci95"]
-        expected_ci = _wilson(hits, eligible)
+        expected_ci = wilson(accuracy, eligible)
 
         _require(
             len(ci95) == 2

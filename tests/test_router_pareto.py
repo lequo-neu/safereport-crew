@@ -295,3 +295,70 @@ def test_router_evaluation_handles_missing_results(tmp_path, monkeypatch):
     assert image is None
     assert table.empty
     assert "eval_router_pareto.py" in note
+
+
+def test_router_chart_uses_multiline_labels(result, monkeypatch):
+    """Chart annotations use real line breaks, not escaped text."""
+    from matplotlib.axes import Axes
+
+    original = Axes.annotate
+    labels = []
+
+    def capture(self, text, *args, **kwargs):
+        labels.append(text)
+        return original(self, text, *args, **kwargs)
+
+    monkeypatch.setattr(Axes, "annotate", capture)
+
+    router_pareto_chart(result["points"])
+
+    assert len(labels) == 3
+    assert all("\n" in label for label in labels)
+    assert all(r"\n" not in label for label in labels)
+
+    shared = next(label for label in labels if "Router replay" in label)
+
+    assert "Claude Sonnet 5.5" in shared
+    assert "62.9%" in shared
+    assert "22/35" in shared
+
+
+def test_config_metadata_changes_preserve_replay(source_copy, result):
+    """Routine model verification updates do not change historical results."""
+    path = source_copy / CONFIG
+    source = path.read_text()
+
+    old = 'checked_on = "2026-11-19"'
+    new = 'checked_on = "2026-11-25"'
+
+    assert old in source
+
+    path.write_text(source.replace(old, new, 1) + "\n# Metadata-only verification update\n")
+
+    assert evaluate_router_pareto(source_copy) == result
+
+
+def test_replay_fingerprints_only_frozen_evidence(result):
+    assert set(result["source_sha256"]) == {
+        DATASET,
+        MANIFEST,
+        RESULTS,
+    }
+
+    assert CONFIG not in result["source_sha256"]
+
+
+def test_replay_rejects_changed_measured_model_id(source_copy):
+    """Historical accuracy must not be assigned to another model."""
+    path = source_copy / CONFIG
+    source = path.read_text()
+
+    old = 'model_id = "gpt-5-nano"'
+    new = 'model_id = "different-model"'
+
+    assert old in source
+
+    path.write_text(source.replace(old, new, 1))
+
+    with pytest.raises(ValueError, match="configured model ID differs"):
+        evaluate_router_pareto(source_copy)
