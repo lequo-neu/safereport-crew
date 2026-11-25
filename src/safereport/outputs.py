@@ -95,6 +95,151 @@ def pareto_chart(points: list[dict], measure: str = "standards found in the top 
     return _png(figure)
 
 
+def router_pareto_chart(points: list[dict]) -> bytes:
+    """B7/B8 cost and accuracy on the same 35 eligible reports.
+
+    Identical cost and accuracy coordinates share one label and
+    frontier position. A ring identifies the router replay.
+    """
+    figure = Figure(figsize=(9, 4.8), dpi=150)
+    axes = figure.subplots()
+
+    groups = {}
+
+    for point in points:
+        key = (point["cost"], point["accuracy"])
+        groups.setdefault(key, []).append(point)
+
+    unique = [group[0] for group in groups.values()]
+    front = pareto_front(unique)
+
+    frontier_coordinates = {(point["cost"], point["accuracy"]) for point in front}
+
+    axes.plot(
+        [point["cost"] for point in front],
+        [point["accuracy"] for point in front],
+        color=MUTED,
+        linestyle="--",
+        linewidth=1.2,
+        label="Pareto frontier",
+    )
+
+    router_label_added = False
+
+    for (cost, accuracy), group in groups.items():
+        on_front = (cost, accuracy) in frontier_coordinates
+
+        axes.scatter(
+            [cost],
+            [accuracy],
+            s=55,
+            color=INK if on_front else "white",
+            edgecolors=INK,
+            zorder=3,
+        )
+
+        low, high = group[0]["ci95"]
+
+        axes.errorbar(
+            cost,
+            accuracy,
+            yerr=[[accuracy - low], [high - accuracy]],
+            fmt="none",
+            ecolor=MUTED,
+            elinewidth=1.2,
+            capsize=4,
+            zorder=2,
+        )
+
+        has_router = any(point["model"] == "router" for point in group)
+
+        if has_router:
+            axes.scatter(
+                [cost],
+                [accuracy],
+                s=180,
+                facecolors="none",
+                edgecolors=ACCENT,
+                linewidths=1.8,
+                zorder=4,
+                label=None if router_label_added else "Router replay",
+            )
+            router_label_added = True
+
+        names = " + ".join(point["label"] for point in group)
+
+        label = f"{names}\n{accuracy:.1%} | {group[0]['hits']}/{group[0]['cases']} | ${cost:.4f}"
+
+        right_side = cost >= max(point["cost"] for point in points) / 2
+
+        axes.annotate(
+            label,
+            (cost, accuracy),
+            textcoords="offset points",
+            xytext=(-12, 22) if right_side else (12, -24),
+            ha="right" if right_side else "left",
+            va="bottom" if right_side else "top",
+            fontsize=8,
+            color=INK,
+        )
+
+    max_cost = max(point["cost"] for point in points)
+
+    axes.set_xlim(
+        -0.08 * max_cost - 1e-4,
+        1.18 * max_cost + 1e-4,
+    )
+
+    axes.set_ylim(0, 1)
+
+    axes.set_xlabel("Historical cost per 35-case evaluation (USD)")
+
+    axes.set_ylabel("Strict standards retrieval Hit@3")
+
+    axes.xaxis.set_major_formatter(lambda value, _: f"${value:.2f}")
+
+    axes.yaxis.set_major_formatter(lambda value, _: f"{value:.0%}")
+
+    axes.set_title(
+        "B7/B8: retrieval cost and accuracy",
+        loc="left",
+        fontsize=12,
+        color=INK,
+        fontweight="bold",
+        pad=14,
+    )
+
+    axes.grid(
+        axis="y",
+        color=MUTED,
+        alpha=0.18,
+        linewidth=0.7,
+    )
+
+    axes.spines[["top", "right"]].set_visible(False)
+
+    axes.legend(
+        loc="upper left",
+        frameon=False,
+        fontsize=8,
+    )
+
+    figure.text(
+        0.02,
+        0.015,
+        "Wilson 95% intervals. Retrospective router replay; "
+        "no new inference cost. Gemini and Gemma unmeasured.",
+        fontsize=8,
+        color=INK,
+    )
+
+    figure.tight_layout(rect=(0, 0.07, 1, 1))
+
+    buffer = io.BytesIO()
+    figure.savefig(buffer, format="png")
+    return buffer.getvalue()
+
+
 def _png(figure: Figure) -> bytes:
     figure.tight_layout()
     buffer = io.BytesIO()

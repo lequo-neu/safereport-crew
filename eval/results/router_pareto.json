@@ -1,0 +1,513 @@
+{
+  "accuracy_bars": {
+    "hard": 0.95,
+    "moderate": 0.88,
+    "simple": 0.8
+  },
+  "additional_api_calls": 0,
+  "additional_api_cost": 0.0,
+  "configured_models": [
+    "claude",
+    "gemini_flash",
+    "gemma_local",
+    "gpt_nano"
+  ],
+  "eligible_reports": 35,
+  "excluded_reports": 15,
+  "limitations": [
+    "Retrospective replay on the same B7 slice used to populate measured routing accuracies.",
+    "Not an independent evaluation of router generalization.",
+    "Synthetic uncertainty combinations are not observed per-report signals.",
+    "Historical evaluation costs are reused; no new inference is performed.",
+    "Only standards retrieval Hit@3 is evaluated, not end-to-end decision accuracy.",
+    "Provider failures, retries, availability, latency and private mode are outside the replay.",
+    "Unmeasured Gemini and Gemma are excluded from the cost-accuracy points.",
+    "Claude's result is for the configured backend; server-side fallback may be enabled."
+  ],
+  "measure": "strict standards retrieval Hit@3",
+  "measured_models": [
+    "claude",
+    "gpt_nano"
+  ],
+  "method": "retrospective invariant-selection replay",
+  "points": [
+    {
+      "accuracy": 0.34285714285714286,
+      "cases": 35,
+      "ci95": [
+        0.208,
+        0.508
+      ],
+      "cost": 0.0,
+      "hits": 12,
+      "label": "Offline hybrid",
+      "model": "offline"
+    },
+    {
+      "accuracy": 0.4857142857142857,
+      "cases": 35,
+      "ci95": [
+        0.33,
+        0.644
+      ],
+      "cost": 0.03327545,
+      "hits": 17,
+      "label": "GPT 5 nano",
+      "model": "gpt_nano"
+    },
+    {
+      "accuracy": 0.6285714285714286,
+      "cases": 35,
+      "ci95": [
+        0.463,
+        0.768
+      ],
+      "cost": 0.061832,
+      "hits": 22,
+      "label": "Claude Sonnet 5.5",
+      "model": "claude"
+    },
+    {
+      "accuracy": 0.6285714285714286,
+      "cases": 35,
+      "ci95": [
+        0.463,
+        0.768
+      ],
+      "cost": 0.061832,
+      "hits": 22,
+      "label": "Router replay",
+      "model": "router",
+      "selected_model": "claude"
+    }
+  ],
+  "routing_decisions": [
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "lowest_cost",
+      "reason": "hard case (Intake confidence 0.40 below 0.70; top two standards 0.01 apart): no model clears 0.95, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": false,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "lowest_cost",
+      "reason": "hard case (Intake confidence 0.40 below 0.70; top two standards 0.01 apart; the critic rejected the last draft): no model clears 0.95, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": false,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "moderate",
+      "mode": "lowest_cost",
+      "reason": "moderate case (Intake confidence 0.40 below 0.70): no model clears 0.88, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": false,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "lowest_cost",
+      "reason": "hard case (Intake confidence 0.40 below 0.70; the critic rejected the last draft): no model clears 0.95, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": false,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "lowest_cost",
+      "reason": "hard case (Intake confidence 0.40 below 0.70; baseline and model disagree on the event group; top two standards 0.01 apart): no model clears 0.95, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": true,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "lowest_cost",
+      "reason": "hard case (Intake confidence 0.40 below 0.70; baseline and model disagree on the event group; top two standards 0.01 apart; the critic rejected the last draft): no model clears 0.95, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": true,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "lowest_cost",
+      "reason": "hard case (Intake confidence 0.40 below 0.70; baseline and model disagree on the event group): no model clears 0.95, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": true,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "lowest_cost",
+      "reason": "hard case (Intake confidence 0.40 below 0.70; baseline and model disagree on the event group; the critic rejected the last draft): no model clears 0.95, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": true,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "moderate",
+      "mode": "lowest_cost",
+      "reason": "moderate case (top two standards 0.01 apart): no model clears 0.88, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": false,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "lowest_cost",
+      "reason": "hard case (top two standards 0.01 apart; the critic rejected the last draft): no model clears 0.95, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": false,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "simple",
+      "mode": "lowest_cost",
+      "reason": "simple case: no model clears 0.80, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": false,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "moderate",
+      "mode": "lowest_cost",
+      "reason": "moderate case (the critic rejected the last draft): no model clears 0.88, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": false,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "lowest_cost",
+      "reason": "hard case (baseline and model disagree on the event group; top two standards 0.01 apart): no model clears 0.95, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": true,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "lowest_cost",
+      "reason": "hard case (baseline and model disagree on the event group; top two standards 0.01 apart; the critic rejected the last draft): no model clears 0.95, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": true,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "moderate",
+      "mode": "lowest_cost",
+      "reason": "moderate case (baseline and model disagree on the event group): no model clears 0.88, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": true,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "lowest_cost",
+      "reason": "hard case (baseline and model disagree on the event group; the critic rejected the last draft): no model clears 0.95, so the most accurate measured model (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": true,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": false,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": false,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "moderate",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": false,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": false,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": true,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": true,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": true,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": true,
+        "intake_confidence": 0.4,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "moderate",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": false,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": false,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "simple",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": false,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "moderate",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": false,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": true,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": true,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.01
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "moderate",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": false,
+        "disagreement": true,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.1
+      }
+    },
+    {
+      "based_on_prior": false,
+      "difficulty": "hard",
+      "mode": "best_quality",
+      "reason": "best quality: highest accuracy for retrieve (0.63)",
+      "selected_model": "claude",
+      "signals": {
+        "critic_rejected": true,
+        "disagreement": true,
+        "intake_confidence": 0.9,
+        "retrieval_margin": 0.1
+      }
+    }
+  ],
+  "selected_model": "claude",
+  "source_sha256": {
+    "data/labels/router_slice.csv": "6a263fbc8ef1055cbd141659555a3660f197896870e380cbad01ae1a45ec20ed",
+    "data/labels/router_slice_manifest.json": "45d1fc8e1b69b6fd185157c6530259019c10186f21f26b7171fc23598fa94d61",
+    "eval/results/router_slice.json": "381c3a751515c65902cf5269ca27ff2b569f944d1e3470d61f32f7665ccc0446"
+  },
+  "total_reports": 50,
+  "unmeasured_models": [
+    "gemini_flash",
+    "gemma_local"
+  ]
+}

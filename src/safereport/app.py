@@ -520,6 +520,23 @@ def build_app(crew: Crew) -> gr.Blocks:
                 retrieval = gr.Dataframe(interactive=False, wrap=True)
                 coding = gr.Dataframe(interactive=False, wrap=True)
                 eval_note = gr.Markdown(elem_classes="sr-small")
+
+                section("B7/B8 router evaluation", "critic")
+
+                router_pareto = gr.Image(
+                    label="Retrieval cost and accuracy (35 eligible reports)",
+                    interactive=False,
+                    height=440,
+                )
+
+                router_results = gr.Dataframe(
+                    interactive=False,
+                    wrap=True,
+                )
+
+                router_note = gr.Markdown(
+                    elem_classes="sr-small",
+                )
                 with gr.Accordion("Model calls", open=False):
                     refresh_usage = gr.Button("Refresh", scale=0)
                     usage = gr.Dataframe(interactive=False, wrap=True, max_height=420)
@@ -543,6 +560,12 @@ def build_app(crew: Crew) -> gr.Blocks:
         app.load(signed_in_role, None, role).then(role_view, role, role_outputs).then(hint, role, role_hint)
         app.load(lambda: (views.models_table(crew), views.data_table(crew), *views.evaluation(crew)), None,
                  [models, data, pareto, coding, retrieval, eval_note])  # fmt: skip
+
+        app.load(
+            views.router_evaluation,
+            None,
+            [router_pareto, router_results, router_note],
+        )
 
         def sources(sess):
             choices = views.evidence_choices(crew, sess)
