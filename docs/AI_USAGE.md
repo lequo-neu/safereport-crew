@@ -165,6 +165,16 @@ Each task records here which AI tool helped and how the result was checked.
   change them. The plan reads every report, as the Trends page does; nothing was tuned on the
   answer key or the 2025 holdout, and no Category 1 rule or triage weight changed.
   No model call went through the app; nothing was paid.
+* **Issue #26, the warehousing program for post offices** (Hamad). Claude Code read CPL 03-00-026
+  (2026) from the PDF on osha.gov (text extraction) and quoted its scope for NAICS 491110 (Table 2,
+  XII.A, XII.B.3) in `data/reference/emphasis_programs.toml`. It wrote the scope rule (facility
+  words, delivery and retail words), the change that lets a match be "possible" instead of forced,
+  the tests and `scripts/eval_postal_scope.py`. The words were written after reading 491110
+  reports from every year outside the 2025 holdout and the answer key, so the counts in
+  `eval/results/postal_scope.json` are development counts, not a test, and no precision is
+  claimed. The B3 sample and the holdout were not read; B2 and B3 were not rerun. The Crystal City
+  report (20251111619) is a test case quoted from Hamad's B1 review, not a measurement. No model
+  call went through the app; nothing was paid.
 
 ## The safety talk translations
 

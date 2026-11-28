@@ -73,11 +73,34 @@ text = """Falls while working at heights: in construction, any fall to a lower l
 citation = "CPL 03-00-026"
 title = "National Emphasis Program on Warehousing and Distribution Center Operations"
 date = "2026-07-31"
-url = "https://www.osha.gov/enforcement/directives/nep"
+url = "https://www.osha.gov/enforcement/directives/cpl-03-00-026-0"
 industries = ["491110", "492110", "492210", "493110", "493120", "493130", "493190"]
 triggers = ['forklift|fork lift|powered industrial|pallet jack|order picker|reach truck|tugger', 'struck|caught|pinch|crush|conveyor', 'slip|trip|fell|fall', 'lift(ing|ed)?\b|carry|overexert|strain', 'heat (stress|stroke|exhaustion|illness|related)|dehydrat', 'fire|burn', 'rack|pallet|load|dock|trailer|box|package|stack']
 verified = true
-scope_note = "Read from the directive on 2026-11-19: Table 2 NAICS codes (postal processing and distribution centers, couriers, local delivery, warehousing; 491110 also holds post offices the data cannot tell apart). Triggers follow the hazards the directive lists: struck by, caught in, slips, trips and falls, powered industrial vehicles, material handling and storage, heat, ergonomics and fire."
+scope_note = "Read from the directive on 2026-11-19, and its scope for 491110 again on 2026-11-28 (issue #26, the directive signed 2026-07-06, effective 2026-07-31): Table 2 NAICS codes (postal processing and distribution centers, couriers, local delivery, warehousing). Triggers follow the hazards the directive lists: struck by, caught in, slips, trips and falls, powered industrial vehicles, material handling and storage, heat, ergonomics and fire. For 491110, Table 2 reads 'Postal Service (Processing & Distribution Centers only)'; XII.B.3 says the CSHO must not inspect under the NEP if 'the establishment is a post office location that is not a processing and distribution center'; XII.A says 'Inspections under this NEP do not include postal or package transportation/delivery to residences and businesses.' So a 491110 report forces an inspection only when it names a processing or distribution facility and does not describe delivery or a retail counter; a report that shows neither, or both, only raises the priority."
+# Issue #26. The facility words are read from the narrative and the employer's name (OSHA's file
+# often names the plant: "U.S. Postal Service - Oakland P&DC"); the delivery and retail words from
+# the narrative only, because "US Post Office" is a common way to write any USPS employer. Written
+# after reading 491110 reports outside the 2025 holdout and the answer key (all years, so the
+# counts in eval/results/postal_scope.json are development counts, not a test).
+scope_industries = ["491110"]
+scope_label = "postal processing and distribution center"
+scope_evidence = [
+  '\bprocess(ing)? (and |& ?)?distribution (center|centre|facility|plant)',
+  '\b[a-z]{0,4}p ?& ?dc\b|\b[a-z]{0,4}(n?pdc|ndc)\b',
+  '\b(network|national|regional) distribution (center|centre|facility)',
+  '\b(mail|postal|package|parcel) (processing|distribution) (center|centre|facility|plant)',
+  '\bprocessing (center|centre|plant|facility)\b',
+  '\bdistribution (center|centre|facility)\b',
+  '\bmail[- ]processing\b',
+]
+scope_exclusions = [
+  '\bdeliver(ing|ed)? (\w+ ){0,3}?(mail|packages?|parcels?|letters?)\b|\bwhile delivering\b',
+  '\b(letter|rural|city|mail|postal) carriers?\b|\bcarrier route\b',
+  '\b(on|along) (his|her|their|the|a) (mail |delivery |postal )?route\b',
+  '\bmail ?box(es)?\b',
+  '\bretail (counter|window|lobby|area|unit|clerk)\b|\b(window|counter|retail) (clerk|associate)\b|\bpost office lobby\b',
+]
 text = """Hazards in warehouses and distribution centers: powered industrial trucks and forklifts, pallet jacks, material handling and storage, stacked loads, conveyors, loading docks, slips, trips and falls, ergonomic and heat hazards."""
 
 [[documents]]

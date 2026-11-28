@@ -41,7 +41,7 @@ from safereport.ledger import FactLedger, percent
 from safereport.outputs import sensitivity_chart, trend_chart, triage_csv
 from safereport.prevention import load_controls, make_plan, money, names, with_changes
 from safereport.redaction import redact
-from safereport.retrieval import IndexRegistry
+from safereport.retrieval import IndexRegistry, OshaFields
 from safereport.router import Mode, Router, Signals
 from safereport.schemas import CITATION, DIRECTIVE, GENERAL_DUTY, IntakeResult, Report, clip
 from safereport.talk_languages import extra_language
@@ -227,7 +227,9 @@ def build_graph(services: Services, checkpointer=None):
                                     node, signals)  # fmt: skip
         terms = (terms_reply.data or {}).get("terms", [])
         query = f"{report.narrative} {report.event_title} {report.source_title}"
-        found = services.registry.search(query, naics=report.naics, k=5, terms=terms)
+        found = services.registry.search(
+            query, naics=report.naics, k=5, terms=terms, fields=OshaFields.of(report)
+        )
         pick = pick_standard(intake, found)
         trace.append(
             _trace(
@@ -273,8 +275,8 @@ def build_graph(services: Services, checkpointer=None):
             "pick": pick,
             "margin": found.margin,
             "candidates": [s.section for s in found.sections],
-            "emphasis": [h.document.citation for h in found.emphasis if h.document.verified],
-            "possible_emphasis": [h.document.citation for h in found.emphasis if not h.document.verified],
+            "emphasis": found.forced,
+            "possible_emphasis": found.possible,
             "emphasis_evidence": found.work_evidence(),
             "history_same": sum(m.status == "same" for m in earlier),
             "history_possible": sum(m.status == "possible" for m in earlier),
@@ -561,7 +563,10 @@ def build_graph(services: Services, checkpointer=None):
                  "nature_title": report.nature_title, "baseline_code": predicted.code,
                  "baseline_confidence": predicted.confidence}))  # fmt: skip
             found = services.registry.search(
-                f"{report.narrative} {report.event_title}", naics=report.naics, k=3
+                f"{report.narrative} {report.event_title}",
+                naics=report.naics,
+                k=3,
+                fields=OshaFields.of(report),
             )
             division = str(row.get("event_code_v3") or report.event_code)[:1]
             repeats_found = [m.report_id for m in index.repeats_within(
@@ -569,8 +574,8 @@ def build_graph(services: Services, checkpointer=None):
                 zip_code=report.zip, naics=report.naics, exclude_id=report.id)]  # fmt: skip
             # Only a program whose scope was read from its directive forces an inspection; the
             # others raise the priority and are shown for a person to check.
-            emphasis = [h.document.citation for h in found.emphasis if h.document.verified]
-            possible = [h.document.citation for h in found.emphasis if not h.document.verified]
+            emphasis = found.forced
+            possible = found.possible
             score, parts = priority(
                 report, facts, bool(found.sections), industry_share(report), possible_emphasis=bool(possible)
             )
