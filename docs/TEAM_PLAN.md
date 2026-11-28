@@ -41,9 +41,10 @@ Phases 0 to 3 are built, tested and on `main` (see the [README](../README.md)):
 |---|---|---|
 | Basic | 20 to 23 November | review what exists in your area, and finish the evaluation the proposal promised |
 | Advance | 24 to 25 November | the team picks advanced features, builds and tests them, shows them, merges them |
-| Submission | 26 to 28 November | video, report and presentation ready to submit |
+| Submission | 26 November to 12 December | report, slides, recorded presentation, notebook and the Canvas zip (S1 to S5) |
 
-The course deadlines come later (check Canvas), so the days after 28 November are a buffer, not a plan.
+The dates in this plan are team targets. The only course deadline is on Canvas: one zip by
+Saturday 12 December 2026, 11:59 PM ET (#14).
 
 ## Basic stage: 20 to 23 November
 
@@ -149,30 +150,51 @@ pull requests never edit the same table.
 3. Each feature is built on its own branch with tests, shown to the team (a short video or a call),
    and merged by 25 November at night.
 
-## Submission stage: 26 to 28 November
+## Submission stage: 26 November to 12 December
 
-All four tasks belong to Hamad and Khoa together. You split them between you as you see fit, and
-write who does which part in each issue by 26 November at noon, so nothing is done twice or
-left out.
+| | Date |
+|---|---|
+| **Canvas deadline** | one zip by Saturday 12 December 2026, 11:59 PM ET (#14) |
+| Team target | S1 to S5 ready for Kevin's review by 28 November (#11 to #14, #38). Hamad's parts start on Tuesday 1 December (#19) and are reviewed as they land, inside the buffer before the Canvas deadline |
 
-**S1. The report.** Problem, users and needs, data and answer key, architecture, triage logic,
-evaluation with every number taken from `eval/results/`, limits, AI use. PDF in `docs/report/`.
+All five tasks belong to Hamad and Khoa together. Who does which part is written in each issue,
+so nothing is done twice or left out.
 
-**S2. The slides and the demo script.** 8 to 12 slides and a live demo script that follows the
-README tour, with a backup run recorded offline in case the network fails on the day.
+**S1. The report (#11).** A PDF of 3 to 5 pages in `docs/report/`: the architecture diagram, the
+agent roles, the model selection with the measured comparison and the cost, the results with
+every number taken from `eval/results/`, the process and the decisions, the limits and the AI use.
 
-**S3. The video.** The demo, each part shown by the person who built it, put together in one video.
+**S2. The slides (#12).** 8 to 12 slides for 10 minutes at most, with a Contributions slide,
+exported as PDF or PowerPoint for the zip.
 
-**S4. The submission.** Everything handed in, in the form the course asks for (check Canvas):
+**S3. The recorded presentation (#13).** One recording of 10 minutes at most: the slides, the
+product run offline, the architecture and the main insight. Each part of the demo is shown by the
+person who built it.
+
+**S4. The submission (#14).** One zip on Canvas with the notebook and its link, the report, the
+slides, the recording or its link, and the repository link and tag. Before zipping:
 * a fresh clone of `main` passes the README quick start and `pytest -q`;
+* the notebook runs top to bottom on a fresh Colab runtime;
 * Kevin tags the submitted commit (for example `v1.0.0`) when you ask him, so the code handed in
-  is the code we tested;
-* the report, the slides, the video link and the repository link are submitted, and a screenshot
-  or the confirmation of each submission is attached to the issue.
+  is the code we tested.
 
-Kevin reviews S1 to S3 before 28 November at night and checks S4 with you.
+After, a screenshot of the Canvas confirmation is attached to #14.
+
+**S5. The Colab notebook (#38).** `notebooks/safereport_crew.ipynb`, offline by default with no
+key, and its link set to "Anyone with the link can view".
+
+**Who does what** (agreed on #19 and #38)
+
+| Who | Part |
+|---|---|
+| Hamad | the report and slide sections on the setup, the OSHA data, the seven-agent workflow and Category 1 (S1, S2); notebook parts 1 to 16 (done, #40); the final top-to-bottom run on a fresh Colab runtime once Khoa has integrated his parts (S4, S5) |
+| Khoa | notebook parts 17 to 19 (model routing, the evaluation results read from `eval/results/`, the edge cases) and their final integration (S5); from #19, the B8 results in README and AI_USAGE, the model IDs and `checked_on` in `config/models.toml`, the B6 and B7 findings in OPEN_ISSUES, and the test counts |
+| Kevin | reviews and merges; tags the submitted commit |
+
+Kevin reviews S1 to S3 and S5 and checks S4 with you.
 
 ## If time runs short
 
-We cut in this order: the advance features, then B8's parallel call cap. B2, B3, B6 and B7 stay:
+We cut in this order: the advance features, then B8's parallel call cap. #26 and #27 are optional,
+nobody has taken them on, and they are the first to be dropped. B2, B3, B6 and B7 stay:
 they are the evidence that the project goes beyond the baseline.
