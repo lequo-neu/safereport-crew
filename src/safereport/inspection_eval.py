@@ -30,6 +30,7 @@ import pandas as pd
 from safereport import offline
 from safereport.config import PROJECT_ROOT
 from safereport.evaluation import wilson
+from safereport.retrieval import OshaFields
 from safereport.schemas import IntakeResult, Report
 from safereport.triage import DEFAULT_WEIGHTS, TRIAGE_FILE, category_one, priority
 
@@ -102,7 +103,9 @@ def score_reports(services, rows: pd.DataFrame) -> pd.DataFrame:
                 }
             )
         )
-        found = services.registry.search(f"{report.narrative} {report.event_title}", naics=report.naics, k=3)
+        found = services.registry.search(
+            f"{report.narrative} {report.event_title}", naics=report.naics, k=3, fields=OshaFields.of(report)
+        )
         division = str(row.get("event_code_v3") or report.event_code)[:1]
         repeats = [
             m.report_id
@@ -111,8 +114,8 @@ def score_reports(services, rows: pd.DataFrame) -> pd.DataFrame:
                 zip_code=report.zip, naics=report.naics, exclude_id=report.id,
             )
         ]  # fmt: skip
-        emphasis = [h.document.citation for h in found.emphasis if h.document.verified]
-        possible = [h.document.citation for h in found.emphasis if not h.document.verified]
+        emphasis = found.forced
+        possible = found.possible
         score, _parts = priority(
             report, facts, bool(found.sections), industry_share(services.store, report),
             possible_emphasis=bool(possible),

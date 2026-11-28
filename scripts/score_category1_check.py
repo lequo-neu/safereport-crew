@@ -221,6 +221,7 @@ def shared_cases(a: list[dict[str, str]], b: list[dict[str, str]]) -> dict[str, 
 def crew_flags(services: Any, rows: list[dict[str, str]]) -> dict[str, dict[str, Any]]:
     """What the crew's rules decide for each case, with the inputs the weekly triage gives them."""
     from safereport.graph import _report_from_row
+    from safereport.retrieval import OshaFields
     from safereport.triage import category_one
 
     flags = {}
@@ -230,8 +231,10 @@ def crew_flags(services: Any, rows: list[dict[str, str]]) -> dict[str, dict[str,
             continue
         data = found.to_dict("records")[0]
         report = _report_from_row(data)
-        hits = services.registry.search(f"{report.narrative} {report.event_title}", naics=report.naics, k=3)
-        emphasis = [h.document.citation for h in hits.emphasis if h.document.verified]
+        hits = services.registry.search(
+            f"{report.narrative} {report.event_title}", naics=report.naics, k=3, fields=OshaFields.of(report)
+        )
+        emphasis = hits.forced
         division = str(data.get("event_code_v3") or report.event_code)[:1]
         repeats = [m.report_id for m in services.employers(report.state).repeats_within(
             report.employer, report.state, report.event_date, division=division, city=report.city,
