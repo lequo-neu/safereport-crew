@@ -191,10 +191,25 @@ key, and its link set to "Anyone with the link can view".
 | Khoa | notebook parts 17 to 19 (model routing, the evaluation results read from `eval/results/`, the edge cases) and their final integration (S5); from #19, the B8 results in README and AI_USAGE, the model IDs and `checked_on` in `config/models.toml`, the B6 and B7 findings in OPEN_ISSUES, and the test counts |
 | Kevin | reviews and merges; tags the submitted commit |
 
+**The parts still without an owner: Hamad's proposal, pending Khoa's confirmation.** Nothing in
+this table is agreed yet. Khoa confirms or changes it on #11 to #14, and this table is then
+updated.
+
+| Task | Proposed owner |
+|---|---|
+| S1 and S2: the model selection and results sections, from B6 to B8 | Khoa (he measured them) |
+| S1: the limits and the AI use | Khoa |
+| S1: the architecture diagram, and the process and the decisions | Hamad |
+| S1: putting the PDF together | Hamad |
+| S2: the main insight slide | Khoa |
+| S2: the Contributions slide, from a line each of us writes, and putting the deck together | Hamad |
+| S3: the demo script, following the README tour | Khoa drafts it, Hamad reviews it |
+| S3: the recording | each records the parts they built (#13); Hamad edits them into one video |
+| S4: the zip | Khoa assembles and submits it after Hamad's final Colab run; Hamad checks it against #14 |
+
 Kevin reviews S1 to S3 and S5 and checks S4 with you.
 
 ## If time runs short
 
-We cut in this order: the advance features, then B8's parallel call cap. #26 and #27 are optional,
-nobody has taken them on, and they are the first to be dropped. B2, B3, B6 and B7 stay:
-they are the evidence that the project goes beyond the baseline.
+#26 and #27 are optional and the first to be dropped, although their pull requests are open (#47
+and #48). B2, B3, B6 and B7 stay: they are the evidence that the project goes beyond the baseline.
