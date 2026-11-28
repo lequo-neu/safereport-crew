@@ -175,6 +175,16 @@ Each task records here which AI tool helped and how the result was checked.
   claimed. The B3 sample and the holdout were not read; B2 and B3 were not rerun. The Crystal City
   report (20251111619) is a test case quoted from Hamad's B1 review, not a measurement. No model
   call went through the app; nothing was paid.
+* **Issue #27, the trenching and excavation program** (Hamad). Claude Code read CPL 02-00-161
+  (2018) from the PDF on osha.gov (text extraction), quoted its scope (II, IX.A) in
+  `data/reference/emphasis_programs.toml` and marked it verified. It wrote the rule (OIICS 3
+  event 632 and OIICS 2 event 651 read with their version, source 611, the narrative words and
+  the trench drain exclusions), the tests and `scripts/eval_trenching_scope.py`. The words were
+  written after reading reports from every year outside the 2025 holdout and the answer key, so
+  the counts in `eval/results/trenching_scope.json` are development counts, not a test, and no
+  precision is claimed. The B3 sample and the holdout were not read; B2 and B3 were not rerun.
+  20251111409 is a test case quoted from Hamad's B1 review, not a measurement. No model call went
+  through the app; nothing was paid.
 
 ## The safety talk translations
 

@@ -1,0 +1,76 @@
+{
+  "issue": "#27",
+  "program": "CPL 02-00-161",
+  "data": "OSHA Severe Injury Reports, 2015 to 2025, without the 2025 holdout (which holds the B3 sample) and the answer key. Query: narrative and OSHA event title, as in stage 1 of the weekly list; OSHA's event and source codes are read with their OIICS version.",
+  "caveat": "Development counts: the rule's words were written after reading these reports. Nothing is labelled; OSHA's inspection rate is past practice, not the truth.",
+  "rule": {
+    "scope_event_codes": [
+      "3:632",
+      "2:651"
+    ],
+    "source_codes": [
+      "611"
+    ],
+    "scope_evidence": [
+      "\\b(in|into|inside|within|out of|bottom of|edge of) (a|an|the) ([\\w\\x27\"./-]+ ){0,5}?(trench|excavation)(es|s)?\\b",
+      "\\b(trench|excavation)(es|s)? (wall |walls |side |sides |bank |face )?(had |suddenly )?(collapsed|caved|gave way|sloughed)",
+      "\\b(wall|walls|side|sides|bank) of (a|an|the) ([\\w\\x27\"./-]+ ){0,3}?(trench|excavation) (had |suddenly )?(collapsed|caved|gave way|sloughed)"
+    ],
+    "scope_exclusions": [
+      "\\btrench (drain|drains|grate|grates|grating|cover|covers)\\b",
+      "\\bfloor trench(es)?\\b"
+    ]
+  },
+  "all": {
+    "reports": 104936,
+    "before_to_after": {
+      "none -> possible": 32,
+      "possible -> forced": 394,
+      "possible -> none": 556,
+      "possible -> possible": 202
+    },
+    "newly_forced": 394,
+    "newly_forced_already_two_or_more_hospitalized": 8,
+    "newly_forced_by": {
+      "osha_event_code": 109,
+      "narrative_words": 285
+    },
+    "osha_inspected": {
+      "newly_forced": {
+        "inspected": 220,
+        "of": 394,
+        "rate": 0.558,
+        "wilson_95": [
+          0.509,
+          0.607
+        ]
+      },
+      "possible_after": {
+        "inspected": 72,
+        "of": 234,
+        "rate": 0.308,
+        "wilson_95": [
+          0.252,
+          0.37
+        ]
+      },
+      "possible_to_none": {
+        "inspected": 152,
+        "of": 556,
+        "rate": 0.273,
+        "wilson_95": [
+          0.238,
+          0.312
+        ]
+      }
+    }
+  },
+  "texas_week_changed": [
+    {
+      "id": "20251111409",
+      "before": "possible",
+      "after": "forced",
+      "evidence": "trenching or excavation operation: OSHA event code 632 (OIICS 3)"
+    }
+  ]
+}

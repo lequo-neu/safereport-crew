@@ -120,13 +120,27 @@ class ProgramMatch:
 
 @dataclass(frozen=True)
 class OshaFields:
-    """What OSHA's file says about a report besides its narrative (blank for a pasted report)."""
+    """What OSHA's file says about a report besides its narrative (blank for a pasted report).
+
+    The OIICS codes are read with their version: OSHA moved from OIICS 2 to OIICS 3 in January
+    2024, and the same code can mean two different events (651 is a trench cave-in in OIICS 2).
+    """
 
     employer: str = ""
+    event_code: str = ""
+    source_code: str = ""
+    oiics_version: int | None = None
 
     @classmethod
     def of(cls, report) -> OshaFields:
-        return cls(employer=report.employer or "")
+        from safereport.data import OIICS_3_FROM_YEAR
+
+        return cls(
+            employer=report.employer or "",
+            event_code=(report.event_code or "").strip(),
+            source_code=(report.source_code or "").strip(),
+            oiics_version=3 if report.event_date.year >= OIICS_3_FROM_YEAR else 2,
+        )
 
 
 @dataclass
@@ -165,6 +179,12 @@ class Document:
     scope_evidence: list[str] = field(default_factory=list)
     scope_exclusions: list[str] = field(default_factory=list)
     scope_label: str = ""
+    # Emphasis programs only, issue #27: OSHA's own coding. An event code in scope_event_codes,
+    # written "version:code" (e.g. "3:632"), puts the report inside the scope whatever the
+    # narrative says; a source code in source_codes brings the program in like a trigger, and the
+    # scope words then decide whether it forces (a ditch beside a road is not an excavation).
+    scope_event_codes: list[str] = field(default_factory=list)
+    source_codes: list[str] = field(default_factory=list)
 
     def match(self, text: str, naics: str, fields: OshaFields | None = None) -> ProgramMatch | None:
         """For an emphasis program: why it applies to the report, or None when it does not.
@@ -179,6 +199,9 @@ class Document:
             if words is not None:
                 return ProgramMatch("anywhere", words)
         if not self.industries or any(naics.startswith(i) for i in self.industries):
+            coded = self._coded(fields)
+            if coded is not None:
+                return coded
             if not self.triggers:
                 if not self.industries:
                     return None
@@ -187,8 +210,20 @@ class Document:
                 words = _trigger_match(pattern, text)
                 if words is not None:
                     return self._in_scope(ProgramMatch("industry", words), text, naics, fields)
+            if fields is not None and fields.source_code and fields.source_code in self.source_codes:
+                found = ProgramMatch("industry", f"OSHA source code {fields.source_code}")
+                return self._in_scope(found, text, naics, fields)
             return None
         return self._work_match(text, naics)
+
+    def _coded(self, fields: OshaFields | None) -> ProgramMatch | None:
+        if fields is None or not fields.event_code or fields.oiics_version is None:
+            return None
+        if f"{fields.oiics_version}:{fields.event_code}" not in self.scope_event_codes:
+            return None
+        return ProgramMatch(
+            "scope", f"{self.scope_label}: OSHA event code {fields.event_code} (OIICS {fields.oiics_version})"
+        )
 
     def _in_scope(
         self, found: ProgramMatch, text: str, naics: str, fields: OshaFields | None
@@ -468,6 +503,8 @@ def reference_documents(source: Literal["general_duty", "emphasis_program"]) -> 
             scope_evidence=entry.get("scope_evidence", []),
             scope_exclusions=entry.get("scope_exclusions", []),
             scope_label=entry.get("scope_label", ""),
+            scope_event_codes=entry.get("scope_event_codes", []),
+            source_codes=entry.get("source_codes", []),
         )
         for number, entry in enumerate(entries)
     ]
@@ -478,7 +515,8 @@ def reference_documents(source: Literal["general_duty", "emphasis_program"]) -> 
 # would otherwise keep the old scope until someone rebuilt it.
 RULE_FIELDS = ("industries", "triggers", "anywhere_triggers", "verified",
                "work_industries", "work_evidence", "work_exclusions", "work_label",
-               "scope_industries", "scope_evidence", "scope_exclusions", "scope_label")  # fmt: skip
+               "scope_industries", "scope_evidence", "scope_exclusions", "scope_label",
+               "scope_event_codes", "source_codes")  # fmt: skip
 
 
 def with_current_rules(documents: list[Document]) -> list[Document]:
@@ -563,6 +601,8 @@ class IndexRegistry:
                                 "scope_industries",
                                 "scope_evidence",
                                 "scope_exclusions",
+                                "scope_event_codes",
+                                "source_codes",
                             )
                             if name in row
                         },
@@ -606,8 +646,8 @@ class IndexRegistry:
         `terms` are words in the language of the rules that another step adds to the query, for
         example "powered industrial truck" for a forklift. The Standards agent fills them from a
         model in Phase 2; without them the search runs on the narrative alone. `fields` are the
-        other columns of OSHA's file (the employer's name) that an emphasis program with a
-        narrower scope reads.
+        other columns of OSHA's file (the employer's name, the OIICS codes) that an emphasis
+        program with a narrower scope reads.
         """
         query = " ".join([query, *terms]).strip()
         part, note = self.part_for(naics)

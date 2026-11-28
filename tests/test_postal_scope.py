@@ -128,9 +128,9 @@ def test_other_industries_keep_the_rule_as_before(
     assert new == old
 
 
-def test_only_the_warehousing_program_has_a_scope_rule():
-    scoped = [d.citation for d in reference_documents("emphasis_program") if d.scope_evidence]
-    assert scoped == [WAREHOUSING]
+def test_only_the_warehousing_program_is_narrowed_to_491110():
+    narrowed = [d.citation for d in reference_documents("emphasis_program") if d.scope_industries]
+    assert narrowed == [WAREHOUSING]
 
 
 def test_search_splits_forced_and_possible_programs_and_category_one_shows_why(warehousing: Document):
