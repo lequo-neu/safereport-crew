@@ -1,0 +1,67 @@
+{
+  "issue": "#26",
+  "program": "CPL 03-00-026",
+  "data": "OSHA Severe Injury Reports with NAICS 491110, 2015 to 2025, without the 2025 holdout (which holds the B3 sample) and the answer key. Query: narrative and OSHA event title, as in stage 1 of the weekly list; the employer's name is read for facility words.",
+  "caveat": "Development counts: the rule's words were written after reading these reports. Nothing is labelled; OSHA's inspection rate is past practice, not the truth.",
+  "rule": {
+    "scope_evidence": [
+      "\\bprocess(ing)? (and |& ?)?distribution (center|centre|facility|plant)",
+      "\\b[a-z]{0,4}p ?& ?dc\\b|\\b[a-z]{0,4}(n?pdc|ndc)\\b",
+      "\\b(network|national|regional) distribution (center|centre|facility)",
+      "\\b(mail|postal|package|parcel) (processing|distribution) (center|centre|facility|plant)",
+      "\\bprocessing (center|centre|plant|facility)\\b",
+      "\\bdistribution (center|centre|facility)\\b",
+      "\\bmail[- ]processing\\b"
+    ],
+    "scope_exclusions": [
+      "\\bdeliver(ing|ed)? (\\w+ ){0,3}?(mail|packages?|parcels?|letters?)\\b|\\bwhile delivering\\b",
+      "\\b(letter|rural|city|mail|postal) carriers?\\b|\\bcarrier route\\b",
+      "\\b(on|along) (his|her|their|the|a) (mail |delivery |postal )?route\\b",
+      "\\bmail ?box(es)?\\b",
+      "\\bretail (counter|window|lobby|area|unit|clerk)\\b|\\b(window|counter|retail) (clerk|associate)\\b|\\bpost office lobby\\b"
+    ]
+  },
+  "reports": 1548,
+  "before_to_after": {
+    "forced -> forced": 41,
+    "forced -> none": 527,
+    "forced -> possible": 766,
+    "none -> none": 214
+  },
+  "forced": {
+    "before": 1334,
+    "after": 41
+  },
+  "newly_forced": 0,
+  "no_longer_forced": 1293,
+  "no_longer_forced_but_two_or_more_hospitalized": 1,
+  "osha_inspected": {
+    "still_forced": {
+      "inspected": 10,
+      "of": 41,
+      "rate": 0.244,
+      "wilson_95": [
+        0.138,
+        0.393
+      ]
+    },
+    "forced_to_possible": {
+      "inspected": 117,
+      "of": 766,
+      "rate": 0.153,
+      "wilson_95": [
+        0.129,
+        0.18
+      ]
+    },
+    "forced_to_none": {
+      "inspected": 62,
+      "of": 527,
+      "rate": 0.118,
+      "wilson_95": [
+        0.093,
+        0.148
+      ]
+    }
+  }
+}

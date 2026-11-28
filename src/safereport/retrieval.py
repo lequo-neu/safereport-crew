@@ -104,12 +104,29 @@ class ProgramMatch:
     """Why an emphasis program applies: the route the rule took and the words that matched.
 
     route is "anywhere" (an activity the program covers in every industry), "industry" (the
-    report's NAICS code is covered and a trigger matched) or "work" (an employer whose code does
-    not say what work was done, such as a staffing agency, and the narrative shows covered work).
+    report's NAICS code is covered and a trigger matched), "work" (an employer whose code does
+    not say what work was done, such as a staffing agency, and the narrative shows covered work)
+    or "scope" (the directive narrows the program to some establishments or operations and the
+    report shows it is one of them).
+
+    forces is False for a match the directive's scope leaves uncertain: the program raises the
+    priority and is shown for a person to check, but it cannot force an inspection.
     """
 
     route: str
     evidence: str
+    forces: bool = True
+
+
+@dataclass(frozen=True)
+class OshaFields:
+    """What OSHA's file says about a report besides its narrative (blank for a pasted report)."""
+
+    employer: str = ""
+
+    @classmethod
+    def of(cls, report) -> OshaFields:
+        return cls(employer=report.employer or "")
 
 
 @dataclass
@@ -137,13 +154,25 @@ class Document:
     work_evidence: list[str] = field(default_factory=list)
     work_exclusions: list[str] = field(default_factory=list)
     work_label: str = ""
+    # Emphasis programs only: where the directive covers only some establishments of an industry
+    # (issue #26: NAICS 491110 holds post offices, and the warehousing program covers only postal
+    # processing and distribution centers). In scope_industries (or every industry, when it is
+    # empty) a match forces an inspection only when scope_evidence shows the report is inside
+    # the scope (in the narrative or the employer's name) and no scope_exclusion (narrative only)
+    # puts it outside. Only an exclusion: the program does not apply. Neither, or both: the
+    # program is possible (it raises the priority) but forces nothing.
+    scope_industries: list[str] = field(default_factory=list)
+    scope_evidence: list[str] = field(default_factory=list)
+    scope_exclusions: list[str] = field(default_factory=list)
+    scope_label: str = ""
 
-    def match(self, text: str, naics: str) -> ProgramMatch | None:
+    def match(self, text: str, naics: str, fields: OshaFields | None = None) -> ProgramMatch | None:
         """For an emphasis program: why it applies to the report, or None when it does not.
 
         A trigger that applies anywhere matches, or the report's industry is covered and one of
         the industry triggers matches (or there are none), or the employer is in a work industry
-        and the narrative shows the covered work as well as an industry trigger.
+        and the narrative shows the covered work as well as an industry trigger. A program with
+        a narrower scope then checks the report against it (see scope_industries).
         """
         for pattern in self.anywhere_triggers:
             words = _trigger_match(pattern, text)
@@ -151,13 +180,31 @@ class Document:
                 return ProgramMatch("anywhere", words)
         if not self.industries or any(naics.startswith(i) for i in self.industries):
             if not self.triggers:
-                return ProgramMatch("industry", f"NAICS {naics}") if self.industries else None
+                if not self.industries:
+                    return None
+                return self._in_scope(ProgramMatch("industry", f"NAICS {naics}"), text, naics, fields)
             for pattern in self.triggers:
                 words = _trigger_match(pattern, text)
                 if words is not None:
-                    return ProgramMatch("industry", words)
+                    return self._in_scope(ProgramMatch("industry", words), text, naics, fields)
             return None
         return self._work_match(text, naics)
+
+    def _in_scope(
+        self, found: ProgramMatch, text: str, naics: str, fields: OshaFields | None
+    ) -> ProgramMatch | None:
+        if not self.scope_evidence or not (
+            not self.scope_industries or any(naics.startswith(i) for i in self.scope_industries)
+        ):
+            return found
+        employer = fields.employer if fields is not None else ""
+        inside = _first(self.scope_evidence, f"{text} {employer}")
+        outside = _first(self.scope_exclusions, text)
+        if inside is not None and outside is None:
+            return ProgramMatch("scope", f'{self.scope_label}: "{inside}"; "{found.evidence}"')
+        if outside is not None and inside is None:
+            return None
+        return replace(found, forces=False)
 
     def _work_match(self, text: str, naics: str) -> ProgramMatch | None:
         if not naics or not any(naics.startswith(i) for i in self.work_industries):
@@ -173,8 +220,8 @@ class Document:
                 )
         return None
 
-    def applies_to(self, text: str, naics: str) -> bool:
-        return self.match(text, naics) is not None
+    def applies_to(self, text: str, naics: str, fields: OshaFields | None = None) -> bool:
+        return self.match(text, naics, fields) is not None
 
     @property
     def search_text(self) -> str:
@@ -189,6 +236,12 @@ class Hit:
     dense_rank: int | None
     # Emphasis programs only: the route and words that made the program apply.
     match: ProgramMatch | None = None
+
+    @property
+    def forces(self) -> bool:
+        """An emphasis program that forces an inspection: its scope was read from the directive
+        and the report is inside it. The others raise the priority and are shown for a person."""
+        return self.document.verified and (self.match is None or self.match.forces)
 
 
 @dataclass
@@ -206,12 +259,22 @@ class RetrievalResult:
     note: str = ""
 
     def work_evidence(self) -> dict[str, str]:
-        """By citation, the evidence for each program that applied by its work route."""
+        """By citation, the evidence for each program that applied by its work or scope route."""
         return {
             h.document.citation: h.match.evidence
             for h in self.emphasis
-            if h.match is not None and h.match.route == "work"
+            if h.match is not None and h.match.route in ("work", "scope")
         }
+
+    @property
+    def forced(self) -> list[str]:
+        """The emphasis programs that force an inspection (OSHA's Category 1)."""
+        return [h.document.citation for h in self.emphasis if h.forces]
+
+    @property
+    def possible(self) -> list[str]:
+        """The emphasis programs that only raise the priority, for a person to check."""
+        return [h.document.citation for h in self.emphasis if not h.forces]
 
     @property
     def margin(self) -> float:
@@ -401,6 +464,10 @@ def reference_documents(source: Literal["general_duty", "emphasis_program"]) -> 
             work_evidence=entry.get("work_evidence", []),
             work_exclusions=entry.get("work_exclusions", []),
             work_label=entry.get("work_label", ""),
+            scope_industries=entry.get("scope_industries", []),
+            scope_evidence=entry.get("scope_evidence", []),
+            scope_exclusions=entry.get("scope_exclusions", []),
+            scope_label=entry.get("scope_label", ""),
         )
         for number, entry in enumerate(entries)
     ]
@@ -410,7 +477,8 @@ def reference_documents(source: Literal["general_duty", "emphasis_program"]) -> 
 # text, so a loaded index takes them from data/reference: an index built before a rule changed
 # would otherwise keep the old scope until someone rebuilt it.
 RULE_FIELDS = ("industries", "triggers", "anywhere_triggers", "verified",
-               "work_industries", "work_evidence", "work_exclusions", "work_label")  # fmt: skip
+               "work_industries", "work_evidence", "work_exclusions", "work_label",
+               "scope_industries", "scope_evidence", "scope_exclusions", "scope_label")  # fmt: skip
 
 
 def with_current_rules(documents: list[Document]) -> list[Document]:
@@ -488,7 +556,14 @@ class IndexRegistry:
                         "anywhere_triggers": list(row.get("anywhere_triggers", [])),
                         **{
                             name: list(row[name])
-                            for name in ("work_industries", "work_evidence", "work_exclusions")
+                            for name in (
+                                "work_industries",
+                                "work_evidence",
+                                "work_exclusions",
+                                "scope_industries",
+                                "scope_evidence",
+                                "scope_exclusions",
+                            )
                             if name in row
                         },
                     }
@@ -518,12 +593,21 @@ class IndexRegistry:
             return "1910", "construction report, but the Part 1926 index is not built; searched Part 1910"
         return "1910", ""
 
-    def search(self, query: str, naics: str = "", k: int = 5, terms: Sequence[str] = ()) -> RetrievalResult:
+    def search(
+        self,
+        query: str,
+        naics: str = "",
+        k: int = 5,
+        terms: Sequence[str] = (),
+        fields: OshaFields | None = None,
+    ) -> RetrievalResult:
         """Rank sections for a narrative.
 
         `terms` are words in the language of the rules that another step adds to the query, for
         example "powered industrial truck" for a forklift. The Standards agent fills them from a
-        model in Phase 2; without them the search runs on the narrative alone.
+        model in Phase 2; without them the search runs on the narrative alone. `fields` are the
+        other columns of OSHA's file (the employer's name) that an emphasis program with a
+        narrower scope reads.
         """
         query = " ".join([query, *terms]).strip()
         part, note = self.part_for(naics)
@@ -550,7 +634,7 @@ class IndexRegistry:
             # rule: the industry is covered and one of the program's triggers matches. Ranking by
             # similarity flagged 224 of 300 holdout reports, a slip on a doormat as a fall.
             for document in self.retrievers["emphasis_program"].documents:
-                found = document.match(query, naics)
+                found = document.match(query, naics, fields)
                 if found is not None:
                     emphasis.append(Hit(document, 1.0, None, None, found))
         return RetrievalResult(part, sections, emphasis, note)
