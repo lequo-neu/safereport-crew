@@ -120,9 +120,28 @@ title = "National Emphasis Program on Trenching and Excavation"
 date = "2018-10-01"
 url = "https://www.osha.gov/enforcement/directives/cpl-02-00-161"
 industries = []
-triggers = ['\btrench', 'excavat', 'cave[ -]?in']
-verified = false
-scope_note = "Scope not read from the directive; the triggers follow the program title."
+triggers = ['\btrench(es|ing)?\b', '\bexcavat(e|ed|es|ing|ion|ions)\b', '\bcave[ -]?ins?\b']
+verified = true
+scope_note = "Read from the directive on 2026-11-28 (issue #27; effective 2018-10-01, in effect until canceled or superseded, V). II. Scope: 'This instruction applies OSHA-wide. All inspections of trenching and excavation operations will be reported pursuant to this NEP.' No NAICS list: it covers the operation in any industry. IX.A: CSHOs 'shall initiate inspections under this NEP whenever they observe an open trench or an open excavation' and 'Trenching and excavation operations will also be assigned for inspection as the result of incidents, referrals, and complaints.' The directive does not define the words; it references 29 CFR 1926 Subpart P, whose 1926.650(b) defines an excavation as a man-made cut, cavity, trench or depression in an earth surface formed by earth removal. So a report forces an inspection when OSHA coded the event as a trench or excavation collapse, or the narrative puts the worker in a trench or excavation or describes one collapsing; a trench drain or grate does not."
+# Issue #27. OIICS event 632 (OIICS 3, 2024 on: "Collapse, engulfment, open trench or excavation")
+# and 651 (OIICS 2, 2015 to 2023: "Excavation or trenching cave-in") put a report inside the scope.
+# Source 611 ("Ditches, channels, trenches, excavations", the same title in both versions) brings
+# the program in, but a ditch is not always an excavation, so it forces only with the scope words.
+# The triggers no longer match "excavator" or "trencher" (machines). Written after reading reports
+# outside the 2025 holdout and the answer key (all years, so the counts in
+# eval/results/trenching_scope.json are development counts, not a test).
+scope_label = "trenching or excavation operation"
+scope_event_codes = ["3:632", "2:651"]
+source_codes = ["611"]
+scope_evidence = [
+  '\b(in|into|inside|within|out of|bottom of|edge of) (a|an|the) ([\w\x27"./-]+ ){0,5}?(trench|excavation)(es|s)?\b',
+  '\b(trench|excavation)(es|s)? (wall |walls |side |sides |bank |face )?(had |suddenly )?(collapsed|caved|gave way|sloughed)',
+  '\b(wall|walls|side|sides|bank) of (a|an|the) ([\w\x27"./-]+ ){0,3}?(trench|excavation) (had |suddenly )?(collapsed|caved|gave way|sloughed)',
+]
+scope_exclusions = [
+  '\btrench (drain|drains|grate|grates|grating|cover|covers)\b',
+  '\bfloor trench(es)?\b',
+]
 text = """Trench and excavation hazards: cave ins, collapse of trench walls, struck by spoil piles, protective systems, shoring, sloping, trench boxes."""
 
 [[documents]]
